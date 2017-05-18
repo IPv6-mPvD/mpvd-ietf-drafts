@@ -1,0 +1,1099 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc autobreaks="yes"?>
+<?rfc compact="yes"?>
+<?rfc strict='yes'?>
+<?rfc subcompact="no"?>
+<?rfc symrefs="yes"?>
+<?rfc toc="yes"?>
+<?rfc tocindent="yes"?>
+<rfc category="info" docName="draft-bruneau-intarea-provisioning-domains-00"
+     ipr="trust200902">
+  <front>
+    <title abbrev="Possibilities for PvDs">Proposals to discover Provisioning
+    Domains</title>
+
+    <author fullname="Basile Bruneau" initials="B" surname="Bruneau">
+      <organization>&Eacute;cole polytechnique</organization>
+
+      <address>
+        <postal>
+          <street/>
+
+          <city>Vannes</city>
+
+          <code>56000</code>
+
+          <country>France</country>
+        </postal>
+
+        <email>basile.bruneau@polytechnique.edu</email>
+      </address>
+    </author>
+
+    <author fullname="Pierre Pfister" initials="P" surname="Pfister">
+      <organization>Cisco</organization>
+
+      <address>
+        <postal>
+          <street>11 Rue Camille Desmoulins</street>
+
+          <city>Issy-les-Moulineaux</city>
+
+          <code>92130</code>
+
+          <country>France</country>
+        </postal>
+
+        <email>ppfister@cisco.com</email>
+      </address>
+    </author>
+
+    <author fullname="David Schinazi" initials="D" surname="Schinazi">
+      <organization>Apple</organization>
+
+      <address>
+        <postal>
+          <street/>
+
+          <city/>
+
+          <region/>
+
+          <code/>
+
+          <country/>
+        </postal>
+
+        <phone/>
+
+        <facsimile/>
+
+        <email>dschinazi@apple.com</email>
+
+        <uri/>
+      </address>
+    </author>
+
+    <author fullname="Tommy Pauly" initials="T" surname="Pauly">
+      <organization>Apple</organization>
+
+      <address>
+        <postal>
+          <street/>
+
+          <city/>
+
+          <region/>
+
+          <code/>
+
+          <country/>
+        </postal>
+
+        <phone/>
+
+        <facsimile/>
+
+        <email>tpauly@apple.com</email>
+
+        <uri/>
+      </address>
+    </author>
+
+    <author fullname="Eric Vyncke" initials="E" role="editor" surname="Vyncke">
+      <organization>Cisco</organization>
+
+      <address>
+        <postal>
+          <street>De Kleetlaan, 6</street>
+
+          <city>Diegem</city>
+
+          <code>1831</code>
+
+          <country>Belgium</country>
+        </postal>
+
+        <email>evyncke@cisco.com</email>
+      </address>
+    </author>
+
+    <date day="13" month="March" year="2017"/>
+
+    <area>Internet</area>
+
+    <workgroup>intarea</workgroup>
+
+    <keyword>PVD</keyword>
+
+    <keyword>provisioning domains</keyword>
+
+    <keyword>host configuration</keyword>
+
+    <keyword>DNS</keyword>
+
+    <abstract>
+      <t>This document describes one possible way for hosts to retrieve
+      additional information about their Internet access configuration. The
+      set of configuration items required to access the Internet is called a
+      Provisioning Domain (PvD) and is identified by a Fully Qualified Domain
+      Name.</t>
+
+      <t>This document separates the way of getting the Provisioning Domain
+      identifier, the way of getting the Provisioning Domain information and
+      the potential information contained in the Provisioning Domain.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t>It has become very common in modern networks that hosts have Internet
+      or more specific access through different networking interfaces,
+      tunnels, or next-hop routers. The concept of Provisioning Domain (PvD)
+      was defined in <xref target="RFC7556">RFC7556</xref> as a set of network
+      configuration information which can be used by hosts in order to access
+      the network. In this document, PvDs are associated with a Fully
+      Qualified Domain Name (called PvD ID) which is used within the host to
+      identify correlated sets of configuration data and also used to retrieve
+      additional information about the services that the network provides.</t>
+
+      <t>Devices connected to the Internet through multiple interfaces would
+      typically be provisioned with one PvD per interface, but it is worth
+      noting that multiple PvDs with different PvD IDs could be provisioned on
+      any host interface, as well as noting that the same PvD ID could be used
+      on different interfaces in order to inform the host that both PvDs, on
+      different interfaces, ultimately provide equivalent services.</t>
+
+      <t>This document proposes multiple methods allowing the host to to
+      retrieve the PvD ID associated with a set of networking discover the PvD
+      and retrieve the PvD information. It also explains configuration as well
+      as the methods and format in order to retrieve some of the parameters
+      that can describe a PvD.</t>
+    </section>
+
+    <section title="Terminology">
+      <texttable align="left" style="none" suppress-title="true">
+        <ttcol width="25%"/>
+
+        <ttcol width="75%"/>
+
+        <c>PvD</c>
+
+        <c>A provisioning domain, usually with a set of provisioning domain
+        information; for more information, see <xref target="RFC7556"/>.</c>
+
+        <c/>
+
+        <c/>
+      </texttable>
+
+      <section anchor="kwd" title="Requirements Language">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+        "OPTIONAL" in this document are to be interpreted as described in
+        <xref target="RFC2119">RFC 2119</xref>.</t>
+      </section>
+    </section>
+
+    <section anchor="gettingname" title="Retrieving the PvD ID">
+      <t>In this document, each provisioning domain is identified by a PvD ID.
+      The PvD ID is a Fully Qualified Domain Name which belongs to the network
+      operator to avoid conflicts among network operators. The same PvD ID can
+      exist in several access networks if the set of configuration information
+      is identical in all those networks (such as in all home networks of a
+      residential subscriber). Within a host, the PvD ID SHOULD be associated
+      to all the configuration information associated to this PvD ID; this
+      allows for easy update and removal of information while keeping a
+      consistent state.</t>
+
+      <t>This section assumes that IPv6 Router Advertisements are used to
+      discover the PvD ID and explains why this technique was selected.</t>
+
+      <section anchor="name-ra" title="Using One Router Advertisement per PvD">
+        <t>Hosts receive implicit PvDs by the means of Router Advertisements
+        (RA).</t>
+
+        <t>A router MAY add a single PvD ID Option in its RAs. The PvD ID
+        specified in this option is then associated with all the Prefix
+        Information Options (PIO) included in the RA (albeit it is expected
+        that only one PIO will be included in the RA). All other information
+        contained in the RA (notably the RDNSS and Route Information Option)
+        are to be associated with the PvD ID. The set of information contained
+        in the RA forms the bootstrap (or hint) PvD. A new RA option will be
+        required to convey the PvD ID.</t>
+
+        <t>When a host receives an RA which does not include a PvD ID Option,
+        the set of information included in the RA (such as Recursive DNS
+        server, IPv6 prefix) is attached to an implicit PvD identified by the
+        local interface ID on which the RA is received, and by the link-local
+        address of the router sending the RA.</t>
+
+        <t>In the cases where a router should provide multiple independent
+        PvDs to all hosts, including non-PvD aware hosts, it should send
+        multiple RAs, as proposed in <xref
+        target="I-D.bowbakova-rtgwg-enterprise-pa-multihoming"/> using
+        different source link-local addresses (LLA); the datalink layer (MAC)
+        address could be the same for all the different RA. If the router is
+        actually a VRRP instance, then the procedure is identical except that
+        the virtual link-layer address is used as well as virtual link-layer
+        addresses.</t>
+
+        <t>Using RA allows for an early discovery of the PvD ID as it is early
+        in the interface start-up. As RA is usually processed in the kernel,
+        this requires a host OS upgrade. The RA SHOULD contain other PvD
+        information as explained in section <xref target="info-ra"/>.</t>
+      </section>
+
+      <section title="Rationale for not selecting other techniques">
+        <t>There are other techniques to discover the PvD ID that were not
+        selected by the authors and reviewers, this section explains why. The
+        design goal was to be as reliable as possible (do not depend on
+        Internet connectivity) and as fast as possible.</t>
+
+        <section anchor="name-dnssd" title="Using DNS-SD">
+          <t>For each received RA including a RDNSS option as well as a DNS
+          search list option, the host MAY retrieve the PvD ID by querying the
+          configured DNS server for records of type PTR associated with
+          _pvd.&lt;DNS search name&gt;. If a PvD ID is configured, the DNS
+          recursive resolver MUST reply with the PvD ID as a PTR record.
+          NXDOMAIN is returned otherwise.</t>
+
+          <t>When the RDNSS address is link-local, the host MAY retrieve the
+          PvD ID before configuring its global scope address(es).</t>
+
+          <t>Relying on a valid DNS service at the interface bootstrap can
+          lead into delay to start the interface or starting without enough
+          information: for example when the RDNSS is a non local address and
+          there is no Internet connectivity.</t>
+        </section>
+
+        <section anchor="name-reverse-dns" title="Using Reverse DNS lookup">
+          <t><xref target="I-D.stenberg-mif-mpvd-dns"/> proposes a solution to
+          get the name of the PvD using a reverse DNS lookup based on the host
+          global address(es). It merely relies on prepending a well-known
+          prefix '_pvd' to the reverse lookup, for example '
+          _pvd....ip6.arpa.'.</t>
+
+          <t>However, the PvD information is typically provided by the network
+          operator, whereas the reverse DNS zone could be delegated from the
+          operator to the network user, in which case it would not work.</t>
+
+          <t>It also requires a fully functional global address to retrieve
+          the information which may be too late for a correct host
+          configuration. One advantage is that it does not require any change
+          in the IPv6 protocol and no change in the host kernel or even in the
+          CPE.</t>
+        </section>
+      </section>
+
+      <section title="IoT Considerations">
+        <t>TBD: should state that when end-host (IoT) cannot impletement
+        completely this RFC it MAY select any of the PvD or the router SHOULD
+        send a single unicast RA (hence a single PvD) in response to the RS or
+        none if it detects that it cannot offer the right set of network
+        services.</t>
+      </section>
+
+      <section title="Linking IPv4 Information to an IPv6 PvD">
+        <t>The document describes IPv6-only PvD but there are multiple ways to
+        link the set of IPv4 configuration information received by
+        DHCPv4:<list style="symbols">
+            <t>correlation based on the data-link layer address of the source,
+            if the IPv6 RA and the DHCPv4 response have the same data-link
+            layer address, then the information contained in the IPv4 DHCP can
+            be linked to the IPv6 PvD;</t>
+
+            <t>correlation based on the interface when there is no data-link
+            address on the link (such as a 3GPP link), then the information
+            contained in the IPv4 PDP context can be linked to the IPv6 PvD
+            (*** TO BE VERIFIED before going -01);</t>
+
+            <t>correlation based on the DNS search list, if the DNS search
+            lists are identical between the IPv6 RDNSS and the DHCPV4
+            response, then the information contained in the IPv4 DHCP response
+            can be linked to the IPv6 PvD.</t>
+          </list></t>
+
+        <t>The correlation could be useful for some PvD information such as
+        Internet reachability, use of captive portal, display name of the PvD,
+        ...</t>
+
+        <t>In cases where the IPv4 configuration information could not be
+        associated with a PvD, hosts MUST consider it as attached to an
+        independent implicit PvD containing no other information than what is
+        provided through DHCPv4.</t>
+      </section>
+    </section>
+
+    <section anchor="gettinginfo"
+             title="Getting the full set of PvD information">
+      <t>Once the PvD ID is known, it MAY be used to retrieve additional
+      information. PvD Information is modeled as a key-value dictionary which
+      keys are ASCII strings of arbitrary length, and values are either
+      strings (encoding can vary), ordered list of values (recursively), or a
+      dictionary (recursively).</t>
+
+      <t>The PvD Information may be retrieved from multiple sources (from the
+      bootstrap PvD contained in the RA to the secondary/extended PvD
+      described in this section); the PvD ID is then used to correlate the
+      information from different sources. The way a host should operate when
+      receiving conflicting information is TBD but it SHOULD at least override
+      information from less authenticated sources (RA) by more authenticated
+      sources (via TLS).</t>
+
+      <section anchor="info-ra"
+               title="Using the PvD Bootstrap Information Option">
+        <t>Routers MAY transmit, in addition to the PvD ID option, a PvD
+        Bootstrap Information option, containing a first subset of PvD
+        information. The additional pieces of bootstrap PvD information data
+        set are transmitted using the short-hand notation proposed in <xref
+        target="info"/>. This requires another RA option.</t>
+
+        <t>As there is a size limit on the amount of information a single RA
+        can convey, it is likely that the PvD Bootstrap Information option may
+        not contain the whole set of PvD Information. The set of PvD
+        information included in the RA is called PvD Bootstrap
+        Information.</t>
+      </section>
+
+      <section anchor="info-http" title="Downloading a JSON file over HTTPS">
+        <t>The host SHOULD try to download a JSON formatted file over HTTPS in
+        order to get more PvD information.</t>
+
+        <t>The host MUST perform an HTTP query to
+        https://&lt;PvD-ID&gt;/v1.json. If the HTTP status of the answer is
+        greater than 400 the host MUST abandon and consider that there is no
+        additional PvD information. If the HTTP status of the answer is
+        between 300 and 400 it MUST follow the redirection(s). If the HTTP
+        status of the answer is between 200 and 300 the host MAY get a file
+        containing a single JSON object.</t>
+
+        <t>The host MUST respect the cache information in the HTTP header, if
+        any, and at expiration of the downloaded object, it must fetch a
+        fresher version if any.</t>
+
+        <section anchor="info-http-advantages" title="Advantages">
+          <t>The JSON format allows advanced structures.</t>
+
+          <t>It can be secured using HTTPS (and DNSSEC).</t>
+
+          <t>It is easier to update a file on a web server than to edit DNS
+          records. It can be especially important if we want providers to be
+          able to often update the remaining phone plan of the user.</t>
+        </section>
+
+        <section anchor="info-http-disadvantages" title="Disadvantages">
+          <t>It is slower than using DNS because HTTPS uses TCP and TLS and
+          needs more packets to be exchanged to get the file.</t>
+
+          <t>An additional HTTPS server must be deployed and configured.</t>
+        </section>
+      </section>
+
+      <section anchor="info-dns"
+               title="Using DNS TXT ressource records (not selected)">
+        <t>This approach was not selected during the design team meeting but
+        has kept here for reference, it will be removed after global consensus
+        is reached.</t>
+
+        <t>The host could perform a DNS query for TXT resource records (RR)
+        for the FQDN used as PvD ID (alternatively for _pvd.&lt;PvD-ID&gt;).
+        For each retrieved PvD ID, the DNS query MUST be sent to the DNS
+        server configured from the same router advertisement as the PvD ID.
+        Syntax of the TXT response is defined in <xref target="info">Section
+        5</xref>.</t>
+
+        <section anchor="info-dns-advantages" title="Advantages">
+          <t>It requires a single round-time trip in order to retrieve the PvD
+          Information.</t>
+
+          <t>It can be secured using DNSSEC.</t>
+        </section>
+
+        <section anchor="info-dns-disadvantages" title="Disadvantages">
+          <t>A TXT record is limited to 65535 characters in theory but large
+          size of TXT records could require either DNS over TCP (so loosing
+          the 1-RTT advantage) or fragmented UDP packets (which could be
+          dropped by a bad choice of security policy). Large TXT records could
+          also be used to mount an amplification attack.</t>
+        </section>
+
+        <section title="Using DNS SRV ressource records">
+          <t>It is expected that the DNS TXT records will be sufficient for
+          the host to configure itself with basic networking and policy
+          configuration. Nevertheless, if further information is required, or
+          when a different security model shall be used to access the PvD
+          Information, a SRV Resource Record including a full URL MAY be
+          included as a response, expecting the host to query this URL in
+          order to retrieve additional PvD information.</t>
+        </section>
+      </section>
+    </section>
+
+    <section anchor="info" title="PvD Information">
+      <t>PvD information is a set of key-value pairs. Keys are ASCII character
+      strings. Values are either a character string, an ordered list of
+      values, or an embedded dictionary. Value types and default behavior with
+      respect to some specific keys MAY be further specified (recursively).
+      Some keys have a default value as described in the following sections.
+      When there is an expiration time in a PvD, then the information MUST be
+      refreshed before the expiration time. The behavior of a host when the
+      refresh operation is not successful is TBD.</t>
+
+      <t>Nodes using the PvD MUST support the two encodings:<list>
+          <t>JSON syntax for the complete set of PvD information;</t>
+
+          <t>short-hand notation for the bootstrap PvD.</t>
+        </list></t>
+
+      <t>When the PvD information is transferred as a JSON file, then the key
+      used is the second column of the following table. The syntax of the JSON
+      file is obvioulsy JSON and is richer than the short-hand notation
+      specified in the next paragraph.</t>
+
+      <t>When transmitting more information than the PvD ID in the RA (or when
+      DNS TXT resource records are used), the shorthand notataion for PvD
+      information is used and consists of a string containing several
+      "key=value;" substrings. The "key" is the first column of the following
+      tables, the value is encoded as:</t>
+
+      <t>Shorthand notation for values:<list>
+          <t>integer: expressed in decimal format with a '.' (dot) used for
+          decimals;</t>
+
+          <t>string: expressed as UTF-8 encoded string, delimited by single
+          quote character, the single quote character can be expressed by two
+          consecutive single quote character;</t>
+
+          <t>boolean: expressed as '0' for false and '1' for true;</t>
+
+          <t>IPv6 address: printed as <xref
+          target="RFC5952">RFC5952</xref>.</t>
+        </list></t>
+
+      <section anchor="keys-name" title="PvD Name">
+        <t>PvD SHOULD have a human readable name in order to be presented on a
+        GUI. The name can also be localized.</t>
+
+        <texttable>
+          <ttcol>DNS TXT key/Bootstrap PvD key</ttcol>
+
+          <ttcol>JSON key</ttcol>
+
+          <ttcol>Description</ttcol>
+
+          <ttcol>Type</ttcol>
+
+          <ttcol width="20%">JSON Example</ttcol>
+
+          <c>n</c>
+
+          <c>name</c>
+
+          <c>User-visible service name, SHOULD be part of the bootstrap
+          PvD</c>
+
+          <c>human-readable UTF-8 string</c>
+
+          <c>"Foobar Service"</c>
+
+          <c>nl10n</c>
+
+          <c>localizedName</c>
+
+          <c>Localized user-visible service name, language can be selected
+          based on the HTTP Accept-Language header in the request.</c>
+
+          <c>human-readable UTF-8 string</c>
+
+          <c>"Service Blabla"</c>
+        </texttable>
+      </section>
+
+      <section anchor="trust-services" title="Trust of the bootstrap PvD">
+        <t>The content of the bootstrap PvD (from the original RA) cannot be
+        trusted as it is not authenticated. But, the extended PvD can be
+        associated with the PvD ID (as the PvD ID is used to construct the
+        extended PvD URL) and trusted by the used of TLS. The extended PvD
+        SHOULD therefore include the following information elements and, if
+        they are present, the host MUST verify that the all PIO of the RA fits
+        into the master prefix list. If any PIO prefix from the bootstrap PvD
+        does not fit in the master prefix array, then all information received
+        by the bootstrap PvD must be invalidated. In short, the
+        masterIPv6Prefix received over TLS is used to authenticate the
+        bootstrap PvD.</t>
+
+        <t>The values of the bootstrap PvD (RDNSS, ...) are overwritten by the
+        values contained in the trusted extended PvD if they are present.</t>
+
+        <texttable>
+          <ttcol>DNS TXT key</ttcol>
+
+          <ttcol>JSON key</ttcol>
+
+          <ttcol>Description</ttcol>
+
+          <ttcol>Type</ttcol>
+
+          <ttcol width="20%">JSON Example</ttcol>
+
+          <c>mp6</c>
+
+          <c>masterIpv6Prefix</c>
+
+          <c>All the IPv6 prefixes linked to this PvD (such as a /29 for the
+          ISP).</c>
+
+          <c>Array of IPv6 prefixes</c>
+
+          <c>["2001:db8::/32"]</c>
+        </texttable>
+      </section>
+
+      <section anchor="keys-services" title="Reachability">
+        <t>The following set of keys can be used to specify the set of
+        services for which the respective PvD should be used. If present they
+        MUST be honored by the client, i.e., if the PvD is marked as not
+        usable for Internet access (walled garden), then it MUST NOT be used
+        for Internet access. If the usability is limited to a certain set of
+        domain or address prefixes (typical VPN access), then a different PvD
+        MUST be used for other destinations.</t>
+
+        <texttable>
+          <ttcol>DNS TXT key</ttcol>
+
+          <ttcol>JSON key</ttcol>
+
+          <ttcol>Description</ttcol>
+
+          <ttcol>Type</ttcol>
+
+          <ttcol width="20%">JSON Example</ttcol>
+
+          <c>s</c>
+
+          <c>noInternet</c>
+
+          <c>Internet inaccessible</c>
+
+          <c>boolean</c>
+
+          <c>true</c>
+
+          <c>cp</c>
+
+          <c>captivePortal</c>
+
+          <c>Presence of a captive portal</c>
+
+          <c>boolean</c>
+
+          <c>false</c>
+
+          <c>z</c>
+
+          <c>dnsZones</c>
+
+          <c>DNS zones accessible and searchable</c>
+
+          <c>array of DNS zone</c>
+
+          <c>["foo.com","sub.bar.com"]</c>
+
+          <c>6</c>
+
+          <c>prefixes6</c>
+
+          <c>IPv6-prefixes accessible via this PvD</c>
+
+          <c>array of IPv6 prefixes</c>
+
+          <c>["2001:db8:a::/48","2001:db8:b:c::/64"]</c>
+
+          <c>4</c>
+
+          <c>prefixes4</c>
+
+          <c>IPv4-prefixes accessible</c>
+
+          <c>array of IPv4 prefixes in CIDR reachable via this PvD</c>
+
+          <c>["192.0.2.0/24","2.3.0.0/16"]</c>
+        </texttable>
+      </section>
+
+      <section anchor="keys-dns" title="DNS Configuration">
+        <t>The following set of keys can be used to specify the DNS
+        configuration for the respective PvD. If present, they MUST be honored
+        and used by the client whenever it wishes to access a resource
+        described by the PvD.</t>
+
+        <texttable>
+          <ttcol>DNS TXT key</ttcol>
+
+          <ttcol>JSON key</ttcol>
+
+          <ttcol>Description</ttcol>
+
+          <ttcol>Value</ttcol>
+
+          <ttcol width="20%">JSON Example</ttcol>
+
+          <c>r</c>
+
+          <c>dnsServers</c>
+
+          <c>Recursive DNS server</c>
+
+          <c>array of IPv6 and IPv4 addresses</c>
+
+          <c>["2001:db8::1","192.0.2.2"]</c>
+
+          <c>d</c>
+
+          <c>dnsSearch</c>
+
+          <c>DNS search domains</c>
+
+          <c>array of search domains</c>
+
+          <c>["foo.com","sub.bar.com"]</c>
+        </texttable>
+      </section>
+
+      <section anchor="keys-conn" title="Connectivity Characteristics">
+        <t>NOTE: open question to the authors/reviewers: should this document
+        include this section or is it useless?</t>
+
+        <t>The following set of keys can be used to signal certain
+        characteristics of the connection towards the PvD.</t>
+
+        <t>They should reflect characteristics of the overall access
+        technology which is not limited to the link the host is connected to,
+        but rather a combination of the link technology, CPE upstream
+        connectivity, and further quality of service considerations.</t>
+
+        <texttable>
+          <ttcol>DNS TXT key</ttcol>
+
+          <ttcol>JSON key</ttcol>
+
+          <ttcol>Description</ttcol>
+
+          <ttcol>Type</ttcol>
+
+          <ttcol width="20%">JSON Example</ttcol>
+
+          <c>tp</c>
+
+          <c>throughputMax</c>
+
+          <c>Maximum achievable throughput (e.g. CPE downlink/uplink)</c>
+
+          <c>object({down(int), up(int)}) in kb/s</c>
+
+          <c>{"down": 10000, "up": 5000}</c>
+
+          <c>lt</c>
+
+          <c>latencyMin</c>
+
+          <c>Minimum achievable latency</c>
+
+          <c>object({down(int), up(int)}) in ms</c>
+
+          <c>{"down": 10, "up": 20}</c>
+
+          <c>rl</c>
+
+          <c>reliabilityMax</c>
+
+          <c>Maximum achievable reliability</c>
+
+          <c>object({down(int), up(int)}) in 1/1000</c>
+
+          <c>{"down": 1000, "up": 800}</c>
+
+          <c>cp</c>
+
+          <c>captivePortal</c>
+
+          <c>Captive portal</c>
+
+          <c>URL of the portal</c>
+
+          <c>"https://example.com"</c>
+
+          <c>nat</c>
+
+          <c>NAT</c>
+
+          <c>IPv4 NAT in place</c>
+
+          <c>boolean</c>
+
+          <c>true</c>
+
+          <c>natto</c>
+
+          <c>NAT Time-out</c>
+
+          <c>The value in seconds of the NAT time-out</c>
+
+          <c>Integer</c>
+
+          <c>30</c>
+
+          <c>srh</c>
+
+          <c>segmentRoutingHeader</c>
+
+          <c>The IPv6 Segment Routing Header to be used between the IPv6
+          header and any other headers when using this PvD</c>
+
+          <c>Binary string</c>
+
+          <c>...</c>
+
+          <c>srhDNS</c>
+
+          <c>segmentRoutingHeaderDnsFQDN</c>
+
+          <c>The DNS FQDN which is used to retrieved the actual IPv6 Segment
+          Routing Header to be used between the IPv6 header and any other
+          headers when using this PvD</c>
+
+          <c>Ascii string</c>
+
+          <c>srh.pvd-foo.example.org</c>
+
+          <c>cost</c>
+
+          <c>cost</c>
+
+          <c>Cost of using the connection</c>
+
+          <c>object</c>
+
+          <c>See <xref target="keys-cost"/></c>
+        </texttable>
+      </section>
+
+      <section anchor="keys-cost" title="Connection monetary cost">
+        <t>NOTE: This section is included as a request for comment on the
+        potential use and syntax.</t>
+
+        <t>The billing of a connection can be done in a lot of different ways.
+        The user can have a global traffic threshold per month, after which
+        his throughput is limited, or after which he/she pays each megabyte.
+        He/she can also have an unlimited access to some websites, or an
+        unlimited access during the weekends.</t>
+
+        <t>We propose to split the final billing in elementary billings, which
+        have conditions (a start date, an end date, a destination IP
+        address...). The global billing is an ordered list of elementary
+        billings. To know the cost of a transmission, the host goes through
+        the list, and the first elementary billing whose the conditions are
+        fulfilled gives the cost. If no elementary billing conditions match
+        the request, the host MUST make no assumption about the cost.</t>
+
+        <section anchor="billing-conditions" title="Conditions">
+          <t>Here are the potential conditions for an elementary billing. All
+          conditions MUST be fulfill.</t>
+
+          <t>Note: the final version should use short-hand key names.</t>
+
+          <texttable>
+            <ttcol>Key</ttcol>
+
+            <ttcol>Description</ttcol>
+
+            <ttcol>Type</ttcol>
+
+            <ttcol width="20%">JSON Example</ttcol>
+
+            <c>beginDate</c>
+
+            <c>Date before which the billing is not valid</c>
+
+            <c>ISO 8601</c>
+
+            <c>"1977-04-22T06:00:00Z"</c>
+
+            <c>endDate</c>
+
+            <c>Date after which the billing is not valid</c>
+
+            <c>ISO 8601</c>
+
+            <c>"1977-04-22T06:00:00Z"</c>
+
+            <c>domains</c>
+
+            <c>FQDNs whose the billing is limited</c>
+
+            <c>array(string)</c>
+
+            <c>["deezer.com","spotify.com"]</c>
+
+            <c>prefixes4</c>
+
+            <c>IPv4 prefixes whose the billing is limited</c>
+
+            <c>array(string)</c>
+
+            <c>["78.40.123.182/32","78.40.123.183/32"]</c>
+
+            <c>prefixes6</c>
+
+            <c>IPv6 prefixes whose the billing is limited</c>
+
+            <c>array(string)</c>
+
+            <c>["2a00:1450:4007:80e::200e/64"]</c>
+          </texttable>
+        </section>
+
+        <section anchor="billing-price" title="Price">
+          <t>Here are the different possibilities for the cost of an
+          elementary billing. A missing key means
+          "all/unlimited/unrestricted". If the elementary billing selected has
+          a trafficRemaining of 0 kb, then it means that the user has no
+          access to the network. Actually, if the last elementary billing has
+          a trafficRemaining parameter, it means that when the user will reach
+          the threshold, he/she will not have access to the network
+          anymore.</t>
+
+          <texttable>
+            <ttcol>Key</ttcol>
+
+            <ttcol>Description</ttcol>
+
+            <ttcol>Type</ttcol>
+
+            <ttcol width="20%">JSON Example</ttcol>
+
+            <c>pricePerGb</c>
+
+            <c>The price per Gigabit</c>
+
+            <c>float (currency per Gb)</c>
+
+            <c>2</c>
+
+            <c>currency</c>
+
+            <c>The currency used</c>
+
+            <c>ISO 4217</c>
+
+            <c>"EUR"</c>
+
+            <c>throughputMax</c>
+
+            <c>The maximum achievable throughput</c>
+
+            <c>float (kb/s)</c>
+
+            <c>1000</c>
+
+            <c>trafficRemaining</c>
+
+            <c>The traffic remaining</c>
+
+            <c>float (kb)</c>
+
+            <c>96000000</c>
+          </texttable>
+        </section>
+
+        <section anchor="billing-examples" title="Examples">
+          <t>Example for a user with 20 GB per month for 40 EUR, then reach a
+          threshold, and with unlimited data during weekends and to
+          deezer:</t>
+
+          <figure>
+            <artwork><![CDATA[
+[
+  {
+    "domains": ["deezer.com"]
+  },
+  {
+    "prefixes4": ["78.40.123.182/32","78.40.123.183/32"]
+  },
+  {
+    "beginDate": "2016-07-16T00:00:00Z",
+    "endDate": "2016-07-17T23:59:59Z",
+  },
+  {
+    "beginDate": "2016-06-20T00:00:00Z",
+    "endDate": "2016-07-19T23:59:59Z",
+    "trafficRemaining": 96000000
+  },
+  {
+    "throughputMax": 1000
+  }
+]
+            ]]></artwork>
+          </figure>
+
+          <t>If the host tries to download data from deezer.com, the
+          conditions of the first elementary billing are fulfilled, so the
+          host takes this elementary billing, finds no cost indication in it
+          and so deduces that it is totally free. If the host tries to
+          exchange data with youtube.com and the date is 2016-07-14T19:00:00Z,
+          the conditions of the first, second and third elementary billing are
+          not fulfilled. But the conditions of the fourth are. So the host
+          takes this elementary billing and sees that there is a threshold, 12
+          GB are remaining.</t>
+
+          <t>Another example for a user abroad, who has 3 GB per year abroad,
+          and then pay each MB:</t>
+
+          <figure>
+            <artwork><![CDATA[
+[
+  {
+    "beginDate": "2016-02-10T00:00:00Z",
+    "endDate": "2017-02-09T23:59:59Z",
+    "trafficRemaining": 9200000
+  },
+  {
+    "pricePerGb": 30,
+    "currency": "EUR"
+  }
+]
+            ]]></artwork>
+          </figure>
+        </section>
+      </section>
+
+      <section anchor="keys-private" title="Private Extensions">
+        <t>keys starting with "x-" are reserved for private use and can be
+        utilized to provide vendor-, user- or enterprise-specific information.
+        It is RECOMMENDED to use one of the patterns "x-FQDN-KEY" or
+        "x-PEN-KEY" where FQDN is a fully qualified domain name or PEN is a
+        <xref target="PEN">private enterprise number</xref> under control of
+        the author of the extension to avoid collisions.</t>
+      </section>
+
+      <section anchor="information-examples" title="Examples">
+        <section anchor="example-json" title="Using JSON">
+          <figure>
+            <artwork><![CDATA[
+{
+  "name": "Orange France",
+  "localizedName": "Orange France",
+  "dnsServers": ["8.8.8.8", "8.8.4.4"],
+  "throughputMax": {
+    "down": 100000,
+    "up": 20000
+  },
+  "cost": [
+    {
+      "domains": ["deezer.com"]
+    },
+    {
+      "prefixes4": ["78.40.123.182/32","78.40.123.183/32"]
+    },
+    {
+      "beginDate": "2016-07-16T00:00:00Z",
+      "endDate": "2016-07-17T23:59:59Z",
+    },
+    {
+      "beginDate": "2016-06-20T00:00:00Z",
+      "endDate": "2016-07-19T23:59:59Z",
+      "trafficRemaining": 96000000
+    },
+    {
+      "throughputMax": 1000
+    }
+  ]
+}
+            ]]></artwork>
+          </figure>
+        </section>
+
+        <section anchor="example-dnstxt" title="Using DNS TXT records">
+          <figure>
+            <artwork><![CDATA[
+n=Orange France
+r=8.8.8.8,8.8.4.4
+tp=100000,20000
+cost+0+domains=deezer.com
+cost+1+prefixes4=78.40.123.182/32,78.40.123.183/32
+cost+2+beginDate=2016-07-16T00:00:00Z
+cost+2+endDate=2016-07-17T23:59:59Z
+cost+3+beginDate=2016-06-20T00:00:00Z
+cost+3+endDate=2016-07-19T23:59:59Z
+cost+3+trafficRemaining=96000000
+cost+4+throughputMax=1000
+            ]]></artwork>
+          </figure>
+        </section>
+      </section>
+    </section>
+
+    <section title="Use case examples">
+      <t>TBD: 1 or 2 examples when PvD are critical</t>
+
+      <section title="Multihoming">
+        <t>First example could be multihoming (very much in-line with
+        bowbakova draft).</t>
+      </section>
+
+      <section title="VPN/Extranet example">
+        <t>using PvD to reach a specific destination (such as VPN or
+        extranet).</t>
+      </section>
+    </section>
+
+    <section title="Security Considerations">
+      <t>While the PvD ID can be forged easily, if the host retrieve the
+      extended PvD via TLS, then the host can trust the content of the
+      extended PvD and verifies that the RA prefix(es) are indeed included in
+      the master prefixed of the extended PvD.</t>
+    </section>
+
+    <section title="Acknowledgements">
+      <t>Many thanks to M. Stenberg and S. Barth: <xref
+      target="keys-services"/>, <xref target="keys-conn"/> and <xref
+      target="keys-private"/> are from their document <xref
+      target="I-D.stenberg-mif-mpvd-dns"/>.</t>
+
+      <t>Thanks also to Ray Bellis, Lorenzo Colitti, Marcus Keane, Erik Kline,
+      Jen Lenkova, Mark Townsley and James Woodyatt for useful and interesting
+      brainstorming sessions.</t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative references">
+      <?rfc include="reference.RFC.2119.xml"?>
+
+      <?rfc include="reference.RFC.5952.xml"?>
+
+      <?rfc include="reference.RFC.7556.xml"?>
+    </references>
+
+    <references title="Informative references">
+      <?rfc include="reference.I-D.bowbakova-rtgwg-enterprise-pa-multihoming.xml"?>
+
+      <?rfc include="reference.I-D.stenberg-mif-mpvd-dns"?>
+
+      <reference anchor="PEN"
+                 target="https://www.iana.org/assignments/enterprise-numbers">
+        <front>
+          <title>Private Enterprise Numbers</title>
+
+          <author>
+            <organization>IANA</organization>
+          </author>
+
+          <date/>
+        </front>
+      </reference>
+    </references>
+  </back>
+</rfc>
