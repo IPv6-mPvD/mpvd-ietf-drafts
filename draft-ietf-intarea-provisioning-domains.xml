@@ -7,7 +7,7 @@
 <?rfc symrefs="yes"?>
 <?rfc toc="yes"?>
 <?rfc tocindent="yes"?>
-<rfc category="std" docName="draft-ietf-intarea-provisioning-domains-01"
+<rfc category="std" docName="draft-ietf-intarea-provisioning-domains-02"
      ipr="trust200902">
   <front>
     <title abbrev="Provisioning Domains">Discovering Provisioning Domain Names
@@ -101,6 +101,32 @@
       </address>
     </author>
 
+    <author fullname="Wenqin Shao" initials="W" surname="Shao">
+      <organization>Telecom-ParisTech</organization>
+
+      <address>
+        <postal>
+          <street/>
+
+          <city/>
+
+          <region/>
+
+          <code/>
+
+          <country>France</country>
+        </postal>
+
+        <phone/>
+
+        <facsimile/>
+
+        <email>wenqin.shao@telecom-paristech.fr</email>
+
+        <uri/>
+      </address>
+    </author>
+
     <!--
     <author fullname="Marcus Keane" initials="M" surname="Keane">
       <organization>Microsoft</organization>
@@ -129,7 +155,7 @@
     </author>
 	-->
 
-    <date day="9" month="February" year="2018"/>
+    <date day="4" month="June" year="2018"/>
 
     <area>Internet</area>
 
@@ -144,13 +170,13 @@
     <abstract>
       <t>An increasing number of hosts access the Internet via multiple
       interfaces or, in IPv6 multi-homed networks, via multiple IPv6 prefix
-      configurations.</t>
+      configurations context.</t>
 
-      <t>This document describes a way for hosts to identify such means,
-      called Provisioning Domains (PvDs), with Fully Qualified Domain Names
-      (FQDN). Those identifiers are advertised in a new Router Advertisement
-      (RA) option and, when present, are associated with the set of
-      information included within the RA.</t>
+      <t>This document describes a way for hosts to identify such contexts,
+      called Provisioning Domains (PvDs), where Fully Qualified Domain Names
+      (FQDNs) act as PvD identifiers. Those identifiers are advertised in a
+      new Router Advertisement (RA) option and, when present, are associated
+      with the set of information included within the RA.</t>
 
       <t>Based on this FQDN, hosts can retrieve additional information about
       their network access characteristics via an HTTP over TLS query. This
@@ -191,7 +217,7 @@
       additional information that would typically be considered unfit, or too
       large, to be directly included in the Router Advertisement, but might be
       considered useful to the applications, or even sometimes users, when
-      choosing which PvD and transport should be used.</t>
+      choosing which PvD should be used.</t>
     </section>
 
     <section title="Terminology">
@@ -214,7 +240,12 @@
 
           <t hangText="Implicit PvD: ">A PvD that, in the absence of a PvD ID,
           is identified by the host interface to which it is attached and the
-          address of the advertising router.</t>
+          address of the advertising router. See also <xref
+          target="RFC7556"/>.</t>
+
+          <t hangText="PvD-aware host">A host that supports the association of
+          network configuration information into PvDs and the use of these
+          PvDs. Also named PvD-aware node in <xref target="RFC7556"/>.</t>
         </list></t>
     </section>
 
@@ -224,17 +255,18 @@
       Qualified Domain Name (FQDN) which MUST belong to the network operator
       in order to avoid naming collisions. The same PvD ID MAY be used in
       several access networks when they ultimately provide identical services
-      (e.g., in all home networks subscribed to the same service).</t>
+      (e.g., in all home networks subscribed to the same service); else, the
+      PvD ID MUST be different to follow section 2.4 of <xref
+      target="RFC7556"/>.</t>
 
       <section title="PvD ID Option for Router Advertisements">
         <t>This document introduces a Router Advertisement (RA) option called
-        PvD ID Router Advertisement option. It is used to convey the FQDN
-        identifying a given PvD (see <xref target="format"/>), bind the PvD ID
-        with configuration information received over DHCPv4 (see <xref
-        target="dhcpv4"/>), enable the use of HTTP over TLS to retrieve the
-        PvD Additional Information JSON object (see <xref target="data"/>), as
-        well as contain any other RA options which would otherwise be valid in
-        the RA.</t>
+        PvD option. It is used to convey the FQDN identifying a given PvD (see
+        <xref target="format"/>), bind the PvD ID with configuration
+        information received over DHCPv4 (see <xref target="dhcpv4"/>), enable
+        the use of HTTP over TLS to retrieve the PvD Additional Information
+        JSON object (see <xref target="data"/>), as well as contain any other
+        RA options which would otherwise be valid in the RA.</t>
 
         <figure anchor="format"
                 title="PvD ID Router Advertisements Option format">
@@ -244,7 +276,7 @@
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|     Type      |    Length     |H|L|A|        Reserved         |
+|     Type      |    Length     |H|L|R|     Reserved    | Delay |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |       Sequence Number         |                             ...
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+                             ...
@@ -254,7 +286,7 @@
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                             ...
 ...            Router Advertisement message header            ...
-...             (Only present when A-flag is set)             ...
+...             (Only present when R-flag is set)             ...
 ...                                                             |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |   Options ...
@@ -265,13 +297,12 @@
         </figure>
 
         <t><list style="hanging">
-            <t hangText="Type        : ">(8 bits) To be defined by IANA.
-            Current experimentation uses the value of 254.</t>
+            <t hangText="Type        : ">(8 bits) Set to 21.</t>
 
             <t hangText="Length      : ">(8 bits) The length of the option in
             units of 8 octets, including the Type and Length fields, the
             Router Advertisement message header, if any, as well as the RA
-            options that are included within the PvD ID Option.</t>
+            options that are included within the PvD Option.</t>
 
             <t hangText="H-flag      : ">(1 bit) 'HTTP' flag stating whether
             some PvD Additional Information is made available through HTTP
@@ -281,10 +312,14 @@
             the router is also providing IPv4 information using DHCPv4 (see
             <xref target="dhcpv4"/>).</t>
 
-            <t hangText="A-flag      : ">(1 bit) 'Advertisement' flag stating
-            whether the PvD ID Option is followed (right after padding to the
-            next 64 bits boundary) by a Router Advertisement message header
-            (See section 4.2 of target="RFC4861"/&gt;).</t>
+            <t hangText="R-flag      : ">(1 bit) 'Router Advertisement' flag
+            stating whether the PvD Option is followed (right after padding to
+            the next 64 bits boundary) by a Router Advertisement message
+            header (See section 4.2 of <xref target="RFC4861"/>).</t>
+
+            <t hangText="Delay       : ">(4 bits) Unsigned integer used to
+            delay HTTP GET queries from hosts by a randomized backoff (see
+            <xref target="retr"/>).</t>
 
             <t hangText="Reserved    : ">(13 bits) Reserved for later use. It
             MUST be set to zero by the sender and ignored by the receiver.</t>
@@ -302,7 +337,7 @@
             next 8 octets boundary. It MUST be set to zero by the sender, and
             ignored by the receiver.</t>
 
-            <t hangText="RA message header : ">(16 octets) When the A-flag is
+            <t hangText="RA message header : ">(16 octets) When the R-flag is
             set, a full Router Advertisement message header as specified in
             <xref target="RFC4861"/>. The 'Type', 'Code' and 'Checksum' fields
             (i.e. the first 32 bits), MUST be set to zero by the sender and
@@ -312,20 +347,22 @@
 
             <t hangText="Options : ">Zero or more RA options that would
             otherwise be valid as part of the Router Advertisement main body,
-            but are instead included in the PvD ID Option such as to be
-            ignored by hosts that are not 'PvD-aware'.</t>
-          </list>Here is an example of a PvD ID option with example.org as the
-        PvD ID FQDN and including a RDNSS and prefix information options:</t>
+            but are instead included in the PvD Option such as to be ignored
+            by hosts that are not 'PvD-aware'.</t>
+          </list>Here is an example of a PvD option with example.org as the
+        PvD ID FQDN and including a RDNSS and prefix information options (it
+        also have the sequence number 123, presence of additional information
+        to be fetched with a delay indicated as 5):</t>
 
-        <figure>
+        <figure anchor="pvd_example">
           <artwork><![CDATA[   0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
   +---------------+-----------------------------------------------+
-  | Type: 254     |  Length: 12   |0|0|0|        Reserved         |
+  | Type: 21      |  Length: 12   |1|0|0|     Reserved    |Delay:5|
   +---------------+-------------------------------+---------------+
-  |       Sequence Number         |      7        |       e       |
+  |       Seq number: 123         |      7        |       e       |
   +---------------+-----------------------------------------------+
-  |      m        |       a       |      m        |       p       |
+  |      x        |       a       |      m        |       p       |
   +---------------------------------------------------------------+
   |      l        |       e       |      3        |       o       |
   +---------------------------------------------------------------+
@@ -343,42 +380,53 @@
   +---------------------------------------------------------------+
 
 ]]></artwork>
+
+          <postamble/>
         </figure>
       </section>
 
       <section title="Router Behavior">
-        <t>A router MAY send RAs containing at most one PvD ID RA option, but
-        MUST NOT include more than one PvD ID RA option in each RA. In
-        particular, the PvD ID RA option MUST NOT contain further PvD ID RA
-        options.</t>
+        <t>A router MAY send RAs containing one PvD option, but MUST NOT
+        include more than one PvD option in each RA. In particular, the PvD
+        option MUST NOT contain further PvD options.</t>
 
-        <t>The PvD ID Option MAY contain zero, one, or more RA options which
+        <t>The PvD Option MAY contain zero, one, or more RA options which
         would otherwise be valid as part of the same RA. Such options are
         processed by PvD-aware hosts, while ignored by others.</t>
 
         <t>In order to provide multiple different PvDs, a router MUST send
         multiple RAs. Different explicit PvDs MAY be advertised with RAs using
         the same IPv6 source address; but different implicit PvDs, advertised
-        with different RAs, MUST use different link local addresses.</t>
+        by different RAs, MUST use different link-local addresses because
+        these implicit PvDs are identified by the source addresses of the
+        RAs.</t>
 
         <t>Whenever an RA, for a single PvD, would need to be sent via
-        multiple packets, the PvD ID RA option header (i.e., all fields except
-        the 'Options' field) MUST be repeated in all the transmitted RAs. But
-        the options within the 'Options' field, MAY be transmitted only once,
-        included in one of the transmitted PvD ID RA options.</t>
+        multiple packets, the PvD option header (i.e., all fields except the
+        'Options' field) MUST be repeated in all the transmitted RAs. But the
+        options within the 'Options' field, MAY be transmitted only once,
+        included in one of the transmitted PvD options.</t>
       </section>
 
-      <section anchor="host" title="Host Behavior">
+      <section title="Non-PvD-aware Host Behavior">
+        <t>As the PvD Option has a new option code, non-PvD-aware hosts will
+        simply ignore the PvD Option and all the options it contains. This
+        ensure the backward compatibility required in section 3.3 of <xref
+        target="RFC7556"/>. This behavior allows for a mixed-mode network with
+        a mix of PvD-aware and non-PvD-aware hosts coexist.</t>
+      </section>
+
+      <section anchor="host" title="PvD-aware Host Behavior">
         <t>Hosts MUST associate received RAs and included configuration
         information (e.g., Router Valid Lifetime, Prefix Information <xref
         target="RFC4861"/>, Recursive DNS Server <xref target="RFC8106"/>,
         Routing Information <xref target="RFC4191"/> options) with the
-        explicit PvD identified by the first PvD ID Option present in the
+        explicit PvD identified by the first PvD Option present in the
         received RA, if any, or with the implicit PvD identified by the host
         interface and the source address of the received RA otherwise.</t>
 
-        <t>In case multiple PvD ID options are found in a given RA, hosts MUST
-        ignore all but the first PvD ID option.</t>
+        <t>In case multiple PvD options are found in a given RA, hosts MUST
+        ignore all but the first PvD option.</t>
 
         <t>Similarly, hosts MUST associate all network configuration objects
         (e.g., default routers, addresses, more specific routes, DNS Recursive
@@ -390,14 +438,15 @@
         <t>PvD IDs MUST be compared in a case-insensitive manner (i.e., A=a),
         assuming ASCII with zero parity while non-alphabetic codes must match
         exactly (see also Section 3.1 of <xref target="RFC1035"/>). For
-        example, pvd.example.com or PvD.Example.coM would refer to the same
-        PvD.</t>
+        example, "pvd.example.com." or "PvD.Example.coM." would refer to the
+        same PvD.</t>
 
         <t>While resolving names, executing the default address selection
         algorithm <xref target="RFC6724"/> or executing the default router
-        selection algorithm (<xref target="RFC2461"/>, <xref
-        target="RFC4191"/> and <xref target="RFC8028"/>), hosts MAY consider
-        only the configuration associated with an arbitrary set of PvDs.</t>
+        selection algorithm when forwarding packets (<xref target="RFC2461"/>,
+        <xref target="RFC4191"/> and <xref target="RFC8028"/>), hosts MAY
+        consider only the configuration associated with an arbitrary set of
+        PvDs.</t>
 
         <t>For example, a host MAY associate a given process with a specific
         PvD, or a specific set of PvDs, while associating another process with
@@ -432,9 +481,9 @@
         <section anchor="dhcpv4" title="DHCPv4 configuration association">
           <t>When a host retrieves configuration elements from DHCPv4, they
           MUST be associated with the explicit PvD received on the same
-          interface, whose PVD ID Options L-flag is set and, in the case of a
-          non point-to-point link, using the same datalink address. If no such
-          PvD is found, or whenever multiple different PvDs are found, the
+          interface, whose PVD Options L-flag is set and, in the case of a non
+          point-to-point link, using the same datalink address. If no such PvD
+          is found, or whenever multiple different PvDs are found, the
           configuration elements coming from DHCPv4 MUST be associated with
           the implicit PvD identified by the interface on which the DHCPv4
           transaction happened. The case of multiple explicit PvD for an IPv4
@@ -444,14 +493,14 @@
           IPv4.</t-->
         </section>
 
-        <section title="Interconnection Sharing by the Host">
+        <section title="Connection Sharing by the Host">
           <t>The situation when a node receives an RA on one interface (e.g.
           cellular) and shares this connectivity by also acting as a router by
           transmitting RA on another interface (e.g. WiFi) is known as
-          'tethering'. It can be done as ND proxy. The exact behavior is TBD
-          but it is expected that the one or several PvD associated to the
-          shared interface (e.g. cellular) will also be advertised to the
-          clients on the other interface (e.g. WiFi).</t>
+          'tethering'. It can be done as ND proxy. The exact behavior is out
+          of scope of this document but it is expected that the one or several
+          PvD associated to the shared interface (e.g. cellular) will also be
+          advertised to the clients on the other interface (e.g. WiFi).</t>
         </section>
       </section>
     </section>
@@ -473,7 +522,7 @@
       target="host"/>.</t>
 
       <section anchor="retr" title="Retrieving the PvD Additional Information">
-        <t>When the H-flag of the PvD ID Option is set, hosts MAY attempt to
+        <t>When the H-flag of the PvD Option is set, hosts MAY attempt to
         retrieve the PvD Additional Information associated with a given PvD by
         performing an HTTP over TLS <xref target="RFC2818"/> GET query to
         https://&lt;PvD-ID&gt;/.well-known/pvd <xref target="RFC5785"/>.
@@ -491,11 +540,11 @@
         with the PvD, as defined in <xref target="host"/>. In some cases, it
         may therefore be necessary to wait for an address to be available for
         use (e.g., once the Duplicate Address Detection or DHCPv6 processes
-        are complete) before initiating the HTTP over TLS query. If the PvD
-        allows for temporary address per <xref target="RFC4941"/>, then hosts
-        SHOULD use a temporary address to fetch the PvD Additional Information
-        and SHOULD deprecate the used temporary address and generate a new
-        temporary address afterward.</t>
+        are complete) before initiating the HTTP over TLS query. If the host
+        has a temporary address per <xref target="RFC4941"/> in this PvD, then
+        hosts SHOULD use a temporary address to fetch the PvD Additional
+        Information and SHOULD deprecate the used temporary address and
+        generate a new temporary address afterward.</t>
 
         <t>If the HTTP status of the answer is greater than or equal to 400
         the host MUST abandon and consider that there is no additional PvD
@@ -523,11 +572,33 @@
         for the presence and validity of the mandatory fields specified in
         <xref target="aiformat"/>. A retrieved object including an expiration
         time that is already past or missing a mandatory element MUST be
-        ignored. In order to avoid synchronized queries toward the server
-        hosting the PvD Additional Information when an object expires, a host
-        which last retrieved an object at a time A, including a validity time
-        B, SHOULD renew the object at a uniformly random time in the interval
-        [(B-A)/2,A].</t>
+        ignored.</t>
+
+        <t>In order to avoid synchronized queries toward the server hosting
+        the PvD Additional Information when an object expires, object updates
+        are delayed by a randomized backoff time. <list>
+            <t>When a host performs an object update after it detected a
+            change in the PvD Option Sequence number, it MUST delay the query
+            by a random time between zero and 2**(Delay * 2) milliseconds,
+            where 'Delay' corresponds to the 4 bits long unsigned integer in
+            the last received PvD Option.</t>
+
+            <t>When a host last retrieved an object at time A including a
+            validity time B, and is configured to keep the object up to date,
+            it MUST perform the update at a uniformly random time in the
+            interval [(B-A)/2,B].</t>
+          </list></t>
+
+        <t>In the example <xref target="pvd_example"/>, the delay field value
+        is 5, this means that host MUST delay the query by a random number
+        between 0 and 2**(5 * 2) milliseconds, i.e., between 0 and 1024
+        milliseconds.</t>
+
+        <t>Since the 'Delay' value is directly within the PvD Option rather
+        than the object itself, an operator may perform a push-based update by
+        incrementing the Sequence value while changing the Delay value
+        depending on the criticality of the update and its PvD Additional
+        Information servers capacity.</t>
 
         <t>The PvD Additional Information object includes a set of IPv6
         prefixes (under the key "prefixes") which MUST be checked against all
@@ -540,16 +611,16 @@
       </section>
 
       <section title="Operational Consideration to Providing the PvD Additional Information">
-        <t>Whenever the H-flag is set in the PvD RA Option, a valid PvD
+        <t>Whenever the H-flag is set in the PvD Option, a valid PvD
         Additional Information object MUST be made available to all hosts
         receiving the RA by the network operator. In particular, when a
         captive portal is present, hosts MUST still be allowed to perform DNS,
         PKI and HTTP over TLS operations related to the retrieval of the
         object, even before logging into the captive portal.</t>
 
-        <t>Routers MAY increment the PVD ID Sequence number in order to inform
-        host that a new PvD Additional Information object is available and
-        should be retrieved.</t>
+        <t>Routers MAY increment the PVD Option Sequence number in order to
+        inform host that a new PvD Additional Information object is available
+        and should be retrieved.</t>
 
         <t>The server providing the JSON files SHOULD also check whether the
         client address is part of the prefixes listed into the additional
@@ -710,19 +781,19 @@
       </section>
     </section>
 
-    <section title="Operation Considerations">
-      <t>This section describes some use cases of PvD. For sake of simplicity,
-      the RA messages will not be described in the usual ASCII art but rather
-      in an indented list. For example, a RA message containing some options
-      and a PvD ID option that also contains other options will be described
-      as:<list style="symbols">
+    <section title="Operational Considerations">
+      <t>This section describes some use cases of PvD. For the sake of
+      simplicity, the RA messages will not be described in the usual ASCII art
+      but rather in an indented list. For example, a RA message containing
+      some options and a PvD option that also contains other options will be
+      described as:<list style="symbols">
           <t>RA Header: router lifetime = 6000</t>
 
           <t>Prefix Information Option: length = 4, prefix =
           2001:db8:cafe::/64</t>
 
-          <t>PvD ID header: length = 3+ 5 +4 , PvD ID FQDN = example.org,
-          A-flag = 0 (actual length of the header with padding 24 bytes = 3 *
+          <t>PvD Option header: length = 3+ 5 +4 , PvD ID FQDN = example.org.,
+          R-flag = 0 (actual length of the header with padding 24 bytes = 3 *
           8 bytes)<list style="symbols">
               <t>Recursive DNS Server: length = 5, addresses=
               [2001:db8:cafe::53, 2001:db8:f00d::53]</t>
@@ -732,12 +803,12 @@
             </list></t>
         </list></t>
 
-      <t>It is expected that for some years, networks will have a mix of
-      PvD-aware hosts and PvD-ignorant hosts. If there is a need to give
-      specific information to PvD-aware hosts only, then it is recommended to
-      send TWO RA messages: one for each class of hosts. For example, here is
-      the RA for PvD-ignorant hosts:<list style="symbols">
-          <t>RA Header: router lifetime = 6000 (PvD-ignorant hosts will use
+      <t>It is expected that for some years, networks will have a mixed
+      environment of PvD-aware hosts and non-PvD-aware hosts. If there is a
+      need to give specific information to PvD-aware hosts only, then it is
+      recommended to send TWO RA messages: one for each class of hosts. For
+      example, here is the RA for non-PvD-aware hosts:<list style="symbols">
+          <t>RA Header: router lifetime = 6000 (non-PvD-aware hosts will use
           this router as a default router)</t>
 
           <t>Prefix Information Option: length = 4, prefix =
@@ -746,8 +817,8 @@
           <t>Recursive DNS Server Option: length = 3, addresses=
           [2001:db8:cafe::53]</t>
 
-          <t>PvD ID header: length = 3+ 2, PvD ID FQDN = foo.example.org,
-          A-flag = 1 (actual length of the header 24 bytes = 3 * 8 bytes)<list
+          <t>PvD Option header: length = 3+ 2, PvD ID FQDN = foo.example.org.,
+          R-flag = 1 (actual length of the header 24 bytes = 3 * 8 bytes)<list
               style="symbols">
               <t>RA Header: router lifetime = 0 (PvD-aware hosts will not use
               this router as a default router), implicit length = 2</t>
@@ -755,12 +826,12 @@
         </list></t>
 
       <t>And here is a RA example for PvD-aware hosts:<list style="symbols">
-          <t>RA Header: router lifetime = 0 (PvD-ignorant hosts will not use
+          <t>RA Header: router lifetime = 0 (non-PvD-aware hosts will not use
           this router as a default router)</t>
 
-          <t>PvD ID header: length = 3+ 2 + 4 + 3, PvD ID FQDN = example.org,
-          A-flag = 1 (actual length of the header 24 bytes = 3 * 8 bytes)<list
-              style="symbols">
+          <t>PvD Option header: length = 3+ 2 + 4 + 3, PvD ID FQDN =
+          example.org., R-flag = 1 (actual length of the header 24 bytes = 3 *
+          8 bytes)<list style="symbols">
               <t>RA Header: router lifetime = 1600 (PvD-aware hosts will use
               this router as a default router), implicit length = 2</t>
 
@@ -772,7 +843,7 @@
             </list></t>
         </list></t>
 
-      <t>In the above example, PvD-ignorant hosts will only use the first RA
+      <t>In the above example, non-PvD-aware hosts will only use the first RA
       sent from their default router and using the 2001:db8:cafe::/64 prefix.
       PvD-aware hosts will autonomously configure addresses from both PIOs,
       but will only use the source address in 2001:db8:f00d::/64 to
@@ -784,8 +855,8 @@
     <section title="Security Considerations">
       <t>Although some solutions such as IPsec or SeND <xref
       target="RFC3971"/> can be used in order to secure the IPv6 Neighbor
-      Discovery Protocol, actual deployments largely rely on link layer or
-      physical layer security mechanisms (e.g. 802.1x <xref
+      Discovery Protocol, in practice actual deployments largely rely on link
+      layer or physical layer security mechanisms (e.g. 802.1x <xref
       target="IEEE8021X"/>) in conjunction with RA Guard <xref
       target="RFC6105"/>.</t>
 
@@ -797,9 +868,10 @@
 
       <t>It must be noted that <xref target="misconfig"/> of this document
       only provides reasonable assurance against misconfiguration but does not
-      prevent an hostile network access provider to wrong information that
-      could lead applications or hosts to select an hostile PvD. Users should
-      always apply caution when connecting to an unknown network.</t>
+      prevent an hostile network access provider to advertize wrong
+      information that could lead applications or hosts to select an hostile
+      PvD. Users should always apply caution when connecting to an unknown
+      network.</t>
     </section>
 
     <section title="Privacy Considerations">
@@ -814,11 +886,11 @@
       header or HTTP cookie, while performing the HTTP over TLS query.</t>
 
       <t>From a privacy perspective, retrieving the PvD Additional Information
-      is not different from establishing a first connexion to a remote server,
-      or even performing a single DNS lookup. For example, most operating
-      systems already perform early queries to well known web sites, such as
-      http://captive.example.com/hotspot-detect.html, in order to detect the
-      presence of a captive portal.</t>
+      is not different from establishing a first connection to a remote
+      server, or even performing a single DNS lookup. For example, most
+      operating systems already perform early queries to well known web sites,
+      such as http://captive.example.com/hotspot-detect.html, in order to
+      detect the presence of a captive portal.</t>
 
       <t>There may be some cases where hosts, for privacy reasons, should
       refrain from accessing servers that are located outside a certain
@@ -830,9 +902,9 @@
     </section>
 
     <section title="IANA Considerations">
-      <t>IANA is asked to assign the value TBD from the IPv6 Neighbor
-      Discovery Option Formats registry for the PvD ID Router Advertisement
-      option.</t>
+      <t>Upon publication of this document, IANA is asked to remove the
+      'reclaimable' tag off the value 21 for the PvD option (from the IPv6
+      Neighbor Discovery Option Formats registry).</t>
 
       <t>IANA is asked to assign the value "pvd" from the Well-Known URIs
       registry.</t>
@@ -843,11 +915,10 @@
       assignments are to be made through Expert Review [BCP36].</t>
 
       <t>Finally, IANA is asked to create and maintain a new registry entitled
-      "PvD ID Router Advertisement option Flags" reserving bit positions from
-      0 to 15 to be used in the PvD ID Router Advertisement option bitmask.
-      Bit position 0, 1 and 2 are reserved by this document (as specified in
-      <xref target="format"/>). Future assignments require a Standard Track
-      RFC document.</t>
+      "PvD option Flags" reserving bit positions from 0 to 15 to be used in
+      the PvD option bitmask. Bit position 0, 1 and 2 are reserved by this
+      document (as specified in <xref target="format"/>). Future assignments
+      require a Standard Track RFC document.</t>
     </section>
 
     <section title="Acknowledgements">
@@ -855,10 +926,10 @@
       target="I-D.stenberg-mif-mpvd-dns"/>, as well as to Basile Bruneau who
       was author of an early version of this document.</t>
 
-      <t>Thanks also to Marcus Keane, Mikael Abrahamson, Ray Bellis, Lorenzo
-      Colitti, Bob Hinden, Tatuya Jinmei, Erik Kline, Ted Lemon, Jen Lenkova,
-      Mark Townsley and James Woodyatt for useful and interesting
-      discussions.</t>
+      <t>Thanks also to Marcus Keane, Mikael Abrahamson, Ray Bellis, Zhen Cao,
+      Tim Chow, Lorenzo Colitti, Ian Farrer, Bob Hinden, Tatuya Jinmei, Erik
+      Kline, Ted Lemon, Jen Lenkova, Veronika McKillop, Mark Townsley and
+      James Woodyatt for useful and interesting discussions.</t>
 
       <t>Finally, special thanks to Thierry Danis and Wenqin Shao for their
       valuable inputs and implementation efforts (<xref target="github"/>),
@@ -904,6 +975,8 @@
       <?rfc include="reference.RFC.6296.xml"?>
 
       <?rfc include="reference.RFC.6724.xml"?>
+
+      <?rfc include="reference.RFC.6731.xml"?>
 
       <?rfc include="reference.RFC.7556.xml"?>
 
@@ -1070,6 +1143,42 @@
 
             <t>Better detail the Security model and Privacy
             considerations.</t>
+          </list></t>
+      </section>
+
+      <section title="WG Document version 02">
+        <t><list>
+            <t>Use the IANA value of 21 in the text and update the IANA
+            considerations section accordingly</t>
+
+            <t>add the Delay field to avoid the thundering herd effect</t>
+
+            <t>add Wenqin Shao as author</t>
+
+            <t>keep the 1 PvD per RA model</t>
+
+            <t>changed the intro (per Zhen Cao) "when choosing which PvD and
+            transport should be used" =&gt; "when choosing which PvD should be
+            used"</t>
+
+            <t>rename A-flag in R-flag to avoid A-flag of PIO</t>
+
+            <t>use the wording "PvD Option", removing the ID token as it is
+            now a container with more then just an ID, removing 'RA' in the
+            option name to be consistent with other IANA NDP option</t>
+
+            <t>use "non-PvD-aware" rather than "PvD-ignorant"</t>
+
+            <t>added more reference to RFC 7556 (notably for PvD being
+            globally unique, introducing PvD-aware host vs. PvD-aware
+            node)</t>
+
+            <t>Section 3.4.3 renamed from "interconnection shared by node" to
+            'connection shared by node"</t>
+
+            <t>Section 3.4 renamed into "PvD-aware Host Behavior"</t>
+
+            <t>Added a section "Non-PvD-aware Host Behavior"</t>
           </list></t>
       </section>
     </section>
