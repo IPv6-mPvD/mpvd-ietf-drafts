@@ -385,7 +385,7 @@
         </figure>
       </section>
 
-      <section title="Router Behavior">
+      <section anchor="router" title="Router Behavior">
         <t>A router MAY send RAs containing one PvD option, but MUST NOT
         include more than one PvD option in each RA. In particular, the PvD
         option MUST NOT contain further PvD options.</t>
@@ -401,11 +401,13 @@
         these implicit PvDs are identified by the source addresses of the
         RAs.</t>
 
-        <t>Whenever an RA, for a single PvD, would need to be sent via
-        multiple packets, the PvD option header (i.e., all fields except the
-        'Options' field) MUST be repeated in all the transmitted RAs. But the
-        options within the 'Options' field, MAY be transmitted only once,
-        included in one of the transmitted PvD options.</t>
+        <t>As specified in <xref target="RFC4861"/>, when the set of options
+        causes the size of an advertisement to exceed the link MTU,
+        multiple router advertisements can be sent, each containing a subset of
+        the options. In such cases, the PvD option header (i.e., all fields
+        except the 'Options' field) MUST be repeated in all the transmitted
+        RAs. But the options within the 'Options' field, MAY be transmitted
+        only once, included in one of the transmitted PvD options.</t>
       </section>
 
       <section title="Non-PvD-aware Host Behavior">
@@ -494,13 +496,29 @@
         </section>
 
         <section title="Connection Sharing by the Host">
-          <t>The situation when a node receives an RA on one interface (e.g.
-          cellular) and shares this connectivity by also acting as a router by
-          transmitting RA on another interface (e.g. WiFi) is known as
-          'tethering'. It can be done as ND proxy. The exact behavior is out
-          of scope of this document but it is expected that the one or several
-          PvD associated to the shared interface (e.g. cellular) will also be
-          advertised to the clients on the other interface (e.g. WiFi).</t>
+          <t>The situation when a host shares connectivity from an upstream
+          interface (e.g. cellular) to a downstream interface (e.g. WiFi) is
+          known as 'tethering'. Techniques such as ND-proxy
+          <xref target="RFC4389"/>, 64share <xref target="RFC7278"/> or prefix
+          delegation (e.g. using DHCPv6-PD <xref target="RFC3633"/>) may be
+          used for that purpose.</t>
+          <t>Whenever the RAs received from the upstream interface contain a
+          PVD RA option, hosts that are sharing connectivity SHOULD include a
+          PVD Option within the RAs sent downstream with:
+            <list>
+              <t>The same PVD-ID FQDN.</t>
+              <t>The same H-bit, Delay and Sequence Number values.</t>
+              <t>The L bit set whenever the host is sharing IPv4 connectivity
+              received from the same upstream interface.</t>
+              <t>The bits from the Reserved field set to 0.</t>
+            </list>
+            The values of the R-bit, Router Advertisement message header and
+          Options field depend on whether the connectivity should be shared
+          only with PvD aware hosts or not (see <xref target="router"/>). In
+          particular, all options received within the upstream PvD option and
+          included in the downstream RA SHOULD be included in the downstream
+          PvD option.
+          </t>
         </section>
       </section>
     </section>
@@ -773,11 +791,15 @@
         the actual PvD Additional Information, would need to perform NAT66 in
         order to circumvent this check.</t>
 
-        <t>It is also RECOMMENDED that the HTTPS server checks the source
+        <t>It is also RECOMMENDED that the HTTPS server checks the IPv6 source
         addresses of incoming connections (see <xref target="retr"/>). This
         check give reasonable assurance that neither NPTv6 <xref
         target="RFC6296"/> nor NAT66 were used and restricts the information
         to the valid network users.</t>
+
+        <t>Note that this check cannot be performed when the HTTPS query is
+        performed over IPv4. Therefore, the PvD ID FQDN SHOULD NOT have a DNS A
+        record whenever all hosts using the given PvD have IPv6 connectivity.</t>
       </section>
     </section>
 
@@ -962,9 +984,13 @@
     <references title="Informative references">
       <?rfc include="reference.RFC.3339.xml"?>
 
+      <?rfc include="reference.RFC.3633.xml"?>
+
       <?rfc include="reference.RFC.3971.xml"?>
 
       <?rfc include="reference.RFC.4191.xml"?>
+
+      <?rfc include="reference.RFC.4389.xml"?>
 
       <?rfc include="reference.RFC.4941.xml"?>
 
@@ -977,6 +1003,8 @@
       <?rfc include="reference.RFC.6724.xml"?>
 
       <?rfc include="reference.RFC.6731.xml"?>
+
+      <?rfc include="reference.RFC.7278.xml"?>
 
       <?rfc include="reference.RFC.7556.xml"?>
 
