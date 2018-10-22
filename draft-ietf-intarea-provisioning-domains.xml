@@ -76,7 +76,7 @@
     </author>
 
     <author fullname="David Schinazi" initials="D" surname="Schinazi">
-      <organization>Apple</organization>
+      <organization></organization>
 
       <address>
         <postal>
@@ -95,33 +95,30 @@
 
         <facsimile/>
 
-        <email>dschinazi@apple.com</email>
+        <email>dschinazi.ietf@gmail.com</email>
 
         <uri/>
       </address>
     </author>
 
     <author fullname="Wenqin Shao" initials="W" surname="Shao">
-      <organization>Telecom-ParisTech</organization>
+      <organization>Cisco</organization>
 
       <address>
-        <postal>
-          <street/>
+     <postal>
+          <street>11 Rue Camille Desmoulins</street>
 
-          <city/>
+          <city>Issy-les-Moulineaux</city>
 
-          <region/>
-
-          <code/>
+          <code>92130</code>
 
           <country>France</country>
         </postal>
-
         <phone/>
 
         <facsimile/>
 
-        <email>wenqin.shao@telecom-paristech.fr</email>
+        <email>wenshao@cisco.com</email>
 
         <uri/>
       </address>
