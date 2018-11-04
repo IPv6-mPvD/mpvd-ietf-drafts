@@ -75,31 +75,19 @@
       </address>
     </author>
 
-    <author fullname="David Schinazi" initials="D" surname="Schinazi">
-      <organization></organization>
-
-      <address>
+    <author fullname='David Schinazi' surname='Schinazi' initials='D.'>
+    <organization>Google LLC</organization>
+    <address>
         <postal>
-          <street/>
-
-          <city/>
-
-          <region/>
-
-          <code/>
-
-          <country/>
+            <street>1600 Amphitheatre Parkway</street>
+            <city>Mountain View</city>
+            <region>California</region>
+            <code>94043</code>
+            <country>USA</country>
         </postal>
-
-        <phone/>
-
-        <facsimile/>
-
         <email>dschinazi.ietf@gmail.com</email>
-
-        <uri/>
-      </address>
-    </author>
+    </address>
+</author>
 
     <author fullname="Wenqin Shao" initials="W" surname="Shao">
       <organization>Cisco</organization>
