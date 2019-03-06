@@ -7,7 +7,7 @@
 <?rfc symrefs="yes"?>
 <?rfc toc="yes"?>
 <?rfc tocindent="yes"?>
-<rfc category="std" docName="draft-ietf-intarea-provisioning-domains-02"
+<rfc category="std" docName="draft-ietf-intarea-provisioning-domains-03"
      ipr="trust200902">
   <front>
     <title abbrev="Provisioning Domains">Discovering Provisioning Domain Names
@@ -485,7 +485,7 @@
           interface (e.g. cellular) to a downstream interface (e.g. WiFi) is
           known as 'tethering'. Techniques such as ND-proxy
           <xref target="RFC4389"/>, 64share <xref target="RFC7278"/> or prefix
-          delegation (e.g. using DHCPv6-PD <xref target="RFC3633"/>) may be
+          delegation (e.g. using DHCPv6-PD <xref target="RFC8415"/>) may be
           used for that purpose.</t>
           <t>Whenever the RAs received from the upstream interface contain a
           PVD RA option, hosts that are sharing connectivity SHOULD include a
@@ -969,8 +969,6 @@
     <references title="Informative references">
       <?rfc include="reference.RFC.3339.xml"?>
 
-      <?rfc include="reference.RFC.3633.xml"?>
-
       <?rfc include="reference.RFC.3971.xml"?>
 
       <?rfc include="reference.RFC.4191.xml"?>
@@ -996,6 +994,8 @@
       <?rfc include="reference.RFC.8028.xml"?>
 
       <?rfc include="reference.RFC.8106.xml"?>
+
+      <?rfc include="reference.RFC.8415.xml"?>
 
       <?rfc include="reference.I-D.stenberg-mif-mpvd-dns"?>
 
@@ -1194,6 +1194,11 @@
             <t>Added a section "Non-PvD-aware Host Behavior"</t>
           </list></t>
       </section>
+	  <section title="WG Document version 03">
+		  <t><list>
+			  <t>Updated reference for DHCPv6-PD from RFC 3633 to RFC 8415</t>
+		  </list></t>
+	  </section>
     </section>
   </back>
 </rfc>
