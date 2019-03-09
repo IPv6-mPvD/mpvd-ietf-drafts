@@ -7,7 +7,7 @@
 <?rfc symrefs="yes"?>
 <?rfc toc="yes"?>
 <?rfc tocindent="yes"?>
-<rfc category="std" docName="draft-ietf-intarea-provisioning-domains-03"
+<rfc category="std" docName="draft-ietf-intarea-provisioning-domains-04"
      ipr="trust200902">
   <front>
     <title abbrev="Provisioning Domains">Discovering Provisioning Domain Names
@@ -391,7 +391,7 @@
         multiple router advertisements can be sent, each containing a subset of
         the options. In such cases, the PvD option header (i.e., all fields
         except the 'Options' field) MUST be repeated in all the transmitted
-        RAs. But the options within the 'Options' field, MAY be transmitted
+        RAs. The options within the 'Options' field, MAY be transmitted
         only once, included in one of the transmitted PvD options.</t>
       </section>
 
@@ -414,6 +414,9 @@
 
         <t>In case multiple PvD options are found in a given RA, hosts MUST
         ignore all but the first PvD option.</t>
+
+		<t>If a host receives PvD options flags that it does not recognize
+		(currently in the Reserved field), it MUST ignore these flags.</t>
 
         <t>Similarly, hosts MUST associate all network configuration objects
         (e.g., default routers, addresses, more specific routes, DNS Recursive
@@ -499,12 +502,37 @@
             </list>
             The values of the R-bit, Router Advertisement message header and
           Options field depend on whether the connectivity should be shared
-          only with PvD aware hosts or not (see <xref target="router"/>). In
+          only with PvD-aware hosts or not (see <xref target="router"/>). In
           particular, all options received within the upstream PvD option and
           included in the downstream RA SHOULD be included in the downstream
           PvD option.
           </t>
         </section>
+
+		<section title="Usage of DNS Servers">
+			<t>PvD-aware hosts can be provisioned with recursive DNS servers
+			via RA options passed within an explicit PvD, via RA options
+			associated with an implicit PvD, via DHCPv6 or DHCPv4, or from
+			some other provisioning mechanism that creates an implicit PvD (such as a VPN).
+			In all of these cases, the DNS server addresses SHOULD be strongly associated
+			with the corresponding PvD. Specificially, queries sent to a
+			configured recursive DNS server SHOULD be sent from a local IP address
+			that belongs to the matching PvD. Answers received from the DNS
+			server SHOULD only be used on the same PvD.</t>
+			<t>Maintaining the correct usage of DNS within PvDs avoids various
+				practical errors, such as:
+			<list>
+				<t>A PvD associated with a VPN or otherwise
+					private network may provide DNS answers that contain addresses
+					inaccessible over another PvD.</t>
+				<t>A PvD that uses a NAT64 <xref target="RFC6146"/> and DNS64
+					<xref target="RFC6147"/> will synthesize IPv6 addresses in
+					DNS answers that are not globally routable, and cannot be
+					used on other PvDs. Conversely, an IPv4 address resolved
+				via DNS on another PvD cannot be directly used on a NAT64
+				network without the host synthesizing an IPv6 address.</t>
+			</list></t>
+		</section>
       </section>
     </section>
 
@@ -558,7 +586,7 @@
         retrieved, an error message SHOULD be logged and/or displayed in a
         rate-limited fashion.</t>
 
-        <!-- Considere performing retries with exponential backoffs -->
+        <!-- Consider performing retries with exponential backoffs -->
 
         <t>After retrieval of the PvD Additional Information, hosts MUST keep
         track of the Sequence Number value received in subsequent RAs
@@ -767,7 +795,7 @@
         request (e.g., that the Subject Name is equal to the PvD ID expressed
         as an FQDN). This authentication creates a secure binding between the
         information provided by the trusted Router Advertisement, and the
-        HTTPS server. But this does not mean the Advertising Router and the
+        HTTPS server. However, this does not mean the Advertising Router and the
         PvD server belong to the same entity.</t>
 
         <t>Hosts MUST verify that all prefixes in the RA PIO are covered by a
@@ -799,7 +827,7 @@
           <t>Prefix Information Option: length = 4, prefix =
           2001:db8:cafe::/64</t>
 
-          <t>PvD Option header: length = 3+ 5 +4 , PvD ID FQDN = example.org.,
+          <t>PvD Option header: length = 3 + 5 + 4 , PvD ID FQDN = example.org.,
           R-flag = 0 (actual length of the header with padding 24 bytes = 3 *
           8 bytes)<list style="symbols">
               <t>Recursive DNS Server: length = 5, addresses=
@@ -824,7 +852,7 @@
           <t>Recursive DNS Server Option: length = 3, addresses=
           [2001:db8:cafe::53]</t>
 
-          <t>PvD Option header: length = 3+ 2, PvD ID FQDN = foo.example.org.,
+          <t>PvD Option header: length = 3 + 2, PvD ID FQDN = foo.example.org.,
           R-flag = 1 (actual length of the header 24 bytes = 3 * 8 bytes)<list
               style="symbols">
               <t>RA Header: router lifetime = 0 (PvD-aware hosts will not use
@@ -836,7 +864,7 @@
           <t>RA Header: router lifetime = 0 (non-PvD-aware hosts will not use
           this router as a default router)</t>
 
-          <t>PvD Option header: length = 3+ 2 + 4 + 3, PvD ID FQDN =
+          <t>PvD Option header: length = 3 + 2 + 4 + 3, PvD ID FQDN =
           example.org., R-flag = 1 (actual length of the header 24 bytes = 3 *
           8 bytes)<list style="symbols">
               <t>RA Header: router lifetime = 1600 (PvD-aware hosts will use
@@ -916,16 +944,24 @@
       <t>IANA is asked to assign the value "pvd" from the Well-Known URIs
       registry.</t>
 
-      <t>IANA is asked to create and maintain a new registry entitled
-      "Additional Information PvD Keys" containing ASCII strings. The initial
-      content of this registry are given in <xref target="aiformat"/>; future
-      assignments are to be made through Expert Review [BCP36].</t>
+	  <section title="Additional Information PvD Keys Registry">
+		  <t>IANA is asked to create and maintain a new registry called
+		  "Additional Information PvD Keys", which will reserve JSON keys
+		  for use in PvD additional information. The initial contents
+		  of this registry are given in <xref target="aiformat"/>.</t>
+		  <t>New assignments for Additional Information PvD Keys Registry
+		  will be administered by IANA through Expert Review <xref
+		  target="RFC8126">RFC8126</xref>.</t>
+	  </section>
 
-      <t>Finally, IANA is asked to create and maintain a new registry entitled
-      "PvD option Flags" reserving bit positions from 0 to 15 to be used in
-      the PvD option bitmask. Bit position 0, 1 and 2 are reserved by this
-      document (as specified in <xref target="format"/>). Future assignments
-      require a Standard Track RFC document.</t>
+	  <section title="PvD Option Flags Registry">
+		  <t>IANA is also asked to create and maintain a new registry entitled
+		  "PvD Option Flags" reserving bit positions from 0 to 15 to be used in
+		  the PvD option bitmask. Bit position 0, 1 and 2 are reserved by this
+		  document (as specified in <xref target="format"/>). Future assignments
+		  require Standards Action <xref target="RFC8126">RFC8126</xref>, via
+		  a Standards Track RFC document.</t>
+	  </section>
     </section>
 
     <section title="Acknowledgements">
@@ -981,11 +1017,13 @@
 
       <?rfc include="reference.RFC.6105.xml"?>
 
+      <?rfc include="reference.RFC.6146.xml"?>
+
+      <?rfc include="reference.RFC.6147.xml"?>
+
       <?rfc include="reference.RFC.6296.xml"?>
 
       <?rfc include="reference.RFC.6724.xml"?>
-
-      <?rfc include="reference.RFC.6731.xml"?>
 
       <?rfc include="reference.RFC.7278.xml"?>
 
@@ -1194,9 +1232,12 @@
             <t>Added a section "Non-PvD-aware Host Behavior"</t>
           </list></t>
       </section>
-	  <section title="WG Document version 03">
+	  <section title="WG Document version 04">
 		  <t><list>
-			  <t>Updated reference for DHCPv6-PD from RFC 3633 to RFC 8415</t>
+			  <t>Updated reference for DHCPv6-PD from RFC 3633 to RFC 8415.</t>
+			  <t>Enhanced IANA considerations to clarify review process and new
+				  registries.</t>
+			  <t>Added a section on considerations for handling DNS on a PvD-aware host.</t>
 		  </list></t>
 	  </section>
     </section>
