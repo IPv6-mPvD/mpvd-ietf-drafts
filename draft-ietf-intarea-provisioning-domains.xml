@@ -324,8 +324,9 @@
 
             <t hangText="RA message header : ">(16 octets) When the R-flag is
             set, a full Router Advertisement message header as specified in
-            <xref target="RFC4861"/>. The 'Type' MUST be set to 134, the value
-            for "Router Advertisement". The 'Code' MUST be 0. The 'Checksum' MUST
+            <xref target="RFC4861"/>. The sender MUST set the 'Type' to 134,
+			the value for "Router Advertisement", and set the 'Code' to 0.
+			Receivers MUST ignore both of these fields. The 'Checksum' MUST
             be set to 0 by the sender; non-zero checksums MUST be ignored by the
             receiver. All other fields are to be set and parsed as specified in
             <xref target="RFC4861"/> or any updating documents.</t>
