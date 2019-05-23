@@ -51,26 +51,15 @@
 
     <author fullname="Tommy Pauly" initials="T" surname="Pauly">
       <organization>Apple</organization>
-
       <address>
         <postal>
-          <street/>
-
-          <city/>
-
-          <region/>
-
-          <code/>
-
-          <country/>
+			<street>One Apple Park Way</street>
+			<city>Cupertino</city>
+			<region>California</region>
+			<code>95014</code>
+			<country>USA</country>
         </postal>
-
-        <phone/>
-
-        <facsimile/>
-
         <email>tpauly@apple.com</email>
-
         <uri/>
       </address>
     </author>
@@ -753,6 +742,11 @@
         Whenever an unknown key is encountered, it MUST be ignored along with
         its associated elements.</t>
 
+		<t>Private-use or experimental keys MAY be used in the JSON dictionary. In order
+		to avoid such keys colliding with well-known keys, vendors defining private-use
+		or experimental keys SHOULD create sub-dictionaries, where the sub-dictionary is added
+		into the top-level JSON dictionary with a key of the format "vendor-*".</t>
+
         <section anchor="ex" title="Example">
           <t>The following examples show how the JSON keys defined in this
           document can be used:</t>
@@ -778,7 +772,20 @@
 }
 ]]></artwork>
           </figure>
-        </section>
+
+		  <figure>
+            <artwork><![CDATA[
+{
+  "name": "Company Network",
+  "localizedName": "Company Network",
+  "expires": "2017-07-23T06:00:00Z",
+  "prefixes": ["2001:db8:1::/48", "2001:db8:4::/48"],
+  "vendor-foo": { "private-key": "private-value" },
+}
+]]></artwork>
+          </figure>
+
+		</section>
       </section>
 
       <section anchor="misconfig"
