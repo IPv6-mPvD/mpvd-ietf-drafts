@@ -743,9 +743,13 @@
         its associated elements.</t>
 
 		<t>Private-use or experimental keys MAY be used in the JSON dictionary. In order
-		to avoid such keys colliding with well-known keys, vendors defining private-use
-		or experimental keys SHOULD create sub-dictionaries, where the sub-dictionary is added
-		into the top-level JSON dictionary with a key of the format "vendor-*".</t>
+		to avoid such keys colliding with IANA registry keys, implementers or vendors
+		defining private-use or experimental keys MUST create sub-dictionaries, where
+		the sub-dictionary is added into the top-level JSON dictionary with a key of the
+		format "vendor-*" where the "*" is replaced by the implementers or vendors denomination.
+		Upon receiving such a sub-dictionary, host MUST ignore this sub-dictionary if it is unknown.
+		When the vendor or implementor is part of an IANA URN namespace <xref target="URN"/>,
+		the URN namespace SHOULD be used rather than the "vendor-*" format.</t>
 
         <section anchor="ex" title="Example">
           <t>The following examples show how the JSON keys defined in this
@@ -1058,18 +1062,18 @@
 
       <?rfc include="reference.I-D.kline-mif-mpvd-api-reqs"?>
 
-      <reference anchor="PEN"
-                 target="https://www.iana.org/assignments/enterprise-numbers">
-        <front>
-          <title>Private Enterprise Numbers</title>
+	  <reference anchor="URN"
+		  target="https://www.iana.org/assignments/urn-namespaces/urn-namespaces.xhtml#urn-namespaces-1">
+		  <front>
+			  <title>URN Namespaces</title>
 
-          <author>
-            <organization>IANA</organization>
-          </author>
+			  <author>
+				  <organization>IANA</organization>
+			  </author>
 
-          <date/>
-        </front>
-      </reference>
+			  <date/>
+		  </front>
+	  </reference>
 
       <reference anchor="IEEE8021X">
         <front>
