@@ -7,7 +7,7 @@
 <?rfc symrefs="yes"?>
 <?rfc toc="yes"?>
 <?rfc tocindent="yes"?>
-<rfc category="std" docName="draft-ietf-intarea-provisioning-domains-04"
+<rfc category="std" docName="draft-ietf-intarea-provisioning-domains-05"
      ipr="trust200902">
   <front>
     <title abbrev="Provisioning Domains">Discovering Provisioning Domain Names
@@ -51,26 +51,15 @@
 
     <author fullname="Tommy Pauly" initials="T" surname="Pauly">
       <organization>Apple</organization>
-
       <address>
         <postal>
-          <street/>
-
-          <city/>
-
-          <region/>
-
-          <code/>
-
-          <country/>
+			<street>One Apple Park Way</street>
+			<city>Cupertino</city>
+			<region>California</region>
+			<code>95014</code>
+			<country>USA</country>
         </postal>
-
-        <phone/>
-
-        <facsimile/>
-
         <email>tpauly@apple.com</email>
-
         <uri/>
       </address>
     </author>
@@ -324,11 +313,12 @@
 
             <t hangText="RA message header : ">(16 octets) When the R-flag is
             set, a full Router Advertisement message header as specified in
-            <xref target="RFC4861"/>. The 'Type', 'Code' and 'Checksum' fields
-            (i.e. the first 32 bits), MUST be set to zero by the sender and
-            ignored by the receiver. The other fields are to be set and parsed
-            as specified in <xref target="RFC4861"/> or any updating
-            documents.</t>
+            <xref target="RFC4861"/>. The sender MUST set the 'Type' to 134,
+			the value for "Router Advertisement", and set the 'Code' to 0.
+			Receivers MUST ignore both of these fields. The 'Checksum' MUST
+            be set to 0 by the sender; non-zero checksums MUST be ignored by the
+            receiver. All other fields are to be set and parsed as specified in
+            <xref target="RFC4861"/> or any updating documents.</t>
 
             <t hangText="Options : ">Zero or more RA options that would
             otherwise be valid as part of the Router Advertisement main body,
@@ -559,9 +549,11 @@
         https://&lt;PvD-ID&gt;/.well-known/pvd <xref target="RFC5785"/>.
         Inversely, hosts MUST NOT do so whenever the H-flag is not set.</t>
 
-        <!--t>Note: Should the PvD AI retrieval be a MAY or a SHOULD ? Could the
-        object contain critical data, or should it only contain informational
-        data ?</t-->
+        <t>HTTP requests and responses for PvD additional information use the
+        "application/pvd+json" media type (see <xref target="iana"/>). Clients
+        SHOULD include this media type as an Accept header in their GET
+        requests, and servers MUST mark this media type as their Content-Type
+        header in responses.</t>
 
         <t>Note that the DNS name resolution of the PvD ID, the PKI checks as
         well as the actual query MUST be performed using the considered PvD.
@@ -750,19 +742,18 @@
         Whenever an unknown key is encountered, it MUST be ignored along with
         its associated elements.</t>
 
-        <section anchor="keys-private" title="Private Extensions">
-          <t>JSON keys starting with "x-" are reserved for private use and can
-          be utilized to provide information that is specific to vendor, user
-          or enterprise. It is RECOMMENDED to use one of the patterns
-          "x-FQDN-KEY" or "x-PEN-KEY" where FQDN is a fully qualified domain
-          name or PEN is a <xref target="PEN">private enterprise number</xref>
-          under control of the author of the extension to avoid
-          collisions.</t>
-        </section>
+		<t>Private-use or experimental keys MAY be used in the JSON dictionary. In order
+		to avoid such keys colliding with IANA registry keys, implementers or vendors
+		defining private-use or experimental keys MUST create sub-dictionaries, where
+		the sub-dictionary is added into the top-level JSON dictionary with a key of the
+		format "vendor-*" where the "*" is replaced by the implementers or vendors denomination.
+		Upon receiving such a sub-dictionary, host MUST ignore this sub-dictionary if it is unknown.
+		When the vendor or implementor is part of an IANA URN namespace <xref target="URN"/>,
+		the URN namespace SHOULD be used rather than the "vendor-*" format.</t>
 
         <section anchor="ex" title="Example">
-          <t>Here are two examples based on the keys defined in this
-          section.</t>
+          <t>The following examples show how the JSON keys defined in this
+          document can be used:</t>
 
           <figure>
             <artwork><![CDATA[
@@ -785,7 +776,20 @@
 }
 ]]></artwork>
           </figure>
-        </section>
+
+		  <figure>
+            <artwork><![CDATA[
+{
+  "name": "Company Network",
+  "localizedName": "Company Network",
+  "expires": "2017-07-23T06:00:00Z",
+  "prefixes": ["2001:db8:1::/48", "2001:db8:4::/48"],
+  "vendor-foo": { "private-key": "private-value" },
+}
+]]></artwork>
+          </figure>
+
+		</section>
       </section>
 
       <section anchor="misconfig"
@@ -887,7 +891,7 @@
       DNS server 2001:db8:f00d::53 when communicating with this adress.</t>
     </section>
 
-    <section title="Security Considerations">
+    <section title="Security Considerations" anchor="security">
       <t>Although some solutions such as IPsec or SeND <xref
       target="RFC3971"/> can be used in order to secure the IPv6 Neighbor
       Discovery Protocol, in practice actual deployments largely rely on link
@@ -936,7 +940,7 @@
       part of the allowed whitelist.</t>
     </section>
 
-    <section title="IANA Considerations">
+    <section title="IANA Considerations" anchor="iana">
       <t>Upon publication of this document, IANA is asked to remove the
       'reclaimable' tag off the value 21 for the PvD option (from the IPv6
       Neighbor Discovery Option Formats registry).</t>
@@ -961,6 +965,25 @@
 		  document (as specified in <xref target="format"/>). Future assignments
 		  require Standards Action <xref target="RFC8126">RFC8126</xref>, via
 		  a Standards Track RFC document.</t>
+	  </section>
+
+	  <section title="PvD JSON Media Type Registration">
+		  <t>This document registers the media type for PvD JSON text, "application/pvd+json".</t>
+		  <t>Type Name:  application</t>
+		  <t>Subtype Name:  pvd+json</t>
+		  <t>Required parameters:  None</t>
+		  <t>Optional parameters:  None</t>
+		  <t>Encoding considerations:  Encoding considerations are identical to those specified for the "application/json" media type.</t>
+		  <t>Security considerations:  See <xref target="security"/>.</t>
+		  <t>Interoperability considerations:  This document specifies format of conforming messages and the interpretation thereof.</t>
+		  <t>Published specification:  This document</t>
+		  <t>Applications that use this media type:  This media type is intended to be used by network advertising additional Provisioning Domain information, and clients looking up such information.</t>
+		  <t>Additional information:  None</t>
+		  <t>Person and email address to contact for further information:  See Authors' Addresses section</t>
+		  <t>Intended usage:  COMMON</t>
+		  <t>Restrictions on usage:  None</t>
+		  <t>Author:  IETF</t>
+		  <t>Change controller:  IETF</t>
 	  </section>
     </section>
 
@@ -1039,18 +1062,18 @@
 
       <?rfc include="reference.I-D.kline-mif-mpvd-api-reqs"?>
 
-      <reference anchor="PEN"
-                 target="https://www.iana.org/assignments/enterprise-numbers">
-        <front>
-          <title>Private Enterprise Numbers</title>
+	  <reference anchor="URN"
+		  target="https://www.iana.org/assignments/urn-namespaces/urn-namespaces.xhtml#urn-namespaces-1">
+		  <front>
+			  <title>URN Namespaces</title>
 
-          <author>
-            <organization>IANA</organization>
-          </author>
+			  <author>
+				  <organization>IANA</organization>
+			  </author>
 
-          <date/>
-        </front>
-      </reference>
+			  <date/>
+		  </front>
+	  </reference>
 
       <reference anchor="IEEE8021X">
         <front>
