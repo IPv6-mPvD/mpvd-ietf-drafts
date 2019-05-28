@@ -13,7 +13,7 @@
     <title abbrev="Provisioning Domains">Discovering Provisioning Domain Names
     and Data</title>
 
-    <author fullname="Pierre Pfister" initials="P" surname="Pfister">
+    <author fullname="Pierre Pfister" initials="P." surname="Pfister">
       <organization>Cisco</organization>
 
       <address>
@@ -31,7 +31,8 @@
       </address>
     </author>
 
-    <author fullname="Eric Vyncke" initials="E" role="editor" surname="Vyncke">
+    <author fullname="Eric Vyncke" initials="E." role="editor"
+            surname="Vyncke">
       <organization>Cisco</organization>
 
       <address>
@@ -49,40 +50,53 @@
       </address>
     </author>
 
-    <author fullname="Tommy Pauly" initials="T" surname="Pauly">
+    <author fullname="Tommy Pauly" initials="T." surname="Pauly">
       <organization>Apple</organization>
+
       <address>
         <postal>
-			<street>One Apple Park Way</street>
-			<city>Cupertino</city>
-			<region>California</region>
-			<code>95014</code>
-			<country>USA</country>
+          <street>One Apple Park Way</street>
+
+          <city>Cupertino</city>
+
+          <region>California</region>
+
+          <code>95014</code>
+
+          <country>USA</country>
         </postal>
+
         <email>tpauly@apple.com</email>
+
         <uri/>
       </address>
     </author>
 
-    <author fullname='David Schinazi' surname='Schinazi' initials='D.'>
-    <organization>Google LLC</organization>
-    <address>
-        <postal>
-            <street>1600 Amphitheatre Parkway</street>
-            <city>Mountain View</city>
-            <region>California</region>
-            <code>94043</code>
-            <country>USA</country>
-        </postal>
-        <email>dschinazi.ietf@gmail.com</email>
-    </address>
-</author>
+    <author fullname="David Schinazi" initials="D." surname="Schinazi">
+      <organization>Google LLC</organization>
 
-    <author fullname="Wenqin Shao" initials="W" surname="Shao">
+      <address>
+        <postal>
+          <street>1600 Amphitheatre Parkway</street>
+
+          <city>Mountain View</city>
+
+          <region>California</region>
+
+          <code>94043</code>
+
+          <country>USA</country>
+        </postal>
+
+        <email>dschinazi.ietf@gmail.com</email>
+      </address>
+    </author>
+
+    <author fullname="Wenqin Shao" initials="W." surname="Shao">
       <organization>Cisco</organization>
 
       <address>
-     <postal>
+        <postal>
           <street>11 Rue Camille Desmoulins</street>
 
           <city>Issy-les-Moulineaux</city>
@@ -91,6 +105,7 @@
 
           <country>France</country>
         </postal>
+
         <phone/>
 
         <facsimile/>
@@ -129,7 +144,7 @@
     </author>
 	-->
 
-    <date/>
+    <date day="28" month="May" year="2019"/>
 
     <area>Internet</area>
 
@@ -164,9 +179,18 @@
     <section title="Introduction">
       <t>It has become very common in modern networks for hosts to access the
       internet through different network interfaces, tunnels, or next-hop
-      routers. To describe the set of network configurations associated with
-      each access method, the concept of Provisioning Domain (PvD) was defined
-      in <xref target="RFC7556"/>.</t>
+      routers. For example, Alice has a mobile phone provider and a broadband
+      provider in her home, her devices should be capable of seamlessly
+      transitioning from one to the other and be able to use her WiFi to
+      access local ressources or use the more suitable link on a per
+      application base. This draft provides the basic information necessary to
+      make this choice intelligently is going to be crucial to any solution.
+      There are similar concerns for IPSEC VPN that are already considered
+      Explicit PvDs in <xref target="RFC7556"/>.</t>
+
+      <t>To describe the set of network configurations associated with each
+      access method, the concept of Provisioning Domain (PvD) was defined in
+      <xref target="RFC7556"/>.</t>
 
       <t>This document specifies a way to identify PvDs with Fully Qualified
       Domain Names (FQDN), called PvD IDs. Those identifiers are advertised in
@@ -185,13 +209,13 @@
       different interfaces of a host in order to inform that those PvDs
       ultimately provide identical services.</t>
 
-      <t>This document also introduces a way for hosts to retrieve additional
-      information related to a specific PvD by means of an HTTP over TLS query
-      using an URI derived from the PvD ID. The retrieved JSON object contains
-      additional information that would typically be considered unfit, or too
-      large, to be directly included in the Router Advertisement, but might be
-      considered useful to the applications, or even sometimes users, when
-      choosing which PvD should be used.</t>
+      <t>This document also introduces a way for hosts to retrieve optional
+      and additional information related to a specific PvD by means of an HTTP
+      over TLS query using an URI derived from the PvD ID. The retrieved JSON
+      object contains additional information that would typically be
+      considered unfit, or too large, to be directly included in the Router
+      Advertisement, but might be considered useful to the applications, or
+      even sometimes users, when choosing which PvD should be used.</t>
     </section>
 
     <section title="Terminology">
@@ -314,11 +338,11 @@
             <t hangText="RA message header : ">(16 octets) When the R-flag is
             set, a full Router Advertisement message header as specified in
             <xref target="RFC4861"/>. The sender MUST set the 'Type' to 134,
-			the value for "Router Advertisement", and set the 'Code' to 0.
-			Receivers MUST ignore both of these fields. The 'Checksum' MUST
-            be set to 0 by the sender; non-zero checksums MUST be ignored by the
-            receiver. All other fields are to be set and parsed as specified in
-            <xref target="RFC4861"/> or any updating documents.</t>
+            the value for "Router Advertisement", and set the 'Code' to 0.
+            Receivers MUST ignore both of these fields. The 'Checksum' MUST be
+            set to 0 by the sender; non-zero checksums MUST be ignored by the
+            receiver. All other fields are to be set and parsed as specified
+            in <xref target="RFC4861"/> or any updating documents.</t>
 
             <t hangText="Options : ">Zero or more RA options that would
             otherwise be valid as part of the Router Advertisement main body,
@@ -377,12 +401,12 @@
         RAs.</t>
 
         <t>As specified in <xref target="RFC4861"/>, when the set of options
-        causes the size of an advertisement to exceed the link MTU,
-        multiple router advertisements can be sent, each containing a subset of
-        the options. In such cases, the PvD option header (i.e., all fields
-        except the 'Options' field) MUST be repeated in all the transmitted
-        RAs. The options within the 'Options' field, MAY be transmitted
-        only once, included in one of the transmitted PvD options.</t>
+        causes the size of an advertisement to exceed the link MTU, multiple
+        router advertisements can be sent, each containing a subset of the
+        options. In such cases, the PvD option header (i.e., all fields except
+        the 'Options' field) MUST be repeated in all the transmitted RAs. The
+        options within the 'Options' field, MAY be transmitted only once,
+        included in one of the transmitted PvD options.</t>
       </section>
 
       <section title="Non-PvD-aware Host Behavior">
@@ -405,8 +429,8 @@
         <t>In case multiple PvD options are found in a given RA, hosts MUST
         ignore all but the first PvD option.</t>
 
-		<t>If a host receives PvD options flags that it does not recognize
-		(currently in the Reserved field), it MUST ignore these flags.</t>
+        <t>If a host receives PvD options flags that it does not recognize
+        (currently in the Reserved field), it MUST ignore these flags.</t>
 
         <t>Similarly, hosts MUST associate all network configuration objects
         (e.g., default routers, addresses, more specific routes, DNS Recursive
@@ -476,53 +500,55 @@
         <section title="Connection Sharing by the Host">
           <t>The situation when a host shares connectivity from an upstream
           interface (e.g. cellular) to a downstream interface (e.g. WiFi) is
-          known as 'tethering'. Techniques such as ND-proxy
-          <xref target="RFC4389"/>, 64share <xref target="RFC7278"/> or prefix
+          known as 'tethering'. Techniques such as ND-proxy <xref
+          target="RFC4389"/>, 64share <xref target="RFC7278"/> or prefix
           delegation (e.g. using DHCPv6-PD <xref target="RFC8415"/>) may be
           used for that purpose.</t>
+
           <t>Whenever the RAs received from the upstream interface contain a
           PVD RA option, hosts that are sharing connectivity SHOULD include a
-          PVD Option within the RAs sent downstream with:
-            <list>
+          PVD Option within the RAs sent downstream with: <list>
               <t>The same PVD-ID FQDN.</t>
+
               <t>The same H-bit, Delay and Sequence Number values.</t>
+
               <t>The L bit set whenever the host is sharing IPv4 connectivity
               received from the same upstream interface.</t>
+
               <t>The bits from the Reserved field set to 0.</t>
-            </list>
-            The values of the R-bit, Router Advertisement message header and
-          Options field depend on whether the connectivity should be shared
-          only with PvD-aware hosts or not (see <xref target="router"/>). In
-          particular, all options received within the upstream PvD option and
-          included in the downstream RA SHOULD be included in the downstream
-          PvD option.
-          </t>
+            </list> The values of the R-bit, Router Advertisement message
+          header and Options field depend on whether the connectivity should
+          be shared only with PvD-aware hosts or not (see <xref
+          target="router"/>). In particular, all options received within the
+          upstream PvD option and included in the downstream RA SHOULD be
+          included in the downstream PvD option.</t>
         </section>
 
-		<section title="Usage of DNS Servers">
-			<t>PvD-aware hosts can be provisioned with recursive DNS servers
-			via RA options passed within an explicit PvD, via RA options
-			associated with an implicit PvD, via DHCPv6 or DHCPv4, or from
-			some other provisioning mechanism that creates an implicit PvD (such as a VPN).
-			In all of these cases, the DNS server addresses SHOULD be strongly associated
-			with the corresponding PvD. Specificially, queries sent to a
-			configured recursive DNS server SHOULD be sent from a local IP address
-			that belongs to the matching PvD. Answers received from the DNS
-			server SHOULD only be used on the same PvD.</t>
-			<t>Maintaining the correct usage of DNS within PvDs avoids various
-				practical errors, such as:
-			<list>
-				<t>A PvD associated with a VPN or otherwise
-					private network may provide DNS answers that contain addresses
-					inaccessible over another PvD.</t>
-				<t>A PvD that uses a NAT64 <xref target="RFC6146"/> and DNS64
-					<xref target="RFC6147"/> will synthesize IPv6 addresses in
-					DNS answers that are not globally routable, and cannot be
-					used on other PvDs. Conversely, an IPv4 address resolved
-				via DNS on another PvD cannot be directly used on a NAT64
-				network without the host synthesizing an IPv6 address.</t>
-			</list></t>
-		</section>
+        <section title="Usage of DNS Servers">
+          <t>PvD-aware hosts can be provisioned with recursive DNS servers via
+          RA options passed within an explicit PvD, via RA options associated
+          with an implicit PvD, via DHCPv6 or DHCPv4, or from some other
+          provisioning mechanism that creates an implicit PvD (such as a VPN).
+          In all of these cases, the DNS server addresses SHOULD be strongly
+          associated with the corresponding PvD. Specificially, queries sent
+          to a configured recursive DNS server SHOULD be sent from a local IP
+          address that belongs to the matching PvD. Answers received from the
+          DNS server SHOULD only be used on the same PvD.</t>
+
+          <t>Maintaining the correct usage of DNS within PvDs avoids various
+          practical errors, such as: <list>
+              <t>A PvD associated with a VPN or otherwise private network may
+              provide DNS answers that contain addresses inaccessible over
+              another PvD.</t>
+
+              <t>A PvD that uses a NAT64 <xref target="RFC6146"/> and DNS64
+              <xref target="RFC6147"/> will synthesize IPv6 addresses in DNS
+              answers that are not globally routable, and cannot be used on
+              other PvDs. Conversely, an IPv4 address resolved via DNS on
+              another PvD cannot be directly used on a NAT64 network without
+              the host synthesizing an IPv6 address.</t>
+            </list></t>
+        </section>
       </section>
     </section>
 
@@ -742,14 +768,16 @@
         Whenever an unknown key is encountered, it MUST be ignored along with
         its associated elements.</t>
 
-		<t>Private-use or experimental keys MAY be used in the JSON dictionary. In order
-		to avoid such keys colliding with IANA registry keys, implementers or vendors
-		defining private-use or experimental keys MUST create sub-dictionaries, where
-		the sub-dictionary is added into the top-level JSON dictionary with a key of the
-		format "vendor-*" where the "*" is replaced by the implementers or vendors denomination.
-		Upon receiving such a sub-dictionary, host MUST ignore this sub-dictionary if it is unknown.
-		When the vendor or implementor is part of an IANA URN namespace <xref target="URN"/>,
-		the URN namespace SHOULD be used rather than the "vendor-*" format.</t>
+        <t>Private-use or experimental keys MAY be used in the JSON
+        dictionary. In order to avoid such keys colliding with IANA registry
+        keys, implementers or vendors defining private-use or experimental
+        keys MUST create sub-dictionaries, where the sub-dictionary is added
+        into the top-level JSON dictionary with a key of the format "vendor-*"
+        where the "*" is replaced by the implementers or vendors denomination.
+        Upon receiving such a sub-dictionary, host MUST ignore this
+        sub-dictionary if it is unknown. When the vendor or implementor is
+        part of an IANA URN namespace <xref target="URN"/>, the URN namespace
+        SHOULD be used rather than the "vendor-*" format.</t>
 
         <section anchor="ex" title="Example">
           <t>The following examples show how the JSON keys defined in this
@@ -777,7 +805,7 @@
 ]]></artwork>
           </figure>
 
-		  <figure>
+          <figure>
             <artwork><![CDATA[
 {
   "name": "Company Network",
@@ -788,8 +816,7 @@
 }
 ]]></artwork>
           </figure>
-
-		</section>
+        </section>
       </section>
 
       <section anchor="misconfig"
@@ -799,8 +826,8 @@
         request (e.g., that the Subject Name is equal to the PvD ID expressed
         as an FQDN). This authentication creates a secure binding between the
         information provided by the trusted Router Advertisement, and the
-        HTTPS server. However, this does not mean the Advertising Router and the
-        PvD server belong to the same entity.</t>
+        HTTPS server. However, this does not mean the Advertising Router and
+        the PvD server belong to the same entity.</t>
 
         <t>Hosts MUST verify that all prefixes in the RA PIO are covered by a
         prefix from the PvD Additional Information. An adversarial router
@@ -815,8 +842,9 @@
         to the valid network users.</t>
 
         <t>Note that this check cannot be performed when the HTTPS query is
-        performed over IPv4. Therefore, the PvD ID FQDN SHOULD NOT have a DNS A
-        record whenever all hosts using the given PvD have IPv6 connectivity.</t>
+        performed over IPv4. Therefore, the PvD ID FQDN SHOULD NOT have a DNS
+        A record whenever all hosts using the given PvD have IPv6
+        connectivity.</t>
       </section>
     </section>
 
@@ -831,9 +859,9 @@
           <t>Prefix Information Option: length = 4, prefix =
           2001:db8:cafe::/64</t>
 
-          <t>PvD Option header: length = 3 + 5 + 4 , PvD ID FQDN = example.org.,
-          R-flag = 0 (actual length of the header with padding 24 bytes = 3 *
-          8 bytes)<list style="symbols">
+          <t>PvD Option header: length = 3 + 5 + 4 , PvD ID FQDN =
+          example.org., R-flag = 0 (actual length of the header with padding
+          24 bytes = 3 * 8 bytes)<list style="symbols">
               <t>Recursive DNS Server: length = 5, addresses=
               [2001:db8:cafe::53, 2001:db8:f00d::53]</t>
 
@@ -856,9 +884,9 @@
           <t>Recursive DNS Server Option: length = 3, addresses=
           [2001:db8:cafe::53]</t>
 
-          <t>PvD Option header: length = 3 + 2, PvD ID FQDN = foo.example.org.,
-          R-flag = 1 (actual length of the header 24 bytes = 3 * 8 bytes)<list
-              style="symbols">
+          <t>PvD Option header: length = 3 + 2, PvD ID FQDN =
+          foo.example.org., R-flag = 1 (actual length of the header 24 bytes =
+          3 * 8 bytes)<list style="symbols">
               <t>RA Header: router lifetime = 0 (PvD-aware hosts will not use
               this router as a default router), implicit length = 2</t>
             </list></t>
@@ -891,7 +919,7 @@
       DNS server 2001:db8:f00d::53 when communicating with this adress.</t>
     </section>
 
-    <section title="Security Considerations" anchor="security">
+    <section anchor="security" title="Security Considerations">
       <t>Although some solutions such as IPsec or SeND <xref
       target="RFC3971"/> can be used in order to secure the IPv6 Neighbor
       Discovery Protocol, in practice actual deployments largely rely on link
@@ -940,7 +968,7 @@
       part of the allowed whitelist.</t>
     </section>
 
-    <section title="IANA Considerations" anchor="iana">
+    <section anchor="iana" title="IANA Considerations">
       <t>Upon publication of this document, IANA is asked to remove the
       'reclaimable' tag off the value 21 for the PvD option (from the IPv6
       Neighbor Discovery Option Formats registry).</t>
@@ -948,43 +976,65 @@
       <t>IANA is asked to assign the value "pvd" from the Well-Known URIs
       registry.</t>
 
-	  <section title="Additional Information PvD Keys Registry">
-		  <t>IANA is asked to create and maintain a new registry called
-		  "Additional Information PvD Keys", which will reserve JSON keys
-		  for use in PvD additional information. The initial contents
-		  of this registry are given in <xref target="aiformat"/>.</t>
-		  <t>New assignments for Additional Information PvD Keys Registry
-		  will be administered by IANA through Expert Review <xref
-		  target="RFC8126">RFC8126</xref>.</t>
-	  </section>
+      <section title="Additional Information PvD Keys Registry">
+        <t>IANA is asked to create and maintain a new registry called
+        "Additional Information PvD Keys", which will reserve JSON keys for
+        use in PvD additional information. The initial contents of this
+        registry are given in <xref target="aiformat"/>.</t>
 
-	  <section title="PvD Option Flags Registry">
-		  <t>IANA is also asked to create and maintain a new registry entitled
-		  "PvD Option Flags" reserving bit positions from 0 to 15 to be used in
-		  the PvD option bitmask. Bit position 0, 1 and 2 are reserved by this
-		  document (as specified in <xref target="format"/>). Future assignments
-		  require Standards Action <xref target="RFC8126">RFC8126</xref>, via
-		  a Standards Track RFC document.</t>
-	  </section>
+        <t>New assignments for Additional Information PvD Keys Registry will
+        be administered by IANA through Expert Review <xref
+        target="RFC8126">RFC8126</xref>.</t>
+      </section>
 
-	  <section title="PvD JSON Media Type Registration">
-		  <t>This document registers the media type for PvD JSON text, "application/pvd+json".</t>
-		  <t>Type Name:  application</t>
-		  <t>Subtype Name:  pvd+json</t>
-		  <t>Required parameters:  None</t>
-		  <t>Optional parameters:  None</t>
-		  <t>Encoding considerations:  Encoding considerations are identical to those specified for the "application/json" media type.</t>
-		  <t>Security considerations:  See <xref target="security"/>.</t>
-		  <t>Interoperability considerations:  This document specifies format of conforming messages and the interpretation thereof.</t>
-		  <t>Published specification:  This document</t>
-		  <t>Applications that use this media type:  This media type is intended to be used by network advertising additional Provisioning Domain information, and clients looking up such information.</t>
-		  <t>Additional information:  None</t>
-		  <t>Person and email address to contact for further information:  See Authors' Addresses section</t>
-		  <t>Intended usage:  COMMON</t>
-		  <t>Restrictions on usage:  None</t>
-		  <t>Author:  IETF</t>
-		  <t>Change controller:  IETF</t>
-	  </section>
+      <section title="PvD Option Flags Registry">
+        <t>IANA is also asked to create and maintain a new registry entitled
+        "PvD Option Flags" reserving bit positions from 0 to 15 to be used in
+        the PvD option bitmask. Bit position 0, 1 and 2 are reserved by this
+        document (as specified in <xref target="format"/>). Future assignments
+        require Standards Action <xref target="RFC8126">RFC8126</xref>, via a
+        Standards Track RFC document.</t>
+      </section>
+
+      <section title="PvD JSON Media Type Registration">
+        <t>This document registers the media type for PvD JSON text,
+        "application/pvd+json".</t>
+
+        <t>Type Name: application</t>
+
+        <t>Subtype Name: pvd+json</t>
+
+        <t>Required parameters: None</t>
+
+        <t>Optional parameters: None</t>
+
+        <t>Encoding considerations: Encoding considerations are identical to
+        those specified for the "application/json" media type.</t>
+
+        <t>Security considerations: See <xref target="security"/>.</t>
+
+        <t>Interoperability considerations: This document specifies format of
+        conforming messages and the interpretation thereof.</t>
+
+        <t>Published specification: This document</t>
+
+        <t>Applications that use this media type: This media type is intended
+        to be used by network advertising additional Provisioning Domain
+        information, and clients looking up such information.</t>
+
+        <t>Additional information: None</t>
+
+        <t>Person and email address to contact for further information: See
+        Authors' Addresses section</t>
+
+        <t>Intended usage: COMMON</t>
+
+        <t>Restrictions on usage: None</t>
+
+        <t>Author: IETF</t>
+
+        <t>Change controller: IETF</t>
+      </section>
     </section>
 
     <section title="Acknowledgements">
@@ -992,10 +1042,11 @@
       target="I-D.stenberg-mif-mpvd-dns"/>, as well as to Basile Bruneau who
       was author of an early version of this document.</t>
 
-      <t>Thanks also to Marcus Keane, Mikael Abrahamsson, Ray Bellis, Zhen Cao,
-      Tim Chow, Lorenzo Colitti, Michael Di Bartolomeo, Ian Farrer, Bob Hinden, Tatuya Jinmei, Erik
-      Kline, Ted Lemon, Jen Lenkova, Veronika McKillop, Mark Townsley and
-      James Woodyatt for useful and interesting discussions.</t>
+      <t>Thanks also to Marcus Keane, Mikael Abrahamsson, Ray Bellis, Zhen
+      Cao, Tim Chow, Lorenzo Colitti, Michael Di Bartolomeo, Ian Farrer,
+      Phillip Hallam-Baker, Bob Hinden, Tatuya Jinmei, Erik Kline, Ted Lemon,
+      Jen Lenkova, Veronika McKillop, Mark Townsley and James Woodyatt for
+      useful and interesting discussions and reviews.</t>
 
       <t>Finally, special thanks to Thierry Danis and Wenqin Shao for their
       valuable inputs and implementation efforts (<xref target="github"/>),
@@ -1062,18 +1113,18 @@
 
       <?rfc include="reference.I-D.kline-mif-mpvd-api-reqs"?>
 
-	  <reference anchor="URN"
-		  target="https://www.iana.org/assignments/urn-namespaces/urn-namespaces.xhtml#urn-namespaces-1">
-		  <front>
-			  <title>URN Namespaces</title>
+      <reference anchor="URN"
+                 target="https://www.iana.org/assignments/urn-namespaces/urn-namespaces.xhtml#urn-namespaces-1">
+        <front>
+          <title>URN Namespaces</title>
 
-			  <author>
-				  <organization>IANA</organization>
-			  </author>
+          <author>
+            <organization>IANA</organization>
+          </author>
 
-			  <date/>
-		  </front>
-	  </reference>
+          <date/>
+        </front>
+      </reference>
 
       <reference anchor="IEEE8021X">
         <front>
@@ -1255,14 +1306,18 @@
             <t>Added a section "Non-PvD-aware Host Behavior"</t>
           </list></t>
       </section>
-	  <section title="WG Document version 04">
-		  <t><list>
-			  <t>Updated reference for DHCPv6-PD from RFC 3633 to RFC 8415.</t>
-			  <t>Enhanced IANA considerations to clarify review process and new
-				  registries.</t>
-			  <t>Added a section on considerations for handling DNS on a PvD-aware host.</t>
-		  </list></t>
-	  </section>
+
+      <section title="WG Document version 04">
+        <t><list>
+            <t>Updated reference for DHCPv6-PD from RFC 3633 to RFC 8415.</t>
+
+            <t>Enhanced IANA considerations to clarify review process and new
+            registries.</t>
+
+            <t>Added a section on considerations for handling DNS on a
+            PvD-aware host.</t>
+          </list></t>
+      </section>
     </section>
   </back>
 </rfc>
