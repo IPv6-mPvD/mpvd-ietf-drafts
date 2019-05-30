@@ -144,7 +144,7 @@
     </author>
 	-->
 
-    <date day="28" month="May" year="2019"/>
+    <date day="30" month="May" year="2019"/>
 
     <area>Internet</area>
 
@@ -179,14 +179,15 @@
     <section title="Introduction">
       <t>It has become very common in modern networks for hosts to access the
       internet through different network interfaces, tunnels, or next-hop
-      routers. For example, Alice has a mobile phone provider and a broadband
-      provider in her home, her devices should be capable of seamlessly
-      transitioning from one to the other and be able to use her WiFi to
-      access local ressources or use the more suitable link on a per
-      application base. This draft provides the basic information necessary to
-      make this choice intelligently is going to be crucial to any solution.
-      There are similar concerns for IPSEC VPN that are already considered
-      Explicit PvDs in <xref target="RFC7556"/>.</t>
+      routers. For example, if Alice has a mobile phone provider and a
+      broadband provider in her home, her devices should be capable of
+      seamlessly transitioning from one to the other and be able to use her
+      WiFi to access local resources or use the more suitable link on a
+      per-application base. This draft provides the basic information
+      necessary to make this choice intelligently is going to be crucial to
+      any solution. There are similar use cases for IPSEC Virtual Private
+      Networks that are already considered Explicit PvDs in <xref
+      target="RFC7556"/>.</t>
 
       <t>To describe the set of network configurations associated with each
       access method, the concept of Provisioning Domain (PvD) was defined in

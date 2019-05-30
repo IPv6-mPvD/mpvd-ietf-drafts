@@ -5,13 +5,13 @@
 intarea                                                       P. Pfister
 Internet-Draft                                            E. Vyncke, Ed.
 Intended status: Standards Track                                   Cisco
-Expires: November 29, 2019                                      T. Pauly
+Expires: December 1, 2019                                       T. Pauly
                                                                    Apple
                                                              D. Schinazi
                                                               Google LLC
                                                                  W. Shao
                                                                    Cisco
-                                                            May 28, 2019
+                                                            May 30, 2019
 
 
              Discovering Provisioning Domain Names and Data
@@ -53,12 +53,12 @@ Status of This Memo
 
 
 
-Pfister, et al.         Expires November 29, 2019               [Page 1]
+Pfister, et al.         Expires December 1, 2019                [Page 1]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
 
-   This Internet-Draft will expire on November 29, 2019.
+   This Internet-Draft will expire on December 1, 2019.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Pfister, et al.         Expires November 29, 2019               [Page 2]
+Pfister, et al.         Expires December 1, 2019                [Page 2]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -129,14 +129,14 @@ Internet-Draft            Provisioning Domains                  May 2019
 
    It has become very common in modern networks for hosts to access the
    internet through different network interfaces, tunnels, or next-hop
-   routers.  For example, Alice has a mobile phone provider and a
+   routers.  For example, if Alice has a mobile phone provider and a
    broadband provider in her home, her devices should be capable of
    seamlessly transitioning from one to the other and be able to use her
-   WiFi to access local ressources or use the more suitable link on a
-   per application base.  This draft provides the basic information
+   WiFi to access local resources or use the more suitable link on a
+   per-application base.  This draft provides the basic information
    necessary to make this choice intelligently is going to be crucial to
-   any solution.  There are similar concerns for IPSEC VPN that are
-   already considered Explicit PvDs in [RFC7556].
+   any solution.  There are similar use cases for IPSEC Virtual Private
+   Networks that are already considered Explicit PvDs in [RFC7556].
 
    To describe the set of network configurations associated with each
    access method, the concept of Provisioning Domain (PvD) was defined
@@ -165,7 +165,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019               [Page 3]
+Pfister, et al.         Expires December 1, 2019                [Page 3]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -221,7 +221,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019               [Page 4]
+Pfister, et al.         Expires December 1, 2019                [Page 4]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -277,7 +277,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019               [Page 5]
+Pfister, et al.         Expires December 1, 2019                [Page 5]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -333,7 +333,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019               [Page 6]
+Pfister, et al.         Expires December 1, 2019                [Page 6]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -389,7 +389,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019               [Page 7]
+Pfister, et al.         Expires December 1, 2019                [Page 7]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -445,7 +445,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019               [Page 8]
+Pfister, et al.         Expires December 1, 2019                [Page 8]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -501,7 +501,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019               [Page 9]
+Pfister, et al.         Expires December 1, 2019                [Page 9]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -557,7 +557,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 10]
+Pfister, et al.         Expires December 1, 2019               [Page 10]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -613,7 +613,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 11]
+Pfister, et al.         Expires December 1, 2019               [Page 11]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -669,7 +669,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 12]
+Pfister, et al.         Expires December 1, 2019               [Page 12]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -725,7 +725,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 13]
+Pfister, et al.         Expires December 1, 2019               [Page 13]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -781,7 +781,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 14]
+Pfister, et al.         Expires December 1, 2019               [Page 14]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -837,7 +837,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 15]
+Pfister, et al.         Expires December 1, 2019               [Page 15]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -893,7 +893,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 16]
+Pfister, et al.         Expires December 1, 2019               [Page 16]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -949,7 +949,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 17]
+Pfister, et al.         Expires December 1, 2019               [Page 17]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -1005,7 +1005,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 18]
+Pfister, et al.         Expires December 1, 2019               [Page 18]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -1061,7 +1061,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 19]
+Pfister, et al.         Expires December 1, 2019               [Page 19]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -1117,7 +1117,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 20]
+Pfister, et al.         Expires December 1, 2019               [Page 20]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -1173,7 +1173,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 21]
+Pfister, et al.         Expires December 1, 2019               [Page 21]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -1229,7 +1229,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 22]
+Pfister, et al.         Expires December 1, 2019               [Page 22]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -1285,7 +1285,7 @@ A.2.  Version 01
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 23]
+Pfister, et al.         Expires December 1, 2019               [Page 23]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -1341,7 +1341,7 @@ A.4.  WG Document version 00
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 24]
+Pfister, et al.         Expires December 1, 2019               [Page 24]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -1397,7 +1397,7 @@ A.6.  WG Document version 02
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 25]
+Pfister, et al.         Expires December 1, 2019               [Page 25]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -1453,7 +1453,7 @@ Authors' Addresses
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 26]
+Pfister, et al.         Expires December 1, 2019               [Page 26]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
@@ -1509,4 +1509,4 @@ Internet-Draft            Provisioning Domains                  May 2019
 
 
 
-Pfister, et al.         Expires November 29, 2019              [Page 27]
+Pfister, et al.         Expires December 1, 2019               [Page 27]
