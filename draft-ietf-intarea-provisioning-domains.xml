@@ -180,14 +180,13 @@
       <t>It has become very common in modern networks for hosts to access the
       internet through different network interfaces, tunnels, or next-hop
       routers. For example, if Alice has a mobile phone provider and a
-      broadband provider in her home, her devices should be capable of
-      seamlessly transitioning from one to the other and be able to use her
-      WiFi to access local resources or use the more suitable link on a
-      per-application base. This draft provides the basic information
-      necessary to make this choice intelligently is going to be crucial to
-      any solution. There are similar use cases for IPSEC Virtual Private
-      Networks that are already considered Explicit PvDs in <xref
-      target="RFC7556"/>.</t>
+      broadband provider in her home, her devices and her applications should
+      be capable of seamlessly transitioning from one to the other and be able
+      to use her Wi-Fi to access local resources or use the more suitable link
+      on a per-application base. This document provides the basic information
+      necessary to make this choice intelligently. There are similar use cases
+      for IPsec Virtual Private Networks that are already considered Explicit
+      PvDs in <xref target="RFC7556"/>.</t>
 
       <t>To describe the set of network configurations associated with each
       access method, the concept of Provisioning Domain (PvD) was defined in
@@ -500,7 +499,7 @@
 
         <section title="Connection Sharing by the Host">
           <t>The situation when a host shares connectivity from an upstream
-          interface (e.g. cellular) to a downstream interface (e.g. WiFi) is
+          interface (e.g. cellular) to a downstream interface (e.g. Wi-Fi) is
           known as 'tethering'. Techniques such as ND-proxy <xref
           target="RFC4389"/>, 64share <xref target="RFC7278"/> or prefix
           delegation (e.g. using DHCPv6-PD <xref target="RFC8415"/>) may be
@@ -699,7 +698,7 @@
 
           <c>UTF-8 string <xref target="RFC3629"/></c>
 
-          <c>"Awesome Wifi"</c>
+          <c>"Awesome Wi-Fi"</c>
 
           <c>expires</c>
 
@@ -745,7 +744,7 @@
 
           <c>UTF-8 string</c>
 
-          <c>"Wifi G&eacute;nial"</c>
+          <c>"Wi-Fi G&eacute;nial"</c>
 
           <c>dnsZones</c>
 
@@ -788,7 +787,7 @@
             <artwork><![CDATA[
 {
   "name": "Foo Wireless",
-  "localizedName": "Foo-France Wifi",
+  "localizedName": "Foo-France Wi-Fi",
   "expires": "2017-07-23T06:00:00Z",
   "prefixes" : ["2001:db8:1::/48", "2001:db8:4::/48"],
 }
@@ -1318,6 +1317,16 @@
             <t>Added a section on considerations for handling DNS on a
             PvD-aware host.</t>
           </list></t>
+
+        <section title="WG Document version 05">
+          <t><list>
+              <t>Fixed nits about IPSEC and WiFi</t>
+
+              <t>Added use case per Phillip Hallam-Baker</t>
+
+              <t>Clarified some sentences</t>
+            </list></t>
+        </section>
       </section>
     </section>
   </back>

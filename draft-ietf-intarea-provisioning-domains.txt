@@ -81,7 +81,7 @@ Table of Contents
    2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   4
    3.  Provisioning Domain Identification using Router
        Advertisements  . . . . . . . . . . . . . . . . . . . . . . .   4
-     3.1.  PvD ID Option for Router Advertisements . . . . . . . . .   4
+     3.1.  PvD ID Option for Router Advertisements . . . . . . . . .   5
      3.2.  Router Behavior . . . . . . . . . . . . . . . . . . . . .   7
      3.3.  Non-PvD-aware Host Behavior . . . . . . . . . . . . . . .   8
      3.4.  PvD-aware Host Behavior . . . . . . . . . . . . . . . . .   8
@@ -123,6 +123,7 @@ Internet-Draft            Provisioning Domains                  May 2019
      A.5.  WG Document version 01  . . . . . . . . . . . . . . . . .  25
      A.6.  WG Document version 02  . . . . . . . . . . . . . . . . .  25
      A.7.  WG Document version 04  . . . . . . . . . . . . . . . . .  26
+       A.7.1.  WG Document version 05  . . . . . . . . . . . . . . .  26
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  26
 
 1.  Introduction
@@ -130,13 +131,13 @@ Internet-Draft            Provisioning Domains                  May 2019
    It has become very common in modern networks for hosts to access the
    internet through different network interfaces, tunnels, or next-hop
    routers.  For example, if Alice has a mobile phone provider and a
-   broadband provider in her home, her devices should be capable of
-   seamlessly transitioning from one to the other and be able to use her
-   WiFi to access local resources or use the more suitable link on a
-   per-application base.  This draft provides the basic information
-   necessary to make this choice intelligently is going to be crucial to
-   any solution.  There are similar use cases for IPSEC Virtual Private
-   Networks that are already considered Explicit PvDs in [RFC7556].
+   broadband provider in her home, her devices and her applications
+   should be capable of seamlessly transitioning from one to the other
+   and be able to use her Wi-Fi to access local resources or use the
+   more suitable link on a per-application base.  This document provides
+   the basic information necessary to make this choice intelligently.
+   There are similar use cases for IPsec Virtual Private Networks that
+   are already considered Explicit PvDs in [RFC7556].
 
    To describe the set of network configurations associated with each
    access method, the concept of Provisioning Domain (PvD) was defined
@@ -160,8 +161,7 @@ Internet-Draft            Provisioning Domains                  May 2019
    on different interfaces of a host in order to inform that those PvDs
    ultimately provide identical services.
 
-   This document also introduces a way for hosts to retrieve optional
-   and additional information related to a specific PvD by means of an
+
 
 
 
@@ -170,6 +170,8 @@ Pfister, et al.         Expires December 1, 2019                [Page 3]
 Internet-Draft            Provisioning Domains                  May 2019
 
 
+   This document also introduces a way for hosts to retrieve optional
+   and additional information related to a specific PvD by means of an
    HTTP over TLS query using an URI derived from the PvD ID.  The
    retrieved JSON object contains additional information that would
    typically be considered unfit, or too large, to be directly included
@@ -213,11 +215,9 @@ Internet-Draft            Provisioning Domains                  May 2019
    service); else, the PvD ID MUST be different to follow section 2.4 of
    [RFC7556].
 
-3.1.  PvD ID Option for Router Advertisements
 
-   This document introduces a Router Advertisement (RA) option called
-   PvD option.  It is used to convey the FQDN identifying a given PvD
-   (see Figure 1), bind the PvD ID with configuration information
+
+
 
 
 
@@ -226,6 +226,11 @@ Pfister, et al.         Expires December 1, 2019                [Page 4]
 Internet-Draft            Provisioning Domains                  May 2019
 
 
+3.1.  PvD ID Option for Router Advertisements
+
+   This document introduces a Router Advertisement (RA) option called
+   PvD option.  It is used to convey the FQDN identifying a given PvD
+   (see Figure 1), bind the PvD ID with configuration information
    received over DHCPv4 (see Section 3.4.2), enable the use of HTTP over
    TLS to retrieve the PvD Additional Information JSON object (see
    Section 4), as well as contain any other RA options which would
@@ -268,11 +273,6 @@ Internet-Draft            Provisioning Domains                  May 2019
 
    R-flag      :   (1 bit) 'Router Advertisement' flag stating whether
       the PvD Option is followed (right after padding to the next 64
-      bits boundary) by a Router Advertisement message header (See
-      section 4.2 of [RFC4861]).
-
-   Delay       :   (4 bits) Unsigned integer used to delay HTTP GET
-      queries from hosts by a randomized backoff (see Section 4.1).
 
 
 
@@ -281,6 +281,12 @@ Pfister, et al.         Expires December 1, 2019                [Page 5]
 
 Internet-Draft            Provisioning Domains                  May 2019
 
+
+      bits boundary) by a Router Advertisement message header (See
+      section 4.2 of [RFC4861]).
+
+   Delay       :   (4 bits) Unsigned integer used to delay HTTP GET
+      queries from hosts by a randomized backoff (see Section 4.1).
 
    Reserved    :   (13 bits) Reserved for later use.  It MUST be set to
       zero by the sender and ignored by the receiver.
@@ -314,12 +320,6 @@ Internet-Draft            Provisioning Domains                  May 2019
    FQDN and including a RDNSS and prefix information options (it also
    have the sequence number 123, presence of additional information to
    be fetched with a delay indicated as 5):
-
-
-
-
-
-
 
 
 
@@ -492,7 +492,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 3.4.3.  Connection Sharing by the Host
 
    The situation when a host shares connectivity from an upstream
-   interface (e.g. cellular) to a downstream interface (e.g.  WiFi) is
+   interface (e.g. cellular) to a downstream interface (e.g.  Wi-Fi) is
    known as 'tethering'.  Techniques such as ND-proxy [RFC4389], 64share
    [RFC7278] or prefix delegation (e.g. using DHCPv6-PD [RFC8415]) may
    be used for that purpose.
@@ -710,7 +710,7 @@ Internet-Draft            Provisioning Domains                  May 2019
    +----------+-----------------+-------------+------------------------+
    | JSON key | Description     | Type        | Example                |
    +----------+-----------------+-------------+------------------------+
-   | name     | Human-readable  | UTF-8       | "Awesome Wifi"         |
+   | name     | Human-readable  | UTF-8       | "Awesome Wi-Fi"        |
    |          | service name    | string      |                        |
    |          |                 | [RFC3629]   |                        |
    | expires  | Date after      | [RFC3339]   | "2017-07-23T06:00:00Z" |
@@ -744,7 +744,7 @@ Internet-Draft            Provisioning Domains                  May 2019
    +---------------+-----------------+---------+-----------------------+
    | JSON key      | Description     | Type    | Example               |
    +---------------+-----------------+---------+-----------------------+
-   | localizedName | Localized user- | UTF-8   | "Wifi Genial"         |
+   | localizedName | Localized user- | UTF-8   | "Wi-Fi Genial"        |
    |               | visible service | string  |                       |
    |               | name, language  |         |                       |
    |               | can be selected |         |                       |
@@ -793,7 +793,7 @@ Internet-Draft            Provisioning Domains                  May 2019
 
    {
      "name": "Foo Wireless",
-     "localizedName": "Foo-France Wifi",
+     "localizedName": "Foo-France Wi-Fi",
      "expires": "2017-07-23T06:00:00Z",
      "prefixes" : ["2001:db8:1::/48", "2001:db8:4::/48"],
    }
@@ -1428,6 +1428,14 @@ A.7.  WG Document version 04
       Added a section on considerations for handling DNS on a PvD-aware
       host.
 
+A.7.1.  WG Document version 05
+
+      Fixed nits about IPSEC and WiFi
+
+      Added use case per Phillip Hallam-Baker
+
+      Clarified some sentences
+
 Authors' Addresses
 
    Pierre Pfister
@@ -1439,14 +1447,6 @@ Authors' Addresses
    Email: ppfister@cisco.com
 
 
-   Eric Vyncke (editor)
-   Cisco
-   De Kleetlaan, 6
-   Diegem  1831
-   Belgium
-
-   Email: evyncke@cisco.com
-
 
 
 
@@ -1456,6 +1456,15 @@ Authors' Addresses
 Pfister, et al.         Expires December 1, 2019               [Page 26]
 
 Internet-Draft            Provisioning Domains                  May 2019
+
+
+   Eric Vyncke (editor)
+   Cisco
+   De Kleetlaan, 6
+   Diegem  1831
+   Belgium
+
+   Email: evyncke@cisco.com
 
 
    Tommy Pauly
@@ -1483,15 +1492,6 @@ Internet-Draft            Provisioning Domains                  May 2019
    France
 
    Email: wenshao@cisco.com
-
-
-
-
-
-
-
-
-
 
 
 
