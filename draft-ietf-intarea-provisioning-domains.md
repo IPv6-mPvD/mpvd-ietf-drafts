@@ -594,10 +594,9 @@ The PvD Additional Information object includes a set of IPv6
 prefixes (under the key "prefixes") which MUST be checked against all
 the Prefix Information Options advertised in the RA. If any of the
 prefixes included in the PIO is not covered by at least one of the
-listed prefixes, the PvD associated with the tested prefix MUST be
-considered unsafe and MUST NOT be used. While this does not prevent a
-malicious network provider, it does complicate some attack scenarios,
-and may help detecting misconfiguration.
+listed prefixes, the associated PvD information MUST be considered
+to be misconfigured, and MUST NOT be used by the host. See
+{{misconfig}} for more discussion on handling such misconfigurations.
 
 ## Operational Consideration to Providing the PvD Additional Information
 
@@ -696,10 +695,14 @@ the PvD server belong to the same entity.
 
 Hosts MUST verify that all prefixes in the RA PIO are covered by a
 prefix from the PvD Additional Information. An adversarial router
-willing to fake the use of a given Explicit PvD, without any access to
-the actual PvD Additional Information, would need to perform NAT66 in
-order to circumvent this check.
+attempting to spoof the definition of an Explicit PvD, without the ability to
+modify the PvD Additional Information, would need to perform NAT66 in
+order to circumvent this check. Thus, this check cannot prevent all
+spoofing, but it can detect misconfiguration or mismatched routers that
+are not adding a NAT.
 
+If NAT66 is being added in order to spoof PvD ownership, the HTTPS
+server for additional information can detect this misconfiguration.
 The HTTPS server SHOULD validate the source addresses of incoming
 connections (see {{retr}}). This check gives reasonable assurance that
 neither NPTv6 {{?RFC6296}} nor NAT66 were used and restricts the information
