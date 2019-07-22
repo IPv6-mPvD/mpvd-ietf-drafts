@@ -282,7 +282,7 @@ but are instead included in the PvD Option such as to be ignored
 by hosts that are not PvD-aware.
 
 Here is an example of a PvD option with "example.org" as the
-PvD ID FQDN and including RDNSS and prefix information options.
+PvD ID FQDN and including both an RDNSS option and a prefix information option.
 It has a Sequence Number of 123, and indicates the presence of additional
 information that is expected to be fetched with a delay factor of 5.
 
@@ -796,7 +796,8 @@ Users cannot be assumed to be able to meaningfully differentiate between
 whether or not PvDs are in use, and hence cannot be addressed by this document.
 However, a host that correctly implements the MPvD architecture ({{?RFC7556}})
 using the mechanism described in this document will be less susceptible to such
-attacks than a host that does not.
+attacks than a host that does not by being able to check for the various
+misconfigurations described in this document.
 
 # Privacy Considerations
 

@@ -28,7 +28,7 @@ Abstract
    This document defines a mechanism for explicitly identifying PvDs
    through a Router Advertisement (RA) option.  This RA option announces
    a PvD identifier, which hosts can compare to differentiate between
-   PvDs.  The option can directly carry some information about a PvD,
+   PvDs.  The option can directly carry some information about a PvD and
    can optionally point to additional PvD information that can be
    retrieved using HTTP over TLS.
 
@@ -122,7 +122,7 @@ Internet-Draft            Provisioning Domains                 July 2019
    sets of network configuration information.  This information includes
    properties that are traditionally associated with a single networking
    interface, such as source addresses, DNS configuration, proxy
-   configuration, and gateways addresses.
+   configuration, and gateway addresses.
 
    Clients that are aware of PvDs can take advantage of multiple network
    interfaces simultaneously.  This enables using two PvDs in parallel
@@ -188,10 +188,10 @@ Internet-Draft            Provisioning Domains                 July 2019
    Wi-Fi.  These applications could fail-over between these networks, or
    run connections over both (potentially using multi-path transports).
    Applications could also select specific uplinks based on the
-   properties of the network; for example, the cellular network provides
-   free high-quality video streaming, a video-streaming application
-   could select that network while most of the other traffic on Alice's
-   device uses the broadband provider.
+   properties of the network; for example, if the cellular network
+   provides free high-quality video streaming, a video-streaming
+   application could select that network while most of the other traffic
+   on Alice's device uses the broadband provider.
 
 1.1.  Specification of Requirements
 
@@ -312,7 +312,7 @@ Internet-Draft            Provisioning Domains                 July 2019
       described in Section 3.1 of [RFC1035].  Domain names compression
       described in Section 4.1.4 of [RFC1035] MUST NOT be used.
 
-   Padding:  Zero or more padding octets to the next 8 octets boundary
+   Padding:  Zero or more padding octets to the next 8 octet boundary
       (see Section 4.6 of [RFC4861]).  It MUST be set to zero by the
       sender, and ignored by the receiver.
 
@@ -339,9 +339,10 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
    Here is an example of a PvD option with "example.org" as the PvD ID
-   FQDN and including a RDNSS and prefix information options.  It has a
-   Sequence Number of 123, and indicates the presence of additional
-   information that is expected to be fetched with a delay factor of 5.
+   FQDN and including both an RDNSS option and a prefix information
+   option.  It has a Sequence Number of 123, and indicates the presence
+   of additional information that is expected to be fetched with a delay
+   factor of 5.
 
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -384,7 +385,6 @@ Internet-Draft            Provisioning Domains                 July 2019
    MUST be sent from different link-local source addresses.  Explicit
    PvDs MAY share link-local source addresses with an Implicit PvD and
    any number of other Explicit PvDs.
-
 
 
 
@@ -492,11 +492,11 @@ Internet-Draft            Provisioning Domains                 July 2019
 3.4.2.  DHCPv4 configuration association
 
    Associating DHCPv4 [RFC2131] configuration elements with Explicit
-   PvDs allows hosts to treat a set of IPv4 and IPv6 configuration as a
+   PvDs allows hosts to treat a set of IPv4 and IPv6 configurations as a
    single PvD with shared properties.  For example, consider a router
    that provides two different uplinks.  One could be a broadband
    network that has data rate and streaming properties described in PvD
-   additional information, and provides both IPv4 and IPv6 network
+   additional information and that provides both IPv4 and IPv6 network
    access.  The other could be a cellular network that provides only
 
 
@@ -704,8 +704,8 @@ Internet-Draft            Provisioning Domains                 July 2019
    Prefix Information Options advertised in the RA.  If any of the
    prefixes included in the PIO is not covered by at least one of the
    listed prefixes, the associated PvD information MUST be considered to
-   be misconfigured, and MUST NOT be used by the host.  See Section 4.4
-   for more discussion on handling such misconfigurations.
+   be a misconfiguration, and MUST NOT be used by the host.  See
+   Section 4.4 for more discussion on handling such misconfigurations.
 
 4.2.  Operational Consideration to Providing the PvD Additional
       Information
@@ -982,7 +982,8 @@ Internet-Draft            Provisioning Domains                 July 2019
    addressed by this document.  However, a host that correctly
    implements the MPvD architecture ([RFC7556]) using the mechanism
    described in this document will be less susceptible to such attacks
-   than a host that does not.
+   than a host that does not by being able to check for the various
+   misconfigurations described in this document.
 
 7.  Privacy Considerations
 
@@ -1001,7 +1002,6 @@ Internet-Draft            Provisioning Domains                 July 2019
    is not different from establishing a first connection to a remote
    server, or even performing a single DNS lookup.  For example, most
    operating systems already perform early queries to well known web
-
 
 
 
