@@ -53,7 +53,22 @@ author:
     country: France
     email: wenshao@apple.com
 
+informative:
+    IEEE8021X:
+      title: IEEE Standards for Local and Metropolitan Area Networks, Port-based Network Access Control, IEEE Std
+      authors:
+        -
+          org: IEEE
+    URN:
+      title: URN Namespaces
+      url: https://www.iana.org/assignments/urn-namespaces/urn-namespaces.xhtml#urn-namespaces-1
+      authors:
+        -
+          org: IANA
+
 --- abstract
+
+
 
 An increasing number of hosts access the Internet via multiple
 interfaces or, in IPv6 multi-homed networks, via multiple IPv6 prefix
@@ -380,6 +395,19 @@ associated PvD IDs, and routers LLA; it also assumes that the router
 either acts as a DHCPv6 server or relay and uses the same LLA for
 DHCPv6 and RA traffic (which may not be the case when the router
 uses VRRP to send its RA).
+
+
+### DHCPv4 configuration association {#dhcpv4}
+
+When a host retrieves configuration elements from DHCPv4, they MUST
+be associated with the explicit PvD received on the same interface,
+whose PVD Options L-flag is set and, in the case of a non point-to-
+point link, using the same datalink address.  If no such PvD is
+found, or whenever multiple different PvDs are found, the
+configuration elements coming from DHCPv4 MUST be associated with the
+implicit PvD identified by the interface on which the DHCPv4
+transaction happened.  The case of multiple explicit PvD for an IPv4
+interface is undefined.
 
 ### Connection Sharing by the Host
 
@@ -723,7 +751,7 @@ DNS server 2001:db8:f00d::53 when communicating with this adress.
 Although some solutions such as IPsec or SeND {{?RFC3971}}
 can be used in order to secure the IPv6 Neighbor
 Discovery Protocol, in practice actual deployments largely rely on link
-layer or physical layer security mechanisms (e.g. 802.1x {{IEEE8021X"}})
+layer or physical layer security mechanisms (e.g. 802.1x {{IEEE8021X}})
 in conjunction with RA Guard {{?RFC6105}}.
 
 This specification does not improve the Neighbor Discovery Protocol
