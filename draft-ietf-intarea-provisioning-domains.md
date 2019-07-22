@@ -77,7 +77,7 @@ cellular network provider.
 This document defines a mechanism for explicitly identifying PvDs through
 a Router Advertisement (RA) option. This RA option announces a PvD identifier,
 which hosts can compare to differentiate between PvDs. The option can directly
-carry some information about a PvD, can optionally point to additional
+carry some information about a PvD and can optionally point to additional
 PvD information that can be retrieved using HTTP over TLS.
 
 --- middle
@@ -88,7 +88,7 @@ Provisioning Domains (PvDs) are defined in {{?RFC7556}} as consistent
 sets of network configuration information. This information includes
 properties that are traditionally associated with a single networking
 interface, such as source addresses, DNS configuration, proxy configuration,
-and gateways addresses.
+and gateway addresses.
 
 Clients that are aware of PvDs can take advantage of multiple network
 interfaces simultaneously. This enables using two PvDs in parallel for
@@ -143,7 +143,7 @@ would be aware of both available uplinks via her local Wi-Fi. These applications
 could fail-over between these networks, or run connections over both
 (potentially using multi-path transports). Applications could also select
 specific uplinks based on the properties of the network; for example,
-the cellular network provides free high-quality video streaming,
+if the cellular network provides free high-quality video streaming,
 a video-streaming application could select that network while most of the
 other traffic on Alice's device uses the broadband provider.
 
@@ -262,7 +262,7 @@ DNS format, as described in Section 3.1 of {{!RFC1035}}. Domain names
 compression described in Section 4.1.4 of {{!RFC1035}} MUST NOT be used.
 
 Padding:
-: Zero or more padding octets to the next 8 octets boundary (see Section 4.6 of
+: Zero or more padding octets to the next 8 octet boundary (see Section 4.6 of
 {{!RFC4861}}). It MUST be set to zero by the sender, and ignored by the receiver.
 
 RA message header:
@@ -282,7 +282,7 @@ but are instead included in the PvD Option such as to be ignored
 by hosts that are not PvD-aware.
 
 Here is an example of a PvD option with "example.org" as the
-PvD ID FQDN and including a RDNSS and prefix information options.
+PvD ID FQDN and including RDNSS and prefix information options.
 It has a Sequence Number of 123, and indicates the presence of additional
 information that is expected to be fetched with a delay factor of 5.
 
@@ -422,10 +422,10 @@ on the same interface.
 ### DHCPv4 configuration association {#dhcpv4}
 
 Associating DHCPv4 {{?RFC2131}} configuration elements with Explicit PvDs allows
-hosts to treat a set of IPv4 and IPv6 configuration as a single PvD
+hosts to treat a set of IPv4 and IPv6 configurations as a single PvD
 with shared properties. For example, consider a router that provides two different
 uplinks. One could be a broadband network that has data rate and streaming
-properties described in PvD additional information, and provides both IPv4
+properties described in PvD additional information and that provides both IPv4
 and IPv6 network access. The other could be a cellular network that provides
 only IPv6 network access, and uses NAT64 {{?RFC6146}}. The broadband
 network can be represented by an Explicit PvD that points to the additional
@@ -595,7 +595,7 @@ prefixes (under the key "prefixes") which MUST be checked against all
 the Prefix Information Options advertised in the RA. If any of the
 prefixes included in the PIO is not covered by at least one of the
 listed prefixes, the associated PvD information MUST be considered
-to be misconfigured, and MUST NOT be used by the host. See
+to be a misconfiguration, and MUST NOT be used by the host. See
 {{misconfig}} for more discussion on handling such misconfigurations.
 
 ## Operational Consideration to Providing the PvD Additional Information
