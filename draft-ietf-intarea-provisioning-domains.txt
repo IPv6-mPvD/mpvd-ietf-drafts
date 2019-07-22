@@ -15,13 +15,13 @@ Expires: January 23, 2020                                       T. Pauly
 
 
              Discovering Provisioning Domain Names and Data
-               draft-ietf-intarea-provisioning-domains-06
+             draft-ietf-intarea-provisioning-domains-latest
 
 Abstract
 
    Provisioning Domains (PvDs) are defined as consistent sets of network
    configuration information.  This allows hosts to manage connections
-   to multiple networks and interfaces simulataneously, such as when a
+   to multiple networks and interfaces simultaneously, such as when a
    home router provides connectivity through both a broadband and
    cellular network provider.
 
@@ -898,7 +898,7 @@ Pfister, et al.         Expires January 23, 2020               [Page 16]
 Internet-Draft            Provisioning Domains                 July 2019
 
 
-  - Recursive DNS Server: length = 5, addresses= \[2001:db8:cafe::53, 2001:db8:f00d::53\]
+  - Recursive DNS Server: length = 5, addresses = \[2001:db8:cafe::53, 2001:db8:f00d::53\]
 
   - Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
 

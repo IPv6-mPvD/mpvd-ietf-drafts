@@ -1,7 +1,7 @@
 ---
 title: Discovering Provisioning Domain Names and Data
 abbrev: Provisioning Domains
-docname: draft-ietf-intarea-provisioning-domains-06
+docname: draft-ietf-intarea-provisioning-domains-latest
 date:
 category: std
 
@@ -70,7 +70,7 @@ informative:
 
 Provisioning Domains (PvDs) are defined as consistent
 sets of network configuration information. This allows hosts to manage
-connections to multiple networks and interfaces simulataneously, such as
+connections to multiple networks and interfaces simultaneously, such as
 when a home router provides connectivity through both a broadband and
 cellular network provider.
 
@@ -728,7 +728,7 @@ described as:
 example.org., R-flag = 0 (actual length of the header with padding
 24 bytes = 3 * 8 bytes)
 
-	- Recursive DNS Server: length = 5, addresses= \[2001:db8:cafe::53, 2001:db8:f00d::53\]
+	- Recursive DNS Server: length = 5, addresses = \[2001:db8:cafe::53, 2001:db8:f00d::53\]
 
 	- Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
 
