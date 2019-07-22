@@ -68,23 +68,17 @@ informative:
 
 --- abstract
 
+Provisioning Domains (PvDs) are defined as consistent
+sets of network configuration information. This allows hosts to manage
+connections to multiple networks and interfaces simulataneously, such as
+when a home router provides connectivity through both a broadband and
+cellular network provider.
 
-
-An increasing number of hosts access the Internet via multiple
-interfaces or, in IPv6 multi-homed networks, via multiple IPv6 prefix
-configurations context.
-
-This document describes a way for hosts to identify such contexts,
-called Provisioning Domains (PvDs), where Fully Qualified Domain Names
-(FQDNs) act as PvD identifiers. Those identifiers are advertised in a
-new Router Advertisement (RA) option and, when present, are associated
-with the set of information included within the RA.
-
-Based on this FQDN, hosts can retrieve additional information about
-their network access characteristics via an HTTP over TLS query. This
-allows applications to select which Provisioning Domains to use as well
-as to provide configuration parameters to the transport layer and
-above.
+This document defines a mechanism for explicitly identifying PvDs through
+a Router Advertisement (RA) option. This RA option announces a PvD identifier,
+which hosts can compare to differentiate between PvDs. The option can directly
+carry some information about a PvD, can optionally point to additional
+PvD information that can be retrieved using HTTP over TLS.
 
 --- middle
 

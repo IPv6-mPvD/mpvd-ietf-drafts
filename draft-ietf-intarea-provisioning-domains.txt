@@ -19,22 +19,18 @@ Expires: January 23, 2020                                       T. Pauly
 
 Abstract
 
-   An increasing number of hosts access the Internet via multiple
-   interfaces or, in IPv6 multi-homed networks, via multiple IPv6 prefix
-   configurations context.
+   Provisioning Domains (PvDs) are defined as consistent sets of network
+   configuration information.  This allows hosts to manage connections
+   to multiple networks and interfaces simulataneously, such as when a
+   home router provides connectivity through both a broadband and
+   cellular network provider.
 
-   This document describes a way for hosts to identify such contexts,
-   called Provisioning Domains (PvDs), where Fully Qualified Domain
-   Names (FQDNs) act as PvD identifiers.  Those identifiers are
-   advertised in a new Router Advertisement (RA) option and, when
-   present, are associated with the set of information included within
-   the RA.
-
-   Based on this FQDN, hosts can retrieve additional information about
-   their network access characteristics via an HTTP over TLS query.
-   This allows applications to select which Provisioning Domains to use
-   as well as to provide configuration parameters to the transport layer
-   and above.
+   This document defines a mechanism for explicitly identifying PvDs
+   through a Router Advertisement (RA) option.  This RA option announces
+   a PvD identifier, which hosts can compare to differentiate between
+   PvDs.  The option can directly carry some information about a PvD,
+   can optionally point to additional PvD information that can be
+   retrieved using HTTP over TLS.
 
 Status of This Memo
 
@@ -51,14 +47,16 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
+   This Internet-Draft will expire on January 23, 2020.
+
+
+
 
 
 Pfister, et al.         Expires January 23, 2020                [Page 1]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
-
-   This Internet-Draft will expire on January 23, 2020.
 
 Copyright Notice
 
@@ -106,6 +104,8 @@ Table of Contents
      8.3.  PvD JSON Media Type Registration  . . . . . . . . . . . .  19
    9.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  20
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  21
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .  21
+     10.2.  Informative References . . . . . . . . . . . . . . . . .  21
 
 
 
@@ -114,8 +114,6 @@ Pfister, et al.         Expires January 23, 2020                [Page 2]
 Internet-Draft            Provisioning Domains                 July 2019
 
 
-     10.1.  Normative References . . . . . . . . . . . . . . . . . .  21
-     10.2.  Informative References . . . . . . . . . . . . . . . . .  21
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  24
 
 1.  Introduction
@@ -161,7 +159,9 @@ Internet-Draft            Provisioning Domains                 July 2019
    operators may configure hosts that are 'PvD-aware' with PvDs that are
    ignored by other hosts.
 
-
+   Since PvD IDs are used to identify different ways to access the
+   internet, multiple PvDs (with different PvD IDs) can be provisioned
+   on a single host interface.  Similarly, the same PvD ID could be used
 
 
 
@@ -170,9 +170,6 @@ Pfister, et al.         Expires January 23, 2020                [Page 3]
 Internet-Draft            Provisioning Domains                 July 2019
 
 
-   Since PvD IDs are used to identify different ways to access the
-   internet, multiple PvDs (with different PvD IDs) can be provisioned
-   on a single host interface.  Similarly, the same PvD ID could be used
    on different interfaces of a host in order to inform that those PvDs
    ultimately provide equivalent services.
 
@@ -216,6 +213,9 @@ Internet-Draft            Provisioning Domains                 July 2019
    Explicit PvD:  A PvD uniquely identified with a PvD ID.  For more
       information, see [RFC7556].
 
+   Implicit PvD:  A PvD that, in the absence of a PvD ID, is identified
+      by the host interface to which it is attached and the address of
+      the advertising router.  See also [RFC7556].
 
 
 
@@ -225,10 +225,6 @@ Pfister, et al.         Expires January 23, 2020                [Page 4]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
-
-   Implicit PvD:  A PvD that, in the absence of a PvD ID, is identified
-      by the host interface to which it is attached and the address of
-      the advertising router.  See also [RFC7556].
 
    PvD-aware host:  A host that supports the association of network
       configuration information into PvDs and the use of these PvDs.
@@ -275,14 +271,16 @@ Internet-Draft            Provisioning Domains                 July 2019
 
            Figure 1: PvD ID Router Advertisements Option Format
 
+   Type:  (8 bits) Set to 21.
+
+
+
 
 
 Pfister, et al.         Expires January 23, 2020                [Page 5]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
-
-   Type:  (8 bits) Set to 21.
 
    Length:  (8 bits) The length of the option in units of 8 octets,
       including the Type and Length fields, the Router Advertisement
@@ -329,6 +327,8 @@ Internet-Draft            Provisioning Domains                 July 2019
 
    Options:  Zero or more RA options that would otherwise be valid as
       part of the Router Advertisement main body, but are instead
+      included in the PvD Option such as to be ignored by hosts that are
+      not PvD-aware.
 
 
 
@@ -337,9 +337,6 @@ Pfister, et al.         Expires January 23, 2020                [Page 6]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
-
-      included in the PvD Option such as to be ignored by hosts that are
-      not PvD-aware.
 
    Here is an example of a PvD option with "example.org" as the PvD ID
    FQDN and including a RDNSS and prefix information options.  It has a
@@ -385,6 +382,9 @@ Internet-Draft            Provisioning Domains                 July 2019
    In order to provide multiple different PvDs, a router MUST send
    multiple RAs.  If more than one Implicit PvD is advertised, the RAs
    MUST be sent from different link-local source addresses.  Explicit
+   PvDs MAY share link-local source addresses with an Implicit PvD and
+   any number of other Explicit PvDs.
+
 
 
 
@@ -393,9 +393,6 @@ Pfister, et al.         Expires January 23, 2020                [Page 7]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
-
-   PvDs MAY share link-local source addresses with an Implicit PvD and
-   any number of other Explicit PvDs.
 
    Different Explicit PvDs MAY be advertised with RAs using the same
    link-local source address; but different Implicit PvDs, advertised by
@@ -441,6 +438,9 @@ Internet-Draft            Provisioning Domains                 July 2019
    a received Prefix Information option (PIO) are associated with the
    PvD of the last received RA which included the given PIO.
 
+   PvD IDs MUST be compared in a case-insensitive manner as defined by
+   [RFC4343].  For example, "pvd.example.com." or "PvD.Example.coM."
+   would refer to the same PvD.
 
 
 
@@ -449,10 +449,6 @@ Pfister, et al.         Expires January 23, 2020                [Page 8]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
-
-   PvD IDs MUST be compared in a case-insensitive manner as defined by
-   [RFC4343].  For example, "pvd.example.com." or "PvD.Example.coM."
-   would refer to the same PvD.
 
    While resolving names, executing the default address selection
    algorithm [RFC6724] or executing the default router selection
@@ -498,6 +494,10 @@ Internet-Draft            Provisioning Domains                 July 2019
    Associating DHCPv4 [RFC2131] configuration elements with Explicit
    PvDs allows hosts to treat a set of IPv4 and IPv6 configuration as a
    single PvD with shared properties.  For example, consider a router
+   that provides two different uplinks.  One could be a broadband
+   network that has data rate and streaming properties described in PvD
+   additional information, and provides both IPv4 and IPv6 network
+   access.  The other could be a cellular network that provides only
 
 
 
@@ -506,10 +506,6 @@ Pfister, et al.         Expires January 23, 2020                [Page 9]
 Internet-Draft            Provisioning Domains                 July 2019
 
 
-   that provides two different uplinks.  One could be a broadband
-   network that has data rate and streaming properties described in PvD
-   additional information, and provides both IPv4 and IPv6 network
-   access.  The other could be a cellular network that provides only
    IPv6 network access, and uses NAT64 [RFC6146].  The broadband network
    can be represented by an Explicit PvD that points to the additional
    information, and also marks association with DHCPv4 information.  The
@@ -554,6 +550,10 @@ Internet-Draft            Provisioning Domains                 July 2019
 
    o  The bits from the Reserved field set to 0
 
+   The values of the R-bit, Router Advertisement message header and
+   Options field depend on whether the connectivity should be shared
+   only with PvD-aware hosts or not (see Section 3.2).  In particular,
+
 
 
 
@@ -562,9 +562,6 @@ Pfister, et al.         Expires January 23, 2020               [Page 10]
 Internet-Draft            Provisioning Domains                 July 2019
 
 
-   The values of the R-bit, Router Advertisement message header and
-   Options field depend on whether the connectivity should be shared
-   only with PvD-aware hosts or not (see Section 3.2).  In particular,
    all options received within the upstream PvD option and included in
    the downstream RA SHOULD be included in the downstream PvD option.
 
@@ -608,6 +605,9 @@ Internet-Draft            Provisioning Domains                 July 2019
    libraries, applications, or users, in order to decide which set of
    PvDs should be used for which connection, as described in
    Section 3.4.
+
+
+
 
 
 
