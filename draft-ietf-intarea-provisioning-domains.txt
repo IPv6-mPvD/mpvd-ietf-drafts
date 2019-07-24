@@ -81,31 +81,31 @@ Table of Contents
    3.  Provisioning Domain Identification using Router
        Advertisements  . . . . . . . . . . . . . . . . . . . . . . .   5
      3.1.  PvD ID Option for Router Advertisements . . . . . . . . .   5
-     3.2.  Router Behavior . . . . . . . . . . . . . . . . . . . . .   7
-     3.3.  Non-PvD-aware Host Behavior . . . . . . . . . . . . . . .   8
-     3.4.  PvD-aware Host Behavior . . . . . . . . . . . . . . . . .   8
-       3.4.1.  DHCPv6 configuration association  . . . . . . . . . .   9
-       3.4.2.  DHCPv4 configuration association  . . . . . . . . . .   9
-       3.4.3.  Connection Sharing by the Host  . . . . . . . . . . .  10
-       3.4.4.  Usage of DNS Servers  . . . . . . . . . . . . . . . .  11
-   4.  Provisioning Domain Additional Information  . . . . . . . . .  11
-     4.1.  Retrieving the PvD Additional Information . . . . . . . .  12
+     3.2.  Router Behavior . . . . . . . . . . . . . . . . . . . . .   8
+     3.3.  Non-PvD-aware Host Behavior . . . . . . . . . . . . . . .   9
+     3.4.  PvD-aware Host Behavior . . . . . . . . . . . . . . . . .   9
+       3.4.1.  DHCPv6 configuration association  . . . . . . . . . .  10
+       3.4.2.  DHCPv4 configuration association  . . . . . . . . . .  10
+       3.4.3.  Connection Sharing by the Host  . . . . . . . . . . .  11
+       3.4.4.  Usage of DNS Servers  . . . . . . . . . . . . . . . .  12
+   4.  Provisioning Domain Additional Information  . . . . . . . . .  12
+     4.1.  Retrieving the PvD Additional Information . . . . . . . .  13
      4.2.  Operational Consideration to Providing the PvD Additional
-           Information . . . . . . . . . . . . . . . . . . . . . . .  14
-     4.3.  PvD Additional Information Format . . . . . . . . . . . .  14
-       4.3.1.  Example . . . . . . . . . . . . . . . . . . . . . . .  15
-     4.4.  Detecting misconfiguration and misuse . . . . . . . . . .  16
-   5.  Operational Considerations  . . . . . . . . . . . . . . . . .  16
-   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  18
-   7.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .  18
-   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  19
-     8.1.  Additional Information PvD Keys Registry  . . . . . . . .  19
-     8.2.  PvD Option Flags Registry . . . . . . . . . . . . . . . .  19
-     8.3.  PvD JSON Media Type Registration  . . . . . . . . . . . .  20
-   9.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  20
-   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  21
-     10.1.  Normative References . . . . . . . . . . . . . . . . . .  21
-     10.2.  Informative References . . . . . . . . . . . . . . . . .  22
+           Information . . . . . . . . . . . . . . . . . . . . . . .  15
+     4.3.  PvD Additional Information Format . . . . . . . . . . . .  15
+       4.3.1.  Example . . . . . . . . . . . . . . . . . . . . . . .  16
+     4.4.  Detecting misconfiguration and misuse . . . . . . . . . .  17
+   5.  Operational Considerations  . . . . . . . . . . . . . . . . .  17
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  19
+   7.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .  19
+   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  20
+     8.1.  Additional Information PvD Keys Registry  . . . . . . . .  20
+     8.2.  PvD Option Flags Registry . . . . . . . . . . . . . . . .  20
+     8.3.  PvD JSON Media Type Registration  . . . . . . . . . . . .  21
+   9.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  21
+   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  22
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .  22
+     10.2.  Informative References . . . . . . . . . . . . . . . . .  23
 
 
 
@@ -114,7 +114,7 @@ Pfister, et al.         Expires January 25, 2020                [Page 2]
 Internet-Draft            Provisioning Domains                 July 2019
 
 
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  24
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  25
 
 1.  Introduction
 
@@ -230,6 +230,12 @@ Internet-Draft            Provisioning Domains                 July 2019
       configuration information into PvDs and the use of these PvDs.
       Also named PvD-aware node in [RFC7556].
 
+   Legacy-Visible Explicit PvD:  An Explicit PvD that contains
+      information that non-PvD-aware hosts detect and use.  These PvDs
+      are usable by both legacy and PvD-aware hosts, although PvD-aware
+      hosts can be aware of the identifier and additional information
+      associated with the PvD.
+
 3.  Provisioning Domain Identification using Router Advertisements
 
    Explicit PvDs are identified by a PvD ID.  The PvD ID is a Fully
@@ -243,12 +249,38 @@ Internet-Draft            Provisioning Domains                 July 2019
 3.1.  PvD ID Option for Router Advertisements
 
    This document introduces a Router Advertisement (RA) option called
-   PvD option.  It is used to convey the FQDN identifying a given PvD
+   PvD Option.  It is used to convey the FQDN identifying a given PvD
    (see Figure 1, bind the PvD ID with configuration information
    received over DHCPv4 (see Section 3.4.2), enable the use of HTTP over
    TLS to retrieve the PvD Additional Information JSON object (see
    Section 4), as well as contain any other RA options which would
    otherwise be valid in the RA.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Pfister, et al.         Expires January 25, 2020                [Page 5]
+
+Internet-Draft            Provisioning Domains                 July 2019
+
 
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -272,15 +304,6 @@ Internet-Draft            Provisioning Domains                 July 2019
            Figure 1: PvD ID Router Advertisements Option Format
 
    Type:  (8 bits) Set to 21.
-
-
-
-
-
-Pfister, et al.         Expires January 25, 2020                [Page 5]
-
-Internet-Draft            Provisioning Domains                 July 2019
-
 
    Length:  (8 bits) The length of the option in units of 8 octets,
       including the Type and Length fields, the Router Advertisement
@@ -308,6 +331,13 @@ Internet-Draft            Provisioning Domains                 July 2019
    Sequence Number:  (16 bits) Sequence number for the PvD Additional
       Information, as described in Section 4.
 
+
+
+Pfister, et al.         Expires January 25, 2020                [Page 6]
+
+Internet-Draft            Provisioning Domains                 July 2019
+
+
    PvD ID FQDN:  The FQDN used as PvD ID encoded in DNS format, as
       described in Section 3.1 of [RFC1035].  Domain names compression
       described in Section 4.1.4 of [RFC1035] MUST NOT be used.
@@ -330,19 +360,39 @@ Internet-Draft            Provisioning Domains                 July 2019
       included in the PvD Option such as to be ignored by hosts that are
       not PvD-aware.
 
-
-
-
-Pfister, et al.         Expires January 25, 2020                [Page 6]
-
-Internet-Draft            Provisioning Domains                 July 2019
-
-
-   Here is an example of a PvD option with "example.org" as the PvD ID
+   Here is an example of a PvD Option with "example.org" as the PvD ID
    FQDN and including both an RDNSS option and a prefix information
    option.  It has a Sequence Number of 123, and indicates the presence
    of additional information that is expected to be fetched with a delay
    factor of 5.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Pfister, et al.         Expires January 25, 2020                [Page 7]
+
+Internet-Draft            Provisioning Domains                 July 2019
+
 
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -372,27 +422,37 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 3.2.  Router Behavior
 
-   A router MAY send RAs containing one PvD option, but MUST NOT include
-   more than one PvD option in each RA.  The PvD option MUST NOT contain
-   further PvD options.
+   A router MAY send RAs containing one PvD Option, but MUST NOT include
+   more than one PvD Option in each RA.  The PvD Option MUST NOT contain
+   further PvD Options.
 
    The PvD Option MAY contain zero, one, or more RA options which would
    otherwise be valid as part of the same RA.  Such options are
    processed by PvD-aware hosts, while ignored by others.
 
+   Any RA that contains a PvD Option defines an Explicit PvD, which will
+   be visible and usable by PvD-aware hosts.  If an RA contains only a
+   PvD Option at its top-level, with all other RA options contained
+   within the PvD Option (with the R-flag set), the Explicit PvD will be
+   visible only to PvD-aware hosts.  If, on the other hand, an RA
+   contains other options at the top-level, and the PvD Option does not
+   have the R-flag set, the Explicit PvD will be visible to both PvD-
+   aware and legacy hosts.  Such PvDs are referred to as Legacy-Visible
+   Explicit PvDs.
+
    In order to provide multiple different PvDs, a router MUST send
    multiple RAs.  If more than one Implicit PvD is advertised, the RAs
-   MUST be sent from different link-local source addresses.  Explicit
-   PvDs MAY share link-local source addresses with an Implicit PvD and
-   any number of other Explicit PvDs.
 
 
 
-
-Pfister, et al.         Expires January 25, 2020                [Page 7]
+Pfister, et al.         Expires January 25, 2020                [Page 8]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
+
+   MUST be sent from different link-local source addresses.  Explicit
+   PvDs MAY share link-local source addresses with an Implicit PvD and
+   any number of other Explicit PvDs.
 
    Different Explicit PvDs MAY be advertised with RAs using the same
    link-local source address; but different Implicit PvDs, advertised by
@@ -402,10 +462,10 @@ Internet-Draft            Provisioning Domains                 July 2019
    As specified in [RFC4861], when the set of options causes the size of
    an advertisement to exceed the link MTU, multiple router
    advertisements can be sent, each containing a subset of the options.
-   In such cases, the PvD option header (i.e., all fields except the
+   In such cases, the PvD Option header (i.e., all fields except the
    'Options' field) MUST be repeated in all the transmitted RAs.  The
    options within the 'Options' field, MAY be transmitted only once,
-   included in one of the transmitted PvD options.
+   included in one of the transmitted PvD Options.
 
 3.3.  Non-PvD-aware Host Behavior
 
@@ -414,6 +474,9 @@ Internet-Draft            Provisioning Domains                 July 2019
    ensure the backward compatibility required in Section 3.3 of
    [RFC7556].  This behavior allows for a mixed-mode network with a mix
    of PvD-aware and non-PvD-aware hosts coexist.
+
+   Non-PvD-aware hosts will only be aware of the information described
+   by Implicit PvDs and Legacy-Visible Explicit PvDs.
 
 3.4.  PvD-aware Host Behavior
 
@@ -425,30 +488,30 @@ Internet-Draft            Provisioning Domains                 July 2019
    identified by the host interface and the source address of the
    received RA otherwise.
 
-   In case multiple PvD options are found in a given RA, hosts MUST
-   ignore all but the first PvD option.
+   In case multiple PvD Options are found in a given RA, hosts MUST
+   ignore all but the first PvD Option.
 
-   If a host receives PvD options flags that it does not recognize
+   If a host receives PvD Options flags that it does not recognize
    (currently in the Reserved field), it MUST ignore these flags.
 
    Similarly, hosts MUST associate all network configuration objects
    (e.g., default routers, addresses, more specific routes, DNS
    Recursive Resolvers) with the PvD associated with the RA which last
    updated the object.  For example, addresses that are generated using
+
+
+
+Pfister, et al.         Expires January 25, 2020                [Page 9]
+
+Internet-Draft            Provisioning Domains                 July 2019
+
+
    a received Prefix Information option (PIO) are associated with the
    PvD of the last received RA which included the given PIO.
 
    PvD IDs MUST be compared in a case-insensitive manner as defined by
    [RFC4343].  For example, "pvd.example.com." or "PvD.Example.coM."
    would refer to the same PvD.
-
-
-
-
-Pfister, et al.         Expires January 25, 2020                [Page 8]
-
-Internet-Draft            Provisioning Domains                 July 2019
-
 
    While resolving names, executing the default address selection
    algorithm [RFC6724] or executing the default router selection
@@ -472,22 +535,10 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 3.4.1.  DHCPv6 configuration association
 
-   DHCPv6 [RFC8415] configuration elements can be associated with
-   Implicit or Explicit PvDs.  If a DHCPv6 message contains an
-   assignment of IPv6 addresses or prefixes, these addresses or prefixes
-   can fall within the Prefix Information Option (PIO) defined by an RA.
-   Information carried in such DHCPv6 messages MUST be associated with
-   the PvD (Explicit or Implicit) defined by the matching RA.  RAs that
-   do not contain a PIO cannot be associated with DHCPv6.
-
-   Configuration elements retrieved via DHCPv6 that are associated with
-   IPv6 addresses or prefixes that do not match any PIO sent in an RA
-   MUST NOT be associated with any RA-based PvD.  Hosts MAY treat this
-   information as a separate Implicit PvD.
-
-   Stateless configuration elements (elements not associated with an
-   IPv6 address or prefix) MUST be associated with all Implicit PvDs on
-   the same interface.
+   When a PvD-aware host receives DHCPv6 [RFC8415] configuration
+   elements, it SHOULD associate the received information with all
+   Implicit PvDs and Legacy-Visible Explicit PvDs.  This is intended to
+   maintain behavior of how data is associated for non-PvD-aware hosts.
 
 3.4.2.  DHCPv4 configuration association
 
@@ -498,19 +549,18 @@ Internet-Draft            Provisioning Domains                 July 2019
    network that has data rate and streaming properties described in PvD
    additional information and that provides both IPv4 and IPv6 network
    access.  The other could be a cellular network that provides only
-
-
-
-Pfister, et al.         Expires January 25, 2020                [Page 9]
-
-Internet-Draft            Provisioning Domains                 July 2019
-
-
    IPv6 network access, and uses NAT64 [RFC6146].  The broadband network
    can be represented by an Explicit PvD that points to the additional
    information, and also marks association with DHCPv4 information.  The
    cellular network can be represented by a different Explicit PvD that
    is not associated with DHCPv4.
+
+
+
+Pfister, et al.         Expires January 25, 2020               [Page 10]
+
+Internet-Draft            Provisioning Domains                 July 2019
+
 
    When a PvD-aware host retrieves configuration elements from DHCPv4,
    the information is either associated with a single Explicit PvD on
@@ -539,7 +589,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
    Whenever the RAs received from the upstream interface contain a PVD
    RA option, hosts that are sharing connectivity SHOULD include a PVD
-   Option within the RAs sent downstream with:
+   option within the RAs sent downstream with:
 
    o  The same PVD-ID FQDN
 
@@ -553,17 +603,20 @@ Internet-Draft            Provisioning Domains                 July 2019
    The values of the R-bit, Router Advertisement message header and
    Options field depend on whether the connectivity should be shared
    only with PvD-aware hosts or not (see Section 3.2).  In particular,
+   all options received within the upstream PvD Option and included in
+   the downstream RA SHOULD be included in the downstream PvD Option.
 
 
 
 
-Pfister, et al.         Expires January 25, 2020               [Page 10]
+
+
+
+
+Pfister, et al.         Expires January 25, 2020               [Page 11]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
-
-   all options received within the upstream PvD option and included in
-   the downstream RA SHOULD be included in the downstream PvD option.
 
 3.4.4.  Usage of DNS Servers
 
@@ -610,17 +663,17 @@ Internet-Draft            Provisioning Domains                 July 2019
    to applications on a client host about the connectivity that is
    provided using a given interface and source address.  It typically
    includes data that would be considered too large, or not critical
+   enough, to be provided within an RA option.  The information
+   contained in this object MAY be used by the operating system, network
+   libraries, applications, or users, in order to decide which set of
 
 
 
-Pfister, et al.         Expires January 25, 2020               [Page 11]
+Pfister, et al.         Expires January 25, 2020               [Page 12]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
 
-   enough, to be provided within an RA option.  The information
-   contained in this object MAY be used by the operating system, network
-   libraries, applications, or users, in order to decide which set of
    PvDs should be used for which connection, as described in
    Section 3.4.
 
@@ -665,19 +718,18 @@ Internet-Draft            Provisioning Domains                 July 2019
    SHOULD deprecate the used temporary address and generate a new
    temporary address afterward.
 
-
-
-
-
-Pfister, et al.         Expires January 25, 2020               [Page 12]
-
-Internet-Draft            Provisioning Domains                 July 2019
-
-
    If the HTTP status of the answer is greater than or equal to 400 the
    host MUST abandon and consider that there is no additional PvD
    information.  If the HTTP status of the answer is between 300 and
    399, inclusive, it MUST follow the redirection(s).  If the HTTP
+
+
+
+Pfister, et al.         Expires January 25, 2020               [Page 13]
+
+Internet-Draft            Provisioning Domains                 July 2019
+
+
    status of the answer is between 200 and 299, inclusive, the host MAY
    get a file containing a single JSON object.
 
@@ -722,18 +774,18 @@ Internet-Draft            Provisioning Domains                 July 2019
    depending on the criticality of the update and its PvD Additional
    Information servers capacity.
 
-
-
-
-Pfister, et al.         Expires January 25, 2020               [Page 13]
-
-Internet-Draft            Provisioning Domains                 July 2019
-
-
    The PvD Additional Information object includes a set of IPv6 prefixes
    (under the key "prefixes") which MUST be checked against all the
    Prefix Information Options advertised in the RA.  If any of the
    prefixes included in the PIO is not covered by at least one of the
+
+
+
+Pfister, et al.         Expires January 25, 2020               [Page 14]
+
+Internet-Draft            Provisioning Domains                 July 2019
+
+
    listed prefixes, the associated PvD information MUST be considered to
    be a misconfiguration, and MUST NOT be used by the host.  See
    Section 4.4 for more discussion on handling such misconfigurations.
@@ -779,16 +831,17 @@ Internet-Draft            Provisioning Domains                 July 2019
    |           | for this PvD     |           |                        |
    +-----------+------------------+-----------+------------------------+
 
+   A retrieved object which does not include all three of these keys at
+   the root of the JSON object MUST be ignored.  All three keys need to
+   be validated, otherwise the object MUST be ignored.  The value stored
 
 
-Pfister, et al.         Expires January 25, 2020               [Page 14]
+
+Pfister, et al.         Expires January 25, 2020               [Page 15]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
 
-   A retrieved object which does not include all three of these keys at
-   the root of the JSON object MUST be ignored.  All three keys need to
-   be validated, otherwise the object MUST be ignored.  The value stored
    for "identifier" MUST be matched against the PvD ID FQDN presented in
    the PvD RA option using the comparison mechanism described in
    Section 3.4.  The value stored for "expires" MUST be a valid date in
@@ -837,7 +890,10 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 25, 2020               [Page 15]
+
+
+
+Pfister, et al.         Expires January 25, 2020               [Page 16]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -893,12 +949,12 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 25, 2020               [Page 16]
+Pfister, et al.         Expires January 25, 2020               [Page 17]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
 
-   containing some options and a PvD option that also contains other
+   containing some options and a PvD Option that also contains other
    options will be described as:
 
    o  RA Header: router lifetime = 6000
@@ -949,7 +1005,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 25, 2020               [Page 17]
+Pfister, et al.         Expires January 25, 2020               [Page 18]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -1005,7 +1061,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 25, 2020               [Page 18]
+Pfister, et al.         Expires January 25, 2020               [Page 19]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -1036,7 +1092,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 8.  IANA Considerations
 
    Upon publication of this document, IANA is asked to remove the
-   'reclaimable' tag off the value 21 for the PvD option (from the IPv6
+   'reclaimable' tag off the value 21 for the PvD Option (from the IPv6
    Neighbor Discovery Option Formats registry).
 
    IANA is asked to assign the value "pvd" from the Well-Known URIs
@@ -1056,12 +1112,12 @@ Internet-Draft            Provisioning Domains                 July 2019
 
    IANA is also asked to create and maintain a new registry entitled
    "PvD Option Flags" reserving bit positions from 0 to 15 to be used in
-   the PvD option bitmask.  Bit position 0, 1 and 2 are reserved by this
+   the PvD Option bitmask.  Bit position 0, 1 and 2 are reserved by this
 
 
 
 
-Pfister, et al.         Expires January 25, 2020               [Page 19]
+Pfister, et al.         Expires January 25, 2020               [Page 20]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -1117,7 +1173,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 25, 2020               [Page 20]
+Pfister, et al.         Expires January 25, 2020               [Page 21]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -1173,7 +1229,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 25, 2020               [Page 21]
+Pfister, et al.         Expires January 25, 2020               [Page 22]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -1229,7 +1285,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 25, 2020               [Page 22]
+Pfister, et al.         Expires January 25, 2020               [Page 23]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -1285,7 +1341,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 25, 2020               [Page 23]
+Pfister, et al.         Expires January 25, 2020               [Page 24]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -1341,7 +1397,7 @@ Authors' Addresses
 
 
 
-Pfister, et al.         Expires January 25, 2020               [Page 24]
+Pfister, et al.         Expires January 25, 2020               [Page 25]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -1397,4 +1453,4 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 25, 2020               [Page 25]
+Pfister, et al.         Expires January 25, 2020               [Page 26]

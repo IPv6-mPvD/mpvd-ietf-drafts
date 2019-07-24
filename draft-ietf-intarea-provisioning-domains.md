@@ -178,6 +178,12 @@ PvD-aware host:
 network configuration information into PvDs and the use of these
 PvDs. Also named PvD-aware node in {{?RFC7556}}.
 
+Legacy-Visible Explicit PvD:
+: An Explicit PvD that contains information that non-PvD-aware hosts
+detect and use. These PvDs are usable by both legacy and PvD-aware
+hosts, although PvD-aware hosts can be aware of the identifier and
+additional information associated with the PvD.
+
 # Provisioning Domain Identification using Router Advertisements {#ra}
 
 Explicit PvDs are identified by a PvD ID. The PvD ID is a Fully
@@ -189,7 +195,7 @@ PvD ID MUST be different to follow Section 2.4 of {{?RFC7556}}.
 
 ## PvD ID Option for Router Advertisements
 This document introduces a Router Advertisement (RA) option called
-PvD option. It is used to convey the FQDN identifying a given PvD (see
+PvD Option. It is used to convey the FQDN identifying a given PvD (see
 {{format}}, bind the PvD ID with configuration
 information received over DHCPv4 (see {{dhcpv4}}), enable
 the use of HTTP over TLS to retrieve the PvD Additional Information
@@ -281,7 +287,7 @@ otherwise be valid as part of the Router Advertisement main body,
 but are instead included in the PvD Option such as to be ignored
 by hosts that are not PvD-aware.
 
-Here is an example of a PvD option with "example.org" as the
+Here is an example of a PvD Option with "example.org" as the
 PvD ID FQDN and including both an RDNSS option and a prefix information option.
 It has a Sequence Number of 123, and indicates the presence of additional
 information that is expected to be fetched with a delay factor of 5.
@@ -315,13 +321,23 @@ information that is expected to be fetched with a delay factor of 5.
 
 ## Router Behavior {#router}
 
-A router MAY send RAs containing one PvD option, but MUST NOT
-include more than one PvD option in each RA. The PvD option MUST
-NOT contain further PvD options.
+A router MAY send RAs containing one PvD Option, but MUST NOT
+include more than one PvD Option in each RA. The PvD Option MUST
+NOT contain further PvD Options.
 
 The PvD Option MAY contain zero, one, or more RA options which
 would otherwise be valid as part of the same RA. Such options are
 processed by PvD-aware hosts, while ignored by others.
+
+Any RA that contains a PvD Option defines an Explicit PvD, which
+will be visible and usable by PvD-aware hosts. If an RA contains
+only a PvD Option at its top-level, with all other RA options contained
+within the PvD Option (with the R-flag set), the Explicit PvD will be
+visible only to PvD-aware hosts. If, on the other hand,
+an RA contains other options at the top-level, and the PvD Option does
+not have the R-flag set, the Explicit PvD will be visible to both
+PvD-aware and legacy hosts. Such PvDs are referred to as
+Legacy-Visible Explicit PvDs.
 
 In order to provide multiple different PvDs, a router MUST send
 multiple RAs. If more than one Implicit PvD is advertised, the RAs
@@ -338,10 +354,10 @@ RAs.
 As specified in {{!RFC4861}}, when the set of options
 causes the size of an advertisement to exceed the link MTU, multiple
 router advertisements can be sent, each containing a subset of the
-options. In such cases, the PvD option header (i.e., all fields except
+options. In such cases, the PvD Option header (i.e., all fields except
 the 'Options' field) MUST be repeated in all the transmitted RAs. The
 options within the 'Options' field, MAY be transmitted only once,
-included in one of the transmitted PvD options.
+included in one of the transmitted PvD Options.
 
 ## Non-PvD-aware Host Behavior
 
@@ -350,6 +366,9 @@ simply ignore the PvD Option and all the options it contains. This
 ensure the backward compatibility required in Section 3.3 of {{?RFC7556}}.
 This behavior allows for a mixed-mode network with
 a mix of PvD-aware and non-PvD-aware hosts coexist.
+
+Non-PvD-aware hosts will only be aware of the information described by
+Implicit PvDs and Legacy-Visible Explicit PvDs.
 
 ## PvD-aware Host Behavior {#host}
 
@@ -361,10 +380,10 @@ Explicit PvD identified by the first PvD Option present in the
 received RA, if any, or with the Implicit PvD identified by the host
 interface and the source address of the received RA otherwise.
 
-In case multiple PvD options are found in a given RA, hosts MUST
-ignore all but the first PvD option.
+In case multiple PvD Options are found in a given RA, hosts MUST
+ignore all but the first PvD Option.
 
-If a host receives PvD options flags that it does not recognize
+If a host receives PvD Options flags that it does not recognize
 (currently in the Reserved field), it MUST ignore these flags.
 
 Similarly, hosts MUST associate all network configuration objects
@@ -401,23 +420,11 @@ be found in {{?I-D.kline-mif-mpvd-api-reqs}}.
 
 ### DHCPv6 configuration association {#dhcpv6}
 
-DHCPv6 {{?RFC8415}} configuration elements can be associated
-with Implicit or Explicit PvDs. If a DHCPv6 message contains
-an assignment of IPv6 addresses or prefixes, these addresses
-or prefixes can fall within the Prefix Information Option (PIO)
-defined by an RA. Information carried in such DHCPv6 messages
-MUST be associated with the PvD (Explicit or Implicit) defined
-by the matching RA. RAs that do not contain a PIO cannot be
-associated with DHCPv6.
-
-Configuration elements retrieved via DHCPv6 that are associated
-with IPv6 addresses or prefixes that do not match any PIO sent in
-an RA MUST NOT be associated with any RA-based PvD. Hosts
-MAY treat this information as a separate Implicit PvD.
-
-Stateless configuration elements (elements not associated with an
-IPv6 address or prefix) MUST be associated with all Implicit PvDs
-on the same interface.
+When a PvD-aware host receives DHCPv6 {{?RFC8415}} configuration
+elements, it SHOULD associate the received information with all
+Implicit PvDs and Legacy-Visible Explicit PvDs. This is intended
+to maintain behavior of how data is associated for non-PvD-aware
+hosts.
 
 ### DHCPv4 configuration association {#dhcpv4}
 
@@ -459,7 +466,7 @@ known as 'tethering'. Techniques such as ND-proxy {{?RFC4389}},
 
 Whenever the RAs received from the upstream interface contain a
 PVD RA option, hosts that are sharing connectivity SHOULD include a
-PVD Option within the RAs sent downstream with:
+PVD option within the RAs sent downstream with:
 
 - The same PVD-ID FQDN
 
@@ -473,8 +480,8 @@ received from the same upstream interface
 The values of the R-bit, Router Advertisement message
 header and Options field depend on whether the connectivity should
 be shared only with PvD-aware hosts or not (see {{router}}). In particular,
-all options received within the upstream PvD option and included in
-the downstream RA SHOULD be included in the downstream PvD option.
+all options received within the upstream PvD Option and included in
+the downstream RA SHOULD be included in the downstream PvD Option.
 
 ### Usage of DNS Servers
 
@@ -741,7 +748,7 @@ SHOULD NOT have a DNS A record.
 This section describes some use cases of PvD. For the sake of
 simplicity, the RA messages will not be described in the usual ASCII art
 but rather in an indented list. For example, a RA message containing
-some options and a PvD option that also contains other options will be
+some options and a PvD Option that also contains other options will be
 described as:
 
 - RA Header: router lifetime = 6000
@@ -854,7 +861,7 @@ part of the allowed whitelist.
 # IANA Considerations {#iana}
 
 Upon publication of this document, IANA is asked to remove the
-'reclaimable' tag off the value 21 for the PvD option (from the IPv6
+'reclaimable' tag off the value 21 for the PvD Option (from the IPv6
 Neighbor Discovery Option Formats registry).
 
 IANA is asked to assign the value "pvd" from the Well-Known URIs
@@ -874,7 +881,7 @@ be administered by IANA through Expert Review {{!RFC8126}}.
 
 IANA is also asked to create and maintain a new registry entitled
 "PvD Option Flags" reserving bit positions from 0 to 15 to be used in
-the PvD option bitmask. Bit position 0, 1 and 2 are reserved by this
+the PvD Option bitmask. Bit position 0, 1 and 2 are reserved by this
 document (as specified in {{format}}). Future assignments
 require Standards Action {{!RFC8126}}, via a
 Standards Track RFC document.
