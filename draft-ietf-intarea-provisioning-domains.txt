@@ -5,13 +5,13 @@
 Network Working Group                                         P. Pfister
 Internet-Draft                                                 E. Vyncke
 Intended status: Standards Track                                   Cisco
-Expires: January 23, 2020                                       T. Pauly
+Expires: January 25, 2020                                       T. Pauly
                                                               Apple Inc.
                                                              D. Schinazi
                                                               Google LLC
                                                                  W. Shao
                                                                    Cisco
-                                                           July 22, 2019
+                                                           July 24, 2019
 
 
              Discovering Provisioning Domain Names and Data
@@ -47,13 +47,13 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 23, 2020.
+   This Internet-Draft will expire on January 25, 2020.
 
 
 
 
 
-Pfister, et al.         Expires January 23, 2020                [Page 1]
+Pfister, et al.         Expires January 25, 2020                [Page 1]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Pfister, et al.         Expires January 23, 2020                [Page 2]
+Pfister, et al.         Expires January 25, 2020                [Page 2]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -165,7 +165,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020                [Page 3]
+Pfister, et al.         Expires January 25, 2020                [Page 3]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -221,7 +221,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020                [Page 4]
+Pfister, et al.         Expires January 25, 2020                [Page 4]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -277,7 +277,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020                [Page 5]
+Pfister, et al.         Expires January 25, 2020                [Page 5]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -333,7 +333,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020                [Page 6]
+Pfister, et al.         Expires January 25, 2020                [Page 6]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -389,7 +389,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020                [Page 7]
+Pfister, et al.         Expires January 25, 2020                [Page 7]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -445,7 +445,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020                [Page 8]
+Pfister, et al.         Expires January 25, 2020                [Page 8]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -501,7 +501,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020                [Page 9]
+Pfister, et al.         Expires January 25, 2020                [Page 9]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -557,7 +557,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020               [Page 10]
+Pfister, et al.         Expires January 25, 2020               [Page 10]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -576,6 +576,14 @@ Internet-Draft            Provisioning Domains                 July 2019
    configured recursive DNS server SHOULD be sent from a local IP
    address that was provisioned by the PvD via RA or DHCP.  Answers
    received from the DNS server SHOULD only be used on the same PvD.
+
+   PvD-aware applications will be able to select which PvD(s) to use for
+   DNS resolution and connections, which allows them to effectively use
+   multiple Explicit PvDs.  In order to support non-PvD-aware
+   applications, however, PvD-aware hosts SHOULD ensure that non-PvD-
+   aware name resolution APIs like "getaddrinfo" only use resolvers from
+   a single PvD for each query.  More discussion is provided in
+   Section 5.2.1 of [RFC7556].
 
    Maintaining the correct usage of DNS within PvDs avoids various
    practical errors, such as:
@@ -602,21 +610,17 @@ Internet-Draft            Provisioning Domains                 July 2019
    includes data that would be considered too large, or not critical
    enough, to be provided within an RA option.  The information
    contained in this object MAY be used by the operating system, network
-   libraries, applications, or users, in order to decide which set of
-   PvDs should be used for which connection, as described in
-   Section 3.4.
 
 
 
-
-
-
-
-
-Pfister, et al.         Expires January 23, 2020               [Page 11]
+Pfister, et al.         Expires January 25, 2020               [Page 11]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
+
+   libraries, applications, or users, in order to decide which set of
+   PvDs should be used for which connection, as described in
+   Section 3.4.
 
 4.1.  Retrieving the PvD Additional Information
 
@@ -661,37 +665,41 @@ Internet-Draft            Provisioning Domains                 July 2019
    additional information and stop using it until a new JSON object is
    retrieved.
 
+
+
+
+
+Pfister, et al.         Expires January 25, 2020               [Page 12]
+
+Internet-Draft            Provisioning Domains                 July 2019
+
+
    Hosts retrieving a new PvD Additional Information object MUST check
    for the presence and validity of the mandatory fields specified in
    Section 4.3.  A retrieved object including an expiration time that is
    already past or missing a mandatory element MUST be ignored.
-
-
-
-
-Pfister, et al.         Expires January 23, 2020               [Page 12]
-
-Internet-Draft            Provisioning Domains                 July 2019
-
 
    In order to avoid synchronized queries toward the server hosting the
    PvD Additional Information when an object expires, object updates are
    delayed by a randomized backoff time.
 
    o  When a host performs a JSON object update after it detected a
-      change in the PvD Option Sequence Number, it MUST delay the query
-      by a random time between zero and 2**(Delay * 2) milliseconds,
-      where 'Delay' corresponds to the 4 bits long unsigned integer in
-      the last received PvD Option.
+      change in the PvD Option Sequence Number, it MUST add a delay
+      before sending the query.  The target time for the delay is
+      calculated as a random time between zero and 2**(Delay * 2)
+      milliseconds, where 'Delay' corresponds to the 4-bit unsigned
+      integer in the last received PvD Option.
 
    o  When a host last retrieved a JSON object at time A that includes a
       expiry time B using the "expires" key, and the host is configured
-      to keep the PvD information up to date, it MUST perform the update
-      at a uniformly random time in the interval [(B-A)/2,B].
+      to keep the PvD information up to date, it MUST add some
+      randomness into its calculation of the time to fetch the update.
+      The target time for fetching the updated object is calculated as a
+      uniformly random time in the interval [(B-A)/2,B].
 
    In the example Figure 2, the delay field value is 5, this means that
-   host MUST delay the query by a random number between 0 and 2**(5 * 2)
-   milliseconds, i.e., between 0 and 1024 milliseconds.
+   host calculates its delay by choosing a random number between 0 and
+   2**(5 * 2) milliseconds, i.e., between 0 and 1024 milliseconds.
 
    Since the 'Delay' value is directly within the PvD Option rather than
    the object itself, an operator may perform a push-based update by
@@ -714,6 +722,14 @@ Internet-Draft            Provisioning Domains                 July 2019
    Information object MUST be made available to all hosts receiving the
    RA by the network operator.  In particular, when a captive portal is
    present, hosts MUST still be allowed to perform DNS, PKI and HTTP
+
+
+
+Pfister, et al.         Expires January 25, 2020               [Page 13]
+
+Internet-Draft            Provisioning Domains                 July 2019
+
+
    over TLS operations related to the retrieval of the object, even
    before logging into the captive portal.
 
@@ -721,14 +737,6 @@ Internet-Draft            Provisioning Domains                 July 2019
    whenever a new PvD Additional Information object is available and
    should be retrieved by hosts.  If the value exceeds what can be
    stored in the Sequence Number field, it SHOULD wrap back to zero.
-
-
-
-
-Pfister, et al.         Expires January 23, 2020               [Page 13]
-
-Internet-Draft            Provisioning Domains                 July 2019
-
 
    The server providing the JSON files SHOULD also check whether the
    client address is part of the prefixes listed into the additional
@@ -773,15 +781,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-
-
-
-
-
-
-
-
-Pfister, et al.         Expires January 23, 2020               [Page 14]
+Pfister, et al.         Expires January 25, 2020               [Page 14]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -837,7 +837,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020               [Page 15]
+Pfister, et al.         Expires January 25, 2020               [Page 15]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -893,7 +893,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020               [Page 16]
+Pfister, et al.         Expires January 25, 2020               [Page 16]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -949,7 +949,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020               [Page 17]
+Pfister, et al.         Expires January 25, 2020               [Page 17]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -1005,7 +1005,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020               [Page 18]
+Pfister, et al.         Expires January 25, 2020               [Page 18]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -1061,7 +1061,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020               [Page 19]
+Pfister, et al.         Expires January 25, 2020               [Page 19]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -1117,7 +1117,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020               [Page 20]
+Pfister, et al.         Expires January 25, 2020               [Page 20]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -1173,7 +1173,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020               [Page 21]
+Pfister, et al.         Expires January 25, 2020               [Page 21]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -1229,7 +1229,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020               [Page 22]
+Pfister, et al.         Expires January 25, 2020               [Page 22]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -1285,7 +1285,7 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020               [Page 23]
+Pfister, et al.         Expires January 25, 2020               [Page 23]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -1341,7 +1341,7 @@ Authors' Addresses
 
 
 
-Pfister, et al.         Expires January 23, 2020               [Page 24]
+Pfister, et al.         Expires January 25, 2020               [Page 24]
 
 Internet-Draft            Provisioning Domains                 July 2019
 
@@ -1397,4 +1397,4 @@ Internet-Draft            Provisioning Domains                 July 2019
 
 
 
-Pfister, et al.         Expires January 23, 2020               [Page 25]
+Pfister, et al.         Expires January 25, 2020               [Page 25]

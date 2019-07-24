@@ -488,6 +488,14 @@ to a configured recursive DNS server SHOULD be sent from a local IP
 address that was provisioned by the PvD via RA or DHCP. Answers
 received from the DNS server SHOULD only be used on the same PvD.
 
+PvD-aware applications will be able to select which PvD(s) to use
+for DNS resolution and connections, which allows them to effectively
+use multiple Explicit PvDs. In order to support non-PvD-aware
+applications, however, PvD-aware hosts SHOULD ensure that
+non-PvD-aware name resolution APIs like "getaddrinfo" only
+use resolvers from a single PvD for each query. More discussion is
+provided in Section 5.2.1 of {{?RFC7556}}.
+
 Maintaining the correct usage of DNS within PvDs avoids various
 practical errors, such as:
 
@@ -569,19 +577,22 @@ the PvD Additional Information when an object expires, object updates
 are delayed by a randomized backoff time.
 
 - When a host performs a JSON object update after it detected a
-change in the PvD Option Sequence Number, it MUST delay the query
-by a random time between zero and 2**(Delay * 2) milliseconds,
-where 'Delay' corresponds to the 4 bits long unsigned integer in
+change in the PvD Option Sequence Number, it MUST add a delay
+before sending the query. The target time for the delay is calculated
+as a random time between zero and 2**(Delay * 2) milliseconds,
+where 'Delay' corresponds to the 4-bit unsigned integer in
 the last received PvD Option.
 
 - When a host last retrieved a JSON object at time A that includes a
 expiry time B using the "expires" key, and the host is configured to keep
-the PvD information up to date, it MUST perform the update at a
-uniformly random time in the interval \[(B-A)/2,B\].
+the PvD information up to date, it MUST add some randomness into
+its calculation of the time to fetch the update. The target time for
+fetching the updated object is calculated as a uniformly random time
+in the interval \[(B-A)/2,B\].
 
 In the example {{pvd_example}}, the delay field value
-is 5, this means that host MUST delay the query by a random number
-between 0 and 2**(5 * 2) milliseconds, i.e., between 0 and 1024
+is 5, this means that host calculates its delay by choosing a random
+number between 0 and 2**(5 * 2) milliseconds, i.e., between 0 and 1024
 milliseconds.
 
 Since the 'Delay' value is directly within the PvD Option rather
