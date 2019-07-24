@@ -514,6 +514,8 @@ another PvD cannot be directly used on a NAT64 network.
 Additional information about the network characteristics can be
 retrieved based on the PvD ID. This set of information is called PvD
 Additional Information, and is encoded as a JSON object {{!RFC7159}}.
+This JSON object is restricted to the restricted profile of I-JSON,
+as defined in {{!RFC7493}}.
 
 The purpose of this JSON object is to provide additional information
 to applications on a client host about the connectivity
@@ -523,6 +525,18 @@ critical enough, to be provided within an RA option. The information
 contained in this object MAY be used by the operating system, network
 libraries, applications, or users, in order to decide which set of PvDs
 should be used for which connection, as described in {{host}}.
+
+The additional information related to a PvD is specifically intended
+to be optional, and is targeted at optimizing or informing the behavior
+of user-facing hosts. This information can be extended to provide hints
+for host system behavior (such as captive portal or walled-garden
+PvD detection) or application behavior (describing application-specific
+services offered on a given PvD). This content may not be appropriate
+for light-weight Internet of Things (IoT) devices. IoT devices might need
+only a subset of the information, and would in some cases prefer a
+smaller representation like CBOR ({{?RFC7049}}). Delivering a reduced
+version of the PvD Additional Information designed for such devices
+is not defined in this document.
 
 ## Retrieving the PvD Additional Information {#retr}
 
