@@ -550,7 +550,7 @@ is not defined in this document.
 When the H-flag of the PvD Option is set, hosts MAY attempt to
 retrieve the PvD Additional Information associated with a given PvD by
 performing an HTTP over TLS {{!RFC2818}} GET query to
-https://\<PvD-ID\>.well-known/pvd {{?RFC5785}}.
+https://\<PvD-ID\>/.well-known/pvd {{?RFC5785}}.
 Inversely, hosts MUST NOT do so whenever the H-flag is not set.
 
 HTTP requests and responses for PvD additional information use the
@@ -933,8 +933,9 @@ Many thanks to M. Stenberg and S. Barth for their earlier work:
 was author of an early version of this document.
 
 Thanks also to Marcus Keane, Mikael Abrahamsson, Ray Bellis, Zhen
-Cao, Tim Chow, Lorenzo Colitti, Michael Di Bartolomeo, Ian Farrer,
+Cao, Tim Chown, Lorenzo Colitti, Michael Di Bartolomeo, Ian Farrer,
 Phillip Hallam-Baker, Bob Hinden, Tatuya Jinmei, Erik Kline, Ted Lemon,
+Paul Hoffman, Dave Thaler, Suresh Krishnan, Gorry Fairhurst,
 Jen Lenkova, Veronika McKillop, Mark Townsley and James Woodyatt for
 useful and interesting discussions and reviews.
 
