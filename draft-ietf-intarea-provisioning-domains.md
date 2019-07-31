@@ -676,8 +676,8 @@ included in the object.
 
 | JSON key | Description         | Type      | Example      |
 |:------------|:-----------------------|:---------------------|:------------|
-| dnsZones     | DNS zones searchable and accessible  | Array of strings | "2017-07-23T06:00:00Z" |
-| noInternet    | No Internet, set when the PvD is restricted.   | Boolean | \["2001:db8:1::/48", "2001:db8:4::/48"\] |
+| dnsZones     | DNS zones searchable and accessible  | Array of strings | \["example.com","sub.example.com"\] |
+| noInternet    | No Internet, set when the PvD is restricted.   | Boolean | true |
 
 It is worth noting that the JSON format allows for extensions.
 Whenever an unknown key is encountered, it MUST be ignored along with

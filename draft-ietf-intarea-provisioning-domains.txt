@@ -695,7 +695,7 @@ Internet-Draft            Provisioning Domains                 July 2019
    When the H-flag of the PvD Option is set, hosts MAY attempt to
    retrieve the PvD Additional Information associated with a given PvD
    by performing an HTTP over TLS [RFC2818] GET query to https://<PvD-
-   ID>.well-known/pvd [RFC5785].  Inversely, hosts MUST NOT do so
+   ID>/.well-known/pvd [RFC5785].  Inversely, hosts MUST NOT do so
    whenever the H-flag is not set.
 
    HTTP requests and responses for PvD additional information use the
@@ -851,17 +851,22 @@ Internet-Draft            Provisioning Domains                 July 2019
    The following table presents some optional keys which MAY be included
    in the object.
 
-   +------------+------------------+----------+------------------------+
-   | JSON key   | Description      | Type     | Example                |
-   +------------+------------------+----------+------------------------+
-   | dnsZones   | DNS zones        | Array of | "2017-07-23T06:00:00Z" |
-   |            | searchable and   | strings  |                        |
-   |            | accessible       |          |                        |
-   |            |                  |          |                        |
-   | noInternet | No Internet, set | Boolean  | ["2001:db8:1::/48",    |
-   |            | when the PvD is  |          | "2001:db8:4::/48"]     |
-   |            | restricted.      |          |                        |
-   +------------+------------------+----------+------------------------+
+   +-----------+------------+--------+---------------------------------+
+   | JSON key  | Descriptio | Type   | Example                         |
+   |           | n          |        |                                 |
+   +-----------+------------+--------+---------------------------------+
+   | dnsZones  | DNS zones  | Array  | ["example.com","sub.example.com |
+   |           | searchable | of str | "]                              |
+   |           | and        | ings   |                                 |
+   |           | accessible |        |                                 |
+   |           |            |        |                                 |
+   | noInterne | No         | Boolea | true                            |
+   | t         | Internet,  | n      |                                 |
+   |           | set when   |        |                                 |
+   |           | the PvD is |        |                                 |
+   |           | restricted |        |                                 |
+   |           | .          |        |                                 |
+   +-----------+------------+--------+---------------------------------+
 
    It is worth noting that the JSON format allows for extensions.
    Whenever an unknown key is encountered, it MUST be ignored along with
@@ -883,11 +888,6 @@ Internet-Draft            Provisioning Domains                 July 2019
 
    The following examples show how the JSON keys defined in this
    document can be used:
-
-
-
-
-
 
 
 
