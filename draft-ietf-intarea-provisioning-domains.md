@@ -178,12 +178,6 @@ PvD-aware host:
 network configuration information into PvDs and the use of these
 PvDs. Also named PvD-aware node in {{?RFC7556}}.
 
-Legacy-Visible Explicit PvD:
-: An Explicit PvD that contains information that non-PvD-aware hosts
-detect and use. These PvDs are usable by both legacy and PvD-aware
-hosts, although PvD-aware hosts can be aware of the identifier and
-additional information associated with the PvD.
-
 # Provisioning Domain Identification using Router Advertisements {#ra}
 
 Explicit PvDs are identified by a PvD ID. The PvD ID is a Fully
@@ -329,16 +323,6 @@ The PvD Option MAY contain zero, one, or more RA options which
 would otherwise be valid as part of the same RA. Such options are
 processed by PvD-aware hosts, while ignored by others.
 
-Any RA that contains a PvD Option defines an Explicit PvD, which
-will be visible and usable by PvD-aware hosts. If an RA contains
-only a PvD Option at its top-level, with all other RA options contained
-within the PvD Option (with the R-flag set), the Explicit PvD will be
-visible only to PvD-aware hosts. If, on the other hand,
-an RA contains other options at the top-level, and the PvD Option does
-not have the R-flag set, the Explicit PvD will be visible to both
-PvD-aware and legacy hosts. Such PvDs are referred to as
-Legacy-Visible Explicit PvDs.
-
 In order to provide multiple different PvDs, a router MUST send
 multiple RAs. If more than one Implicit PvD is advertised, the RAs
 MUST be sent from different link-local source addresses. Explicit
@@ -366,9 +350,6 @@ simply ignore the PvD Option and all the options it contains. This
 ensure the backward compatibility required in Section 3.3 of {{?RFC7556}}.
 This behavior allows for a mixed-mode network with
 a mix of PvD-aware and non-PvD-aware hosts coexist.
-
-Non-PvD-aware hosts will only be aware of the information described by
-Implicit PvDs and Legacy-Visible Explicit PvDs.
 
 ## PvD-aware Host Behavior {#host}
 
@@ -420,11 +401,22 @@ be found in {{?I-D.kline-mif-mpvd-api-reqs}}.
 
 ### DHCPv6 configuration association {#dhcpv6}
 
-When a PvD-aware host receives DHCPv6 {{?RFC8415}} configuration
-elements, it SHOULD associate the received information with all
-Implicit PvDs and Legacy-Visible Explicit PvDs. This is intended
-to maintain behavior of how data is associated for non-PvD-aware
-hosts.
+When a host retrieves stateless configuration elements using DHCPv6
+(e.g., DNS recursive resolvers or DNS domain search lists
+{{!RFC3646}}), they MUST be associated with all the explicit and
+implicit PvDs received on the same interface with the O-flag set
+{{!RFC4861}}.
+
+When a host retrieves stateful assignments using DHCPv6, such
+assignments MUST be associated with the received PvD which was
+received with RAs with the M-flag set and including a matching Prefix
+Information Option (PIO).
+
+In cases where an address would be assigned by DHCPv6 and no matching
+PvD could be found, hosts MAY associate the assigned address with any
+implicit PvD received on the same interface. This is intended to
+resolve backward compatibility issues with rare deployments choosing
+to assign addresses with DHCPv6 while not sending any matching PIO.
 
 ### DHCPv4 configuration association {#dhcpv4}
 
