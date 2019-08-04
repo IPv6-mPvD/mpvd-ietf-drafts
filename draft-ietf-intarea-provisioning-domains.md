@@ -794,7 +794,7 @@ PvD-aware hosts will autonomously configure addresses from both PIOs,
 but will only use the source address in 2001:db8:f00d::/64 to
 communicate past the first hop router since only the router sending the
 second RA will be used as default router; similarly, they will use the
-DNS server 2001:db8:f00d::53 when communicating with this adress.
+DNS server 2001:db8:f00d::53 when communicating with this address.
 
 # Security Considerations {#security}
 

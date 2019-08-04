@@ -967,7 +967,7 @@ Internet-Draft            Provisioning Domains               August 2019
    to communicate past the first hop router since only the router
    sending the second RA will be used as default router; similarly, they
    will use the DNS server 2001:db8:f00d::53 when communicating with
-   this adress.
+   this address.
 
 6.  Security Considerations
 
