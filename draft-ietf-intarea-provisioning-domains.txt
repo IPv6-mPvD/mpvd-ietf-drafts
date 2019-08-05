@@ -969,11 +969,11 @@ Internet-Draft            Provisioning Domains               August 2019
       example.org., R-flag = 0 (actual length of the header with padding
       24 bytes = 3 * 8 bytes)
 
+      *  Recursive DNS Server: length = 5, addresses =
+         [2001:db8:cafe::53, 2001:db8:f00d::53]
 
-
-  - Recursive DNS Server: length = 5, addresses = \[2001:db8:cafe::53, 2001:db8:f00d::53\]
-
-  - Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
+      *  Prefix Information Option: length = 4, prefix =
+         2001:db8:f00d::/64
 
    Note that a PvD-aware host will receive two different prefixes,
    2001:db8:cafe::/64 and 2001:db8:f00d::/64, both associated with the
@@ -998,10 +998,10 @@ Internet-Draft            Provisioning Domains               August 2019
    o  PvD Option header: length = 3 + 2, PvD ID FQDN = foo.example.org.,
       R-flag = 1 (actual length of the header 24 bytes = 3 * 8 bytes)
 
+      *  RA Header: router lifetime = 0 (PvD-aware hosts will not use
+         this router as a default router), implicit length = 2
 
-
-  - RA Header: router lifetime = 0 (PvD-aware hosts will not use this router as a default router), implicit length = 2
-
+   And here is the RA sent for PvD-aware hosts:
 
 
 
@@ -1010,8 +1010,6 @@ Pfister, et al.         Expires February 6, 2020               [Page 18]
 Internet-Draft            Provisioning Domains               August 2019
 
 
-   And here is the RA sent for PvD-aware hosts:
-
    o  RA Header: router lifetime = 0 (non-PvD-aware hosts will not use
       this router as a default router)
 
@@ -1019,13 +1017,14 @@ Internet-Draft            Provisioning Domains               August 2019
       example.org., R-flag = 1 (actual length of the header 24 bytes = 3
       * 8 bytes)
 
+      *  RA Header: router lifetime = 1600 (PvD-aware hosts will use
+         this router as a default router), implicit length = 2
 
+      *  Prefix Information Option: length = 4, prefix =
+         2001:db8:f00d::/64
 
-  - RA Header: router lifetime = 1600 (PvD-aware hosts will use this router as a default router), implicit length = 2
-
-  - Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
-
-  - Recursive DNS Server Option: length = 3, addresses = \[2001:db8:f00d::53\]
+      *  Recursive DNS Server Option: length = 3, addresses =
+         [2001:db8:f00d::53]
 
    In the above example, non-PvD-aware hosts will only use the first RA
    sent from their default router and using the 2001:db8:cafe::/64
@@ -1061,6 +1060,7 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
+
 Pfister, et al.         Expires February 6, 2020               [Page 19]
 
 Internet-Draft            Provisioning Domains               August 2019
@@ -1076,13 +1076,14 @@ Internet-Draft            Provisioning Domains               August 2019
       example.org., R-flag = 1 (actual length of the header 24 bytes = 3
       * 8 bytes)
 
+      *  RA Header: router lifetime = 1600 (PvD-aware hosts will use
+         this router as a default router), implicit length = 2
 
+      *  Prefix Information Option: length = 4, prefix =
+         2001:db8:f00d::/64
 
-  - RA Header: router lifetime = 1600 (PvD-aware hosts will use this router as a default router), implicit length = 2
-
-  - Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
-
-  - Recursive DNS Server Option: length = 3, addresses = \[2001:db8:f00d::53\]
+      *  Recursive DNS Server Option: length = 3, addresses =
+         [2001:db8:f00d::53]
 
 6.  Security Considerations
 
@@ -1111,7 +1112,6 @@ Internet-Draft            Provisioning Domains               August 2019
    described in this document will be less susceptible to such attacks
    than a host that does not by being able to check for the various
    misconfigurations described in this document.
-
 
 
 

@@ -748,18 +748,14 @@ In this example, there is one RA message sent by the router. This message
 contains some options applicable to all hosts on the network, and also a PvD
 Option that also contains other options only visible to PvD-aware hosts.
 
-- RA Header: router lifetime = 6000
-
-- Prefix Information Option: length = 4, prefix =
+* RA Header: router lifetime = 6000
+* Prefix Information Option: length = 4, prefix =
 2001:db8:cafe::/64
-
-- PvD Option header: length = 3 + 5 + 4 , PvD ID FQDN =
+* PvD Option header: length = 3 + 5 + 4 , PvD ID FQDN =
 example.org., R-flag = 0 (actual length of the header with padding
 24 bytes = 3 * 8 bytes)
-
-	- Recursive DNS Server: length = 5, addresses = \[2001:db8:cafe::53, 2001:db8:f00d::53\]
-
-	- Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
+    - Recursive DNS Server: length = 5, addresses = \[2001:db8:cafe::53, 2001:db8:f00d::53\]
+    - Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
 	
 Note that a PvD-aware host will receive two different prefixes, 2001:db8:cafe::/64 and
 2001:db8:f00d::/64, both associated with the same PvD (identified by "example.org.").
@@ -772,31 +768,23 @@ need to give specific information to PvD-aware hosts only, then it is
 recommended to send two RA messages (one for each class of hosts). For
 example, here is the RA sent for non-PvD-aware hosts:
 
-- RA Header: router lifetime = 6000 (non-PvD-aware hosts will use
+* RA Header: router lifetime = 6000 (non-PvD-aware hosts will use
 this router as a default router)
-
-- Prefix Information Option: length = 4, prefix = 2001:db8:cafe::/64
-
-- Recursive DNS Server Option: length = 3, addresses= \[2001:db8:cafe::53\]
-
-- PvD Option header: length = 3 + 2, PvD ID FQDN = foo.example.org., R-flag = 1 (actual length of the header 24 bytes = 3 * 8 bytes)
-
-	- RA Header: router lifetime = 0 (PvD-aware hosts will not use this router as a default router), implicit length = 2
+* Prefix Information Option: length = 4, prefix = 2001:db8:cafe::/64
+* Recursive DNS Server Option: length = 3, addresses= \[2001:db8:cafe::53\]
+* PvD Option header: length = 3 + 2, PvD ID FQDN = foo.example.org., R-flag = 1 (actual length of the header 24 bytes = 3 * 8 bytes)
+    - RA Header: router lifetime = 0 (PvD-aware hosts will not use this router as a default router), implicit length = 2
 
 And here is the RA sent for PvD-aware hosts:
 
-- RA Header: router lifetime = 0 (non-PvD-aware hosts will not use
+* RA Header: router lifetime = 0 (non-PvD-aware hosts will not use
 this router as a default router)
-
-- PvD Option header: length = 3 + 2 + 4 + 3, PvD ID FQDN =
+* PvD Option header: length = 3 + 2 + 4 + 3, PvD ID FQDN =
 example.org., R-flag = 1 (actual length of the header 24 bytes = 3 *
 8 bytes)
-
-	- RA Header: router lifetime = 1600 (PvD-aware hosts will use this router as a default router), implicit length = 2
-
-	- Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
-
-	- Recursive DNS Server Option: length = 3, addresses = \[2001:db8:f00d::53\]
+    - RA Header: router lifetime = 1600 (PvD-aware hosts will use this router as a default router), implicit length = 2
+    - Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
+    - Recursive DNS Server Option: length = 3, addresses = \[2001:db8:f00d::53\]
 
 In the above example, non-PvD-aware hosts will only use the first RA
 sent from their default router and using the 2001:db8:cafe::/64 prefix.
@@ -816,28 +804,21 @@ able to effectively multi-home on the network.
 The first RA is usable by all hosts. The only different for PvD-aware hosts
 is that they can explicitly identify the PvD ID associated with the RA.
 
-- RA Header: router lifetime = 6000 (non-PvD-aware hosts will use
+* RA Header: router lifetime = 6000 (non-PvD-aware hosts will use
 this router as a default router)
-
-- Prefix Information Option: length = 4, prefix = 2001:db8:cafe::/64
-
-- Recursive DNS Server Option: length = 3, addresses= \[2001:db8:cafe::53\]
-
-- PvD Option header: length = 3, PvD ID FQDN = foo.example.org., R-flag = 0 (actual length of the header 24 bytes = 3 * 8 bytes)
+* Prefix Information Option: length = 4, prefix = 2001:db8:cafe::/64
+* Recursive DNS Server Option: length = 3, addresses= \[2001:db8:cafe::53\]
+* PvD Option header: length = 3, PvD ID FQDN = foo.example.org., R-flag = 0 (actual length of the header 24 bytes = 3 * 8 bytes)
 
 The second RA contains a prefix usable only by PvD-aware hosts. Non-PvD-aware
 hosts will ignore this RA.
 
-- RA Header: router lifetime = 0 (non-PvD-aware hosts will not use
+* RA Header: router lifetime = 0 (non-PvD-aware hosts will not use
 this router as a default router)
-
-- PvD Option header: length = 3 + 2 + 4 + 3, PvD ID FQDN = example.org., R-flag = 1 (actual length of the header 24 bytes = 3 * 8 bytes)
-
-	- RA Header: router lifetime = 1600 (PvD-aware hosts will use this router as a default router), implicit length = 2
-
-	- Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
-
-	- Recursive DNS Server Option: length = 3, addresses = \[2001:db8:f00d::53\]
+* PvD Option header: length = 3 + 2 + 4 + 3, PvD ID FQDN = example.org., R-flag = 1 (actual length of the header 24 bytes = 3 * 8 bytes)
+    - RA Header: router lifetime = 1600 (PvD-aware hosts will use this router as a default router), implicit length = 2
+    - Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
+    - Recursive DNS Server Option: length = 3, addresses = \[2001:db8:f00d::53\]
 
 # Security Considerations {#security}
 
