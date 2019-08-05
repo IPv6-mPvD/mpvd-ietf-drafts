@@ -324,7 +324,7 @@ would otherwise be valid as part of the same RA. Such options are
 processed by PvD-aware hosts, while ignored by other hosts per section 4.2 of {{?RFC4861}}.
 
 In order to provide multiple different PvDs, a router MUST send
-multiple RAs. If more than one different Implicit PvD are advertised, the RAs
+multiple RAs. If more than one different Implicit PvDs are advertised, the RAs
 MUST be sent from different link-local source addresses. Explicit
 PvDs MAY share link-local source addresses with an Implicit PvD
 and any number of other Explicit PvDs.
@@ -409,11 +409,13 @@ implicit PvDs received on the same interface and contained in a RA with the O-fl
 
 When a host retrieves stateful assignments using DHCPv6, such
 assignments MUST be associated with the received PvD which was
-received with RAs with the M-flag set and including a matching PIO taking into account the prefix length included in the PIO.
+received with RAs with the M-flag set and including a matching PIO
+taking into account the prefix length included in the PIO.
 
 In cases where an address would be assigned by DHCPv6 and no matching
 PvD could be found, hosts MAY associate the assigned address with any
-implicit PvD received on the same interface or to multiple of implicit PvD received on the same interface. This is intended to
+implicit PvD received on the same interface or to multiple of implicit PvD
+received on the same interface. This is intended to
 resolve backward compatibility issues with rare deployments choosing
 to assign addresses with DHCPv6 while not sending any matching PIO.
 
@@ -432,8 +434,8 @@ cellular network can be represented by a different Explicit PvD that is
 not associated with DHCPv4.
 
 When a PvD-aware host retrieves configuration elements from DHCPv4,
-the information is either associated with a single Explicit PvD on that interface,
-else with all Implicit PvDs on the same interface.
+the information is associated either with a single Explicit PvD on that interface,
+or else with all Implicit PvDs on the same interface.
 
 An Explicit PvD indicates its association with DHCPv4 information by
 setting the L-flag in the PvD RA Option. If there is exactly one Explicit
