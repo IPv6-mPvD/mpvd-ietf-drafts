@@ -738,11 +738,15 @@ SHOULD NOT have a DNS A record.
 
 # Operational Considerations
 
-This section describes some use cases of PvD. For the sake of
+This section describes some example use cases of PvD. For the sake of
 simplicity, the RA messages will not be described in the usual ASCII art
-but rather in an indented list. For example, a RA message containing
-some options and a PvD Option that also contains other options will be
-described as:
+but rather in an indented list.
+
+## Exposing Extra RA Options to PvD-Aware Hosts
+
+In this example, there is one RA message sent by the router. This message
+contains some options applicable to all hosts on the network, and also a PvD
+Option that also contains other options only visible to PvD-aware hosts.
 
 - RA Header: router lifetime = 6000
 
@@ -756,12 +760,17 @@ example.org., R-flag = 0 (actual length of the header with padding
 	- Recursive DNS Server: length = 5, addresses = \[2001:db8:cafe::53, 2001:db8:f00d::53\]
 
 	- Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
+	
+Note that a PvD-aware host will receive two different prefixes, 2001:db8:cafe::/64 and
+2001:db8:f00d::/64, both associated with the same PvD (identified by "example.org.").
+
+## Different RAs for PvD-Aware and Non-PvD-Aware Hosts
 
 It is expected that for some years, networks will have a mixed
 environment of PvD-aware hosts and non-PvD-aware hosts. If there is a
 need to give specific information to PvD-aware hosts only, then it is
-recommended to send TWO RA messages: one for each class of hosts. For
-example, here is the RA for non-PvD-aware hosts:
+recommended to send two RA messages (one for each class of hosts). For
+example, here is the RA sent for non-PvD-aware hosts:
 
 - RA Header: router lifetime = 6000 (non-PvD-aware hosts will use
 this router as a default router)
@@ -774,7 +783,7 @@ this router as a default router)
 
 	- RA Header: router lifetime = 0 (PvD-aware hosts will not use this router as a default router), implicit length = 2
 
-And here is a RA example for PvD-aware hosts:
+And here is the RA sent for PvD-aware hosts:
 
 - RA Header: router lifetime = 0 (non-PvD-aware hosts will not use
 this router as a default router)
@@ -796,6 +805,39 @@ but will only use the source address in 2001:db8:f00d::/64 to
 communicate past the first hop router since only the router sending the
 second RA will be used as default router; similarly, they will use the
 DNS server 2001:db8:f00d::53 when communicating with this address.
+
+## Enabling Multi-homing for PvD-Aware Hosts
+
+In this example, the goal is to have one prefix from one RA be usable by
+both non-PvD-aware and PvD-aware hosts; and to have another prefix
+usable only by PvD-aware hosts. This allows PvD-aware hosts to be
+able to effectively multi-home on the network.
+
+The first RA is usable by all hosts. The only different for PvD-aware hosts
+is that they can explicitly identify the PvD ID associated with the RA.
+
+- RA Header: router lifetime = 6000 (non-PvD-aware hosts will use
+this router as a default router)
+
+- Prefix Information Option: length = 4, prefix = 2001:db8:cafe::/64
+
+- Recursive DNS Server Option: length = 3, addresses= \[2001:db8:cafe::53\]
+
+- PvD Option header: length = 3, PvD ID FQDN = foo.example.org., R-flag = 0 (actual length of the header 24 bytes = 3 * 8 bytes)
+
+The second RA contains a prefix usable only by PvD-aware hosts. Non-PvD-aware
+hosts will ignore this RA.
+
+- RA Header: router lifetime = 0 (non-PvD-aware hosts will not use
+this router as a default router)
+
+- PvD Option header: length = 3 + 2 + 4 + 3, PvD ID FQDN = example.org., R-flag = 1 (actual length of the header 24 bytes = 3 * 8 bytes)
+
+	- RA Header: router lifetime = 1600 (PvD-aware hosts will use this router as a default router), implicit length = 2
+
+	- Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
+
+	- Recursive DNS Server Option: length = 3, addresses = \[2001:db8:f00d::53\]
 
 # Security Considerations {#security}
 
