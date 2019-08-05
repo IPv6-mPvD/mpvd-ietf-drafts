@@ -139,7 +139,7 @@ even sometimes users, when choosing which PvD should be used.
 
 For example, if Alice has both a cellular network provider and a
 broadband provider in her home, her PvD-aware devices and applications
-would be aware of both available uplinks via her local Wi-Fi. These applications
+would be aware of both available uplinks. These applications
 could fail-over between these networks, or run connections over both
 (potentially using multi-path transports). Applications could also select
 specific uplinks based on the properties of the network; for example,
@@ -176,7 +176,7 @@ address of the advertising router. See also {{?RFC7556}}.
 PvD-aware host:
 : A host that supports the association of
 network configuration information into PvDs and the use of these
-PvDs. Also named PvD-aware node in {{?RFC7556}}.
+PvDs as described in this document. Also named PvD-aware node in {{?RFC7556}}.
 
 # Provisioning Domain Identification using Router Advertisements {#ra}
 
@@ -321,15 +321,15 @@ NOT contain further PvD Options.
 
 The PvD Option MAY contain zero, one, or more RA options which
 would otherwise be valid as part of the same RA. Such options are
-processed by PvD-aware hosts, while ignored by others.
+processed by PvD-aware hosts, while ignored by other hosts per section 4.2 of {{?RFC4861}}.
 
 In order to provide multiple different PvDs, a router MUST send
-multiple RAs. If more than one Implicit PvD is advertised, the RAs
+multiple RAs. If more than one different Implicit PvD are advertised, the RAs
 MUST be sent from different link-local source addresses. Explicit
 PvDs MAY share link-local source addresses with an Implicit PvD
 and any number of other Explicit PvDs.
 
-Different Explicit PvDs MAY be advertised with RAs using
+In other words, different Explicit PvDs MAY be advertised with RAs using
 the same link-local source address; but different Implicit PvDs, advertised
 by different RAs, MUST use different link-local addresses because
 these Implicit PvDs are identified by the source addresses of the
@@ -346,7 +346,7 @@ included in one of the transmitted PvD Options.
 ## Non-PvD-aware Host Behavior
 
 As the PvD Option has a new option code, non-PvD-aware hosts will
-simply ignore the PvD Option and all the options it contains. This
+simply ignore the PvD Option and all the options it contains (see section 4.2 of {{?RFC4861}}. This
 ensure the backward compatibility required in Section 3.3 of {{?RFC7556}}.
 This behavior allows for a mixed-mode network with
 a mix of PvD-aware and non-PvD-aware hosts coexist.
@@ -381,7 +381,7 @@ would refer to the same PvD.
 While resolving names, executing the default address selection
 algorithm {{?RFC6724}} or executing the default router
 selection algorithm when forwarding packets ({{!RFC2461}},
-{{?RFC4191}} and {{?RFC8028}}), hosts MAY
+{{?RFC4191}} and {{?RFC8028}}), hosts and applications MAY
 consider only the configuration associated with an arbitrary set of
 PvDs.
 
@@ -404,17 +404,16 @@ be found in {{?I-D.kline-mif-mpvd-api-reqs}}.
 When a host retrieves stateless configuration elements using DHCPv6
 (e.g., DNS recursive resolvers or DNS domain search lists
 {{!RFC3646}}), they MUST be associated with all the explicit and
-implicit PvDs received on the same interface with the O-flag set
+implicit PvDs received on the same interface and contained in a RA with the O-flag set
 {{!RFC4861}}.
 
 When a host retrieves stateful assignments using DHCPv6, such
 assignments MUST be associated with the received PvD which was
-received with RAs with the M-flag set and including a matching Prefix
-Information Option (PIO).
+received with RAs with the M-flag set and including a matching PIO taking into account the prefix length included in the PIO.
 
 In cases where an address would be assigned by DHCPv6 and no matching
 PvD could be found, hosts MAY associate the assigned address with any
-implicit PvD received on the same interface. This is intended to
+implicit PvD received on the same interface or to multiple of implicit PvD received on the same interface. This is intended to
 resolve backward compatibility issues with rare deployments choosing
 to assign addresses with DHCPv6 while not sending any matching PIO.
 
@@ -434,7 +433,7 @@ not associated with DHCPv4.
 
 When a PvD-aware host retrieves configuration elements from DHCPv4,
 the information is either associated with a single Explicit PvD on that interface,
-or else all Implicit PvDs on the same interface.
+else with all Implicit PvDs on the same interface.
 
 An Explicit PvD indicates its association with DHCPv4 information by
 setting the L-flag in the PvD RA Option. If there is exactly one Explicit
@@ -551,7 +550,7 @@ SHOULD include this media type as an Accept header in their GET
 requests, and servers MUST mark this media type as their Content-Type
 header in responses.
 
-Note that the DNS name resolution of the PvD ID, the PKI checks as
+Note that the DNS name resolution of the PvD ID, the PKI (Public Key Infrastructure) checks as
 well as the actual query MUST be performed using the considered PvD.
 In other words, the name resolution, PKI checks, source address
 selection, as well as the next-hop router selection MUST be performed
@@ -650,7 +649,7 @@ included in the object:
 
 | JSON key | Description         | Type      | Example      |
 |:------------|:-----------------------|:---------------------|:------------|
-| identifer    | PvD ID FQDN  | String | "pvd.example.com" |
+| identifer    | PvD ID FQDN  | String | "pvd.example.com." |
 | expires     | Date after which this object is no longer valid  | {{?RFC3339}} Date | "2017-07-23T06:00:00Z" |
 | prefixes    | Array of IPv6 prefixes valid for this PvD   | Array of strings | \["2001:db8:1::/48", "2001:db8:4::/48"\] |
 
@@ -689,7 +688,7 @@ SHOULD be used rather than the "vendor-*" format.
 
 ### Example
 
-The following examples show how the JSON keys defined in this
+The following two examples show how the JSON keys defined in this
 document can be used:
 
 ~~~
