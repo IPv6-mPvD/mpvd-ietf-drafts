@@ -409,8 +409,12 @@ implicit PvDs received on the same interface and contained in a RA with the O-fl
 
 When a host retrieves stateful assignments using DHCPv6, such
 assignments MUST be associated with the received PvD which was
-received with RAs with the M-flag set and including a matching PIO
-taking into account the prefix length included in the PIO.
+received with RAs with the M-flag set and including a matching PIO.
+A PIO is considered to match a DHCPv6 assignment when the IPv6 prefix
+from the PIO includes the assignment from DHCPv6. For example,
+if a PvD's associated PIO defines the prefix 2001:db8:cafe::/64,
+a DHCPv6 IA_NA message that assigns the address 2001:db8:cafe::1234:4567
+would be considered to match.
 
 In cases where an address would be assigned by DHCPv6 and no matching
 PvD could be found, hosts MAY associate the assigned address with any
