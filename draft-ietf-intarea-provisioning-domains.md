@@ -99,7 +99,7 @@ information via Router Advertisements from a router on a network
 that a client host directly connects to), {{?RFC7556}} also defines the notion
 of Explicit PvDs. IPsec Virtual Private Networks are considered Explicit PvDs,
 but Explicit PvDs can also be discovered via the local network router.
-Discovering Explicit PvDs allows two key advacements in managing multiple PvDs:
+Discovering Explicit PvDs allows two key advancements in managing multiple PvDs:
 
 1. The ability to discover and use multiple PvDs on a single interface,
 such as when a local router can provide connectivity to two different
@@ -487,7 +487,7 @@ RA options passed within an Explicit PvD, via RA options associated
 with an Implicit PvD, via DHCPv6 or DHCPv4, or from some other
 provisioning mechanism that creates an Implicit PvD (such as a VPN).
 In all of these cases, the DNS server addresses SHOULD be
-associated with the corresponding PvD. Specificially, queries sent
+associated with the corresponding PvD. Specifically, queries sent
 to a configured recursive DNS server SHOULD be sent from a local IP
 address that was provisioned by the PvD via RA or DHCP. Answers
 received from the DNS server SHOULD only be used on the same PvD.
@@ -655,7 +655,7 @@ included in the object:
 
 | JSON key | Description         | Type      | Example      |
 |:------------|:-----------------------|:---------------------|:------------|
-| identifer    | PvD ID FQDN  | String | "pvd.example.com." |
+| identifier   | PvD ID FQDN  | String | "pvd.example.com." |
 | expires     | Date after which this object is no longer valid  | {{?RFC3339}} Date | "2017-07-23T06:00:00Z" |
 | prefixes    | Array of IPv6 prefixes valid for this PvD   | Array of strings | \["2001:db8:1::/48", "2001:db8:4::/48"\] |
 
@@ -673,7 +673,8 @@ included in the object.
 
 | JSON key | Description         | Type      | Example      |
 |:------------|:-----------------------|:---------------------|:------------|
-| dnsZones     | DNS zones searchable and accessible  | Array of strings | \["example.com","sub.example.com"\] |
+| dnsZones     | DNS zones searchable and accessible  | Array of strings | \["example.com", |
+|       |    |   | "sub.example.com"\] |
 | noInternet    | No Internet, set when the PvD is restricted.   | Boolean | true |
 
 It is worth noting that the JSON format allows for extensions.
@@ -688,7 +689,7 @@ into the top-level JSON dictionary with a key of the format "vendor-\*"
 where the "\*" is replaced by the implementer's or vendor's identifier.
 For example, keys specific to the FooBar organization could use "vendor-foobar".
 Upon receiving such a sub-dictionary, host MUST ignore this
-sub-dictionary if it is unknown. When the vendor or implementor is
+sub-dictionary if it is unknown. When the vendor or implementer is
 part of an IANA URN namespace {{URN}}, the URN namespace
 SHOULD be used rather than the "vendor-*" format.
 
@@ -699,13 +700,13 @@ document can be used:
 
 ~~~
 {
-  "identifer": "cafe.example.com",
+  "identifier": "cafe.example.com",
   "expires": "2017-07-23T06:00:00Z",
   "prefixes": ["2001:db8:1::/48", "2001:db8:4::/48"],
 }
 
 {
-  "identifer": "company.foo.example.com",
+  "identifier": "company.foo.example.com",
   "expires": "2017-07-23T06:00:00Z",
   "prefixes": ["2001:db8:1::/48", "2001:db8:4::/48"],
   "vendor-foo": { "private-key": "private-value" },
@@ -843,8 +844,8 @@ FQDN received within the trusted PvD ID RA option.
 
 It must be noted that {{misconfig}} of this document
 only provides reasonable assurance against misconfiguration but does not
-prevent an hostile network access provider to advertize wrong
-information that could lead applications or hosts to select an hostile PvD.
+prevent an hostile network access provider to advertise wrong
+information that could lead applications or hosts to select a hostile PvD.
 
 Users cannot be assumed to be able to meaningfully differentiate between
 "safe" and "unsafe" networks. This is a known attack surface that is present

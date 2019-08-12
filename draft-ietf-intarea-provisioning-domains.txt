@@ -15,7 +15,7 @@ Expires: February 13, 2020                                      T. Pauly
 
 
              Discovering Provisioning Domain Names and Data
-             draft-ietf-intarea-provisioning-domains-latest
+               draft-ietf-intarea-provisioning-domains-06
 
 Abstract
 
@@ -137,7 +137,7 @@ Internet-Draft            Provisioning Domains               August 2019
    notion of Explicit PvDs.  IPsec Virtual Private Networks are
    considered Explicit PvDs, but Explicit PvDs can also be discovered
    via the local network router.  Discovering Explicit PvDs allows two
-   key advacements in managing multiple PvDs:
+   key advancements in managing multiple PvDs:
 
    1.  The ability to discover and use multiple PvDs on a single
        interface, such as when a local router can provide connectivity
@@ -629,7 +629,7 @@ Internet-Draft            Provisioning Domains               August 2019
    an Implicit PvD, via DHCPv6 or DHCPv4, or from some other
    provisioning mechanism that creates an Implicit PvD (such as a VPN).
    In all of these cases, the DNS server addresses SHOULD be associated
-   with the corresponding PvD.  Specificially, queries sent to a
+   with the corresponding PvD.  Specifically, queries sent to a
    configured recursive DNS server SHOULD be sent from a local IP
    address that was provisioned by the PvD via RA or DHCP.  Answers
    received from the DNS server SHOULD only be used on the same PvD.
@@ -821,19 +821,19 @@ Internet-Draft            Provisioning Domains               August 2019
    The following table presents the mandatory keys which MUST be
    included in the object:
 
-   +-----------+------------------+-----------+------------------------+
-   | JSON key  | Description      | Type      | Example                |
-   +-----------+------------------+-----------+------------------------+
-   | identifer | PvD ID FQDN      | String    | "pvd.example.com."     |
-   |           |                  |           |                        |
-   | expires   | Date after which | [RFC3339] | "2017-07-23T06:00:00Z" |
-   |           | this object is   | Date      |                        |
-   |           | no longer valid  |           |                        |
-   |           |                  |           |                        |
-   | prefixes  | Array of IPv6    | Array of  | ["2001:db8:1::/48",    |
-   |           | prefixes valid   | strings   | "2001:db8:4::/48"]     |
-   |           | for this PvD     |           |                        |
-   +-----------+------------------+-----------+------------------------+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -841,6 +841,21 @@ Pfister, et al.         Expires February 13, 2020              [Page 15]
 
 Internet-Draft            Provisioning Domains               August 2019
 
+
+   +------------+-----------------+-----------+------------------------+
+   | JSON key   | Description     | Type      | Example                |
+   +------------+-----------------+-----------+------------------------+
+   | identifier | PvD ID FQDN     | String    | "pvd.example.com."     |
+   |            |                 |           |                        |
+   | expires    | Date after      | [RFC3339] | "2017-07-23T06:00:00Z" |
+   |            | which this      | Date      |                        |
+   |            | object is no    |           |                        |
+   |            | longer valid    |           |                        |
+   |            |                 |           |                        |
+   | prefixes   | Array of IPv6   | Array of  | ["2001:db8:1::/48",    |
+   |            | prefixes valid  | strings   | "2001:db8:4::/48"]     |
+   |            | for this PvD    |           |                        |
+   +------------+-----------------+-----------+------------------------+
 
    A retrieved object which does not include all three of these keys at
    the root of the JSON object MUST be ignored.  All three keys need to
@@ -854,22 +869,16 @@ Internet-Draft            Provisioning Domains               August 2019
    The following table presents some optional keys which MAY be included
    in the object.
 
-   +-----------+------------+--------+---------------------------------+
-   | JSON key  | Descriptio | Type   | Example                         |
-   |           | n          |        |                                 |
-   +-----------+------------+--------+---------------------------------+
-   | dnsZones  | DNS zones  | Array  | ["example.com","sub.example.com |
-   |           | searchable | of str | "]                              |
-   |           | and        | ings   |                                 |
-   |           | accessible |        |                                 |
-   |           |            |        |                                 |
-   | noInterne | No         | Boolea | true                            |
-   | t         | Internet,  | n      |                                 |
-   |           | set when   |        |                                 |
-   |           | the PvD is |        |                                 |
-   |           | restricted |        |                                 |
-   |           | .          |        |                                 |
-   +-----------+------------+--------+---------------------------------+
+   +------------+----------------------+----------+--------------------+
+   | JSON key   | Description          | Type     | Example            |
+   +------------+----------------------+----------+--------------------+
+   | dnsZones   | DNS zones searchable | Array of | ["example.com",    |
+   |            | and accessible       | strings  | "sub.example.com"] |
+   |            |                      |          |                    |
+   | noInternet | No Internet, set     | Boolean  | true               |
+   |            | when the PvD is      |          |                    |
+   |            | restricted.          |          |                    |
+   +------------+----------------------+----------+--------------------+
 
    It is worth noting that the JSON format allows for extensions.
    Whenever an unknown key is encountered, it MUST be ignored along with
@@ -879,15 +888,6 @@ Internet-Draft            Provisioning Domains               August 2019
    In order to avoid such keys colliding with IANA registry keys,
    implementers or vendors defining private-use or experimental keys
    MUST create sub-dictionaries, where the sub-dictionary is added into
-   the top-level JSON dictionary with a key of the format "vendor-*"
-   where the "*" is replaced by the implementer's or vendor's
-   identifier.  For example, keys specific to the FooBar organization
-   could use "vendor-foobar".  Upon receiving such a sub-dictionary,
-   host MUST ignore this sub-dictionary if it is unknown.  When the
-   vendor or implementor is part of an IANA URN namespace [URN], the URN
-   namespace SHOULD be used rather than the "vendor-*" format.
-
-
 
 
 
@@ -898,19 +898,27 @@ Pfister, et al.         Expires February 13, 2020              [Page 16]
 Internet-Draft            Provisioning Domains               August 2019
 
 
+   the top-level JSON dictionary with a key of the format "vendor-*"
+   where the "*" is replaced by the implementer's or vendor's
+   identifier.  For example, keys specific to the FooBar organization
+   could use "vendor-foobar".  Upon receiving such a sub-dictionary,
+   host MUST ignore this sub-dictionary if it is unknown.  When the
+   vendor or implementer is part of an IANA URN namespace [URN], the URN
+   namespace SHOULD be used rather than the "vendor-*" format.
+
 4.3.1.  Example
 
    The following two examples show how the JSON keys defined in this
    document can be used:
 
    {
-     "identifer": "cafe.example.com",
+     "identifier": "cafe.example.com",
      "expires": "2017-07-23T06:00:00Z",
      "prefixes": ["2001:db8:1::/48", "2001:db8:4::/48"],
    }
 
    {
-     "identifer": "company.foo.example.com",
+     "identifier": "company.foo.example.com",
      "expires": "2017-07-23T06:00:00Z",
      "prefixes": ["2001:db8:1::/48", "2001:db8:4::/48"],
      "vendor-foo": { "private-key": "private-value" },
@@ -938,14 +946,6 @@ Internet-Draft            Provisioning Domains               August 2019
    server for additional information can detect this misconfiguration.
    The HTTPS server SHOULD validate the source addresses of incoming
    connections (see Section 4.1).  This check gives reasonable assurance
-   that neither NPTv6 [RFC6296] nor NAT66 were used and restricts the
-   information to the valid network users.  If the PvD does not
-   provision IPv4 (it does not include the 'L' bit in the RA), the
-   server cannot validate the source addresses of connections using
-   IPv4.  Thus, the PvD ID FQDN for such PvDs SHOULD NOT have a DNS A
-   record.
-
-
 
 
 
@@ -953,6 +953,13 @@ Pfister, et al.         Expires February 13, 2020              [Page 17]
 
 Internet-Draft            Provisioning Domains               August 2019
 
+
+   that neither NPTv6 [RFC6296] nor NAT66 were used and restricts the
+   information to the valid network users.  If the PvD does not
+   provision IPv4 (it does not include the 'L' bit in the RA), the
+   server cannot validate the source addresses of connections using
+   IPv4.  Thus, the PvD ID FQDN for such PvDs SHOULD NOT have a DNS A
+   record.
 
 5.  Operational Considerations
 
@@ -994,13 +1001,6 @@ Internet-Draft            Provisioning Domains               August 2019
    is recommended to send two RA messages (one for each class of hosts).
    For example, here is the RA sent for non-PvD-aware hosts:
 
-   o  RA Header: router lifetime = 6000 (non-PvD-aware hosts will use
-      this router as a default router)
-
-   o  Prefix Information Option: length = 4, prefix = 2001:db8:cafe::/64
-
-   o  Recursive DNS Server Option: length = 3, addresses=
-      [2001:db8:cafe::53]
 
 
 
@@ -1009,6 +1009,14 @@ Pfister, et al.         Expires February 13, 2020              [Page 18]
 
 Internet-Draft            Provisioning Domains               August 2019
 
+
+   o  RA Header: router lifetime = 6000 (non-PvD-aware hosts will use
+      this router as a default router)
+
+   o  Prefix Information Option: length = 4, prefix = 2001:db8:cafe::/64
+
+   o  Recursive DNS Server Option: length = 3, addresses=
+      [2001:db8:cafe::53]
 
    o  PvD Option header: length = 3 + 2, PvD ID FQDN = foo.example.org.,
       R-flag = 1 (actual length of the header 24 bytes = 3 * 8 bytes)
@@ -1050,14 +1058,6 @@ Internet-Draft            Provisioning Domains               August 2019
    usable only by PvD-aware hosts.  This allows PvD-aware hosts to be
    able to effectively multi-home on the network.
 
-   The first RA is usable by all hosts.  The only difference for PvD-
-   aware hosts is that they can explicitly identify the PvD ID
-   associated with the RA.  PvD-aware hosts will also use this prefix to
-   communicate with non-PvD-aware hosts on the same network.
-
-   o  RA Header: router lifetime = 6000 (non-PvD-aware hosts will use
-      this router as a default router)
-
 
 
 
@@ -1065,6 +1065,14 @@ Pfister, et al.         Expires February 13, 2020              [Page 19]
 
 Internet-Draft            Provisioning Domains               August 2019
 
+
+   The first RA is usable by all hosts.  The only difference for PvD-
+   aware hosts is that they can explicitly identify the PvD ID
+   associated with the RA.  PvD-aware hosts will also use this prefix to
+   communicate with non-PvD-aware hosts on the same network.
+
+   o  RA Header: router lifetime = 6000 (non-PvD-aware hosts will use
+      this router as a default router)
 
    o  Prefix Information Option: length = 4, prefix = 2001:db8:cafe::/64
 
@@ -1107,14 +1115,6 @@ Internet-Draft            Provisioning Domains               August 2019
    communications which servers are authenticated as rightful owners of
    the FQDN received within the trusted PvD ID RA option.
 
-   It must be noted that Section 4.4 of this document only provides
-   reasonable assurance against misconfiguration but does not prevent an
-   hostile network access provider to advertize wrong information that
-   could lead applications or hosts to select an hostile PvD.
-
-   Users cannot be assumed to be able to meaningfully differentiate
-   between "safe" and "unsafe" networks.  This is a known attack surface
-
 
 
 Pfister, et al.         Expires February 13, 2020              [Page 20]
@@ -1122,6 +1122,13 @@ Pfister, et al.         Expires February 13, 2020              [Page 20]
 Internet-Draft            Provisioning Domains               August 2019
 
 
+   It must be noted that Section 4.4 of this document only provides
+   reasonable assurance against misconfiguration but does not prevent an
+   hostile network access provider to advertise wrong information that
+   could lead applications or hosts to select a hostile PvD.
+
+   Users cannot be assumed to be able to meaningfully differentiate
+   between "safe" and "unsafe" networks.  This is a known attack surface
    that is present whether or not PvDs are in use, and hence cannot be
    addressed by this document.  However, a host that correctly
    implements the MPvD architecture ([RFC7556]) using the mechanism
@@ -1163,13 +1170,6 @@ Internet-Draft            Provisioning Domains               August 2019
    'reclaimable' tag off the value 21 for the PvD Option (from the IPv6
    Neighbor Discovery Option Formats registry).
 
-   IANA is asked to assign the value "pvd" from the Well-Known URIs
-   registry.
-
-
-
-
-
 
 
 
@@ -1177,6 +1177,9 @@ Pfister, et al.         Expires February 13, 2020              [Page 21]
 
 Internet-Draft            Provisioning Domains               August 2019
 
+
+   IANA is asked to assign the value "pvd" from the Well-Known URIs
+   registry.
 
 8.1.  Additional Information PvD Keys Registry
 
@@ -1223,9 +1226,6 @@ Internet-Draft            Provisioning Domains               August 2019
    be used by network advertising additional Provisioning Domain
    information, and clients looking up such information.
 
-   Additional information: None
-
-
 
 
 
@@ -1233,6 +1233,8 @@ Pfister, et al.         Expires February 13, 2020              [Page 22]
 
 Internet-Draft            Provisioning Domains               August 2019
 
+
+   Additional information: None
 
    Person and email address to contact for further information: See
    Authors' Addresses section
@@ -1279,8 +1281,6 @@ Internet-Draft            Provisioning Domains               August 2019
    [RFC2818]  Rescorla, E., "HTTP Over TLS", RFC 2818,
               DOI 10.17487/RFC2818, May 2000,
               <https://www.rfc-editor.org/info/rfc2818>.
-
-
 
 
 
