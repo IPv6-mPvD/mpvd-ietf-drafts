@@ -763,6 +763,7 @@ example.org., R-flag = 0 (actual length of the header with padding
 	
 Note that a PvD-aware host will receive two different prefixes, 2001:db8:cafe::/64 and
 2001:db8:f00d::/64, both associated with the same PvD (identified by "example.org.").
+A non-PvD-aware host will only receive one prefix, 2001:db8:cafe::/64.
 
 ## Different RAs for PvD-Aware and Non-PvD-Aware Hosts
 
@@ -784,7 +785,7 @@ And here is the RA sent for PvD-aware hosts:
 * RA Header: router lifetime = 0 (non-PvD-aware hosts will not use
 this router as a default router)
 * PvD Option header: length = 3 + 2 + 4 + 3, PvD ID FQDN =
-example.org., R-flag = 1 (actual length of the header 24 bytes = 3 *
+bar.example.org., R-flag = 1 (actual length of the header 24 bytes = 3 *
 8 bytes)
     - RA Header: router lifetime = 1600 (PvD-aware hosts will use this router as a default router), implicit length = 2
     - Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
@@ -805,8 +806,10 @@ both non-PvD-aware and PvD-aware hosts; and to have another prefix
 usable only by PvD-aware hosts. This allows PvD-aware hosts to be
 able to effectively multi-home on the network.
 
-The first RA is usable by all hosts. The only different for PvD-aware hosts
+The first RA is usable by all hosts. The only difference for PvD-aware hosts
 is that they can explicitly identify the PvD ID associated with the RA.
+PvD-aware hosts will also use this prefix to communicate with
+non-PvD-aware hosts on the same network.
 
 * RA Header: router lifetime = 6000 (non-PvD-aware hosts will use
 this router as a default router)
@@ -819,7 +822,7 @@ hosts will ignore this RA.
 
 * RA Header: router lifetime = 0 (non-PvD-aware hosts will not use
 this router as a default router)
-* PvD Option header: length = 3 + 2 + 4 + 3, PvD ID FQDN = example.org., R-flag = 1 (actual length of the header 24 bytes = 3 * 8 bytes)
+* PvD Option header: length = 3 + 2 + 4 + 3, PvD ID FQDN = bar.example.org., R-flag = 1 (actual length of the header 24 bytes = 3 * 8 bytes)
     - RA Header: router lifetime = 1600 (PvD-aware hosts will use this router as a default router), implicit length = 2
     - Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
     - Recursive DNS Server Option: length = 3, addresses = \[2001:db8:f00d::53\]

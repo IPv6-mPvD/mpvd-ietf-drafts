@@ -5,13 +5,13 @@
 Network Working Group                                         P. Pfister
 Internet-Draft                                                 E. Vyncke
 Intended status: Standards Track                                   Cisco
-Expires: February 7, 2020                                       T. Pauly
+Expires: February 13, 2020                                      T. Pauly
                                                               Apple Inc.
                                                              D. Schinazi
                                                               Google LLC
                                                                  W. Shao
                                                                    Cisco
-                                                         August 06, 2019
+                                                         August 12, 2019
 
 
              Discovering Provisioning Domain Names and Data
@@ -47,13 +47,13 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on February 7, 2020.
+   This Internet-Draft will expire on February 13, 2020.
 
 
 
 
 
-Pfister, et al.         Expires February 7, 2020                [Page 1]
+Pfister, et al.         Expires February 13, 2020               [Page 1]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -102,14 +102,14 @@ Table of Contents
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .  20
    7.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .  21
    8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  21
-     8.1.  Additional Information PvD Keys Registry  . . . . . . . .  21
+     8.1.  Additional Information PvD Keys Registry  . . . . . . . .  22
      8.2.  PvD Option Flags Registry . . . . . . . . . . . . . . . .  22
      8.3.  PvD JSON Media Type Registration  . . . . . . . . . . . .  22
    9.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  23
 
 
 
-Pfister, et al.         Expires February 7, 2020                [Page 2]
+Pfister, et al.         Expires February 13, 2020               [Page 2]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -117,7 +117,7 @@ Internet-Draft            Provisioning Domains               August 2019
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  23
      10.1.  Normative References . . . . . . . . . . . . . . . . . .  23
      10.2.  Informative References . . . . . . . . . . . . . . . . .  24
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  26
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  27
 
 1.  Introduction
 
@@ -165,7 +165,7 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
-Pfister, et al.         Expires February 7, 2020                [Page 3]
+Pfister, et al.         Expires February 13, 2020               [Page 3]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -221,7 +221,7 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
-Pfister, et al.         Expires February 7, 2020                [Page 4]
+Pfister, et al.         Expires February 13, 2020               [Page 4]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -277,7 +277,7 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
-Pfister, et al.         Expires February 7, 2020                [Page 5]
+Pfister, et al.         Expires February 13, 2020               [Page 5]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -333,7 +333,7 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
-Pfister, et al.         Expires February 7, 2020                [Page 6]
+Pfister, et al.         Expires February 13, 2020               [Page 6]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -389,7 +389,7 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
-Pfister, et al.         Expires February 7, 2020                [Page 7]
+Pfister, et al.         Expires February 13, 2020               [Page 7]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -445,7 +445,7 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
-Pfister, et al.         Expires February 7, 2020                [Page 8]
+Pfister, et al.         Expires February 13, 2020               [Page 8]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -501,7 +501,7 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
-Pfister, et al.         Expires February 7, 2020                [Page 9]
+Pfister, et al.         Expires February 13, 2020               [Page 9]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -557,7 +557,7 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
-Pfister, et al.         Expires February 7, 2020               [Page 10]
+Pfister, et al.         Expires February 13, 2020              [Page 10]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -613,7 +613,7 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
-Pfister, et al.         Expires February 7, 2020               [Page 11]
+Pfister, et al.         Expires February 13, 2020              [Page 11]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -669,7 +669,7 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
-Pfister, et al.         Expires February 7, 2020               [Page 12]
+Pfister, et al.         Expires February 13, 2020              [Page 12]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -725,7 +725,7 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
-Pfister, et al.         Expires February 7, 2020               [Page 13]
+Pfister, et al.         Expires February 13, 2020              [Page 13]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -781,7 +781,7 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
-Pfister, et al.         Expires February 7, 2020               [Page 14]
+Pfister, et al.         Expires February 13, 2020              [Page 14]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -837,7 +837,7 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
-Pfister, et al.         Expires February 7, 2020               [Page 15]
+Pfister, et al.         Expires February 13, 2020              [Page 15]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -893,7 +893,7 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
-Pfister, et al.         Expires February 7, 2020               [Page 16]
+Pfister, et al.         Expires February 13, 2020              [Page 16]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -949,7 +949,7 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
-Pfister, et al.         Expires February 7, 2020               [Page 17]
+Pfister, et al.         Expires February 13, 2020              [Page 17]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -983,7 +983,8 @@ Internet-Draft            Provisioning Domains               August 2019
 
    Note that a PvD-aware host will receive two different prefixes,
    2001:db8:cafe::/64 and 2001:db8:f00d::/64, both associated with the
-   same PvD (identified by "example.org.").
+   same PvD (identified by "example.org.").  A non-PvD-aware host will
+   only receive one prefix, 2001:db8:cafe::/64.
 
 5.2.  Different RAs for PvD-Aware and Non-PvD-Aware Hosts
 
@@ -1004,8 +1005,7 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
-
-Pfister, et al.         Expires February 7, 2020               [Page 18]
+Pfister, et al.         Expires February 13, 2020              [Page 18]
 
 Internet-Draft            Provisioning Domains               August 2019
 
@@ -1022,8 +1022,8 @@ Internet-Draft            Provisioning Domains               August 2019
       this router as a default router)
 
    o  PvD Option header: length = 3 + 2 + 4 + 3, PvD ID FQDN =
-      example.org., R-flag = 1 (actual length of the header 24 bytes = 3
-      * 8 bytes)
+      bar.example.org., R-flag = 1 (actual length of the header 24 bytes
+      = 3 * 8 bytes)
 
       *  RA Header: router lifetime = 1600 (PvD-aware hosts will use
          this router as a default router), implicit length = 2
@@ -1050,21 +1050,23 @@ Internet-Draft            Provisioning Domains               August 2019
    usable only by PvD-aware hosts.  This allows PvD-aware hosts to be
    able to effectively multi-home on the network.
 
-   The first RA is usable by all hosts.  The only different for PvD-
+   The first RA is usable by all hosts.  The only difference for PvD-
    aware hosts is that they can explicitly identify the PvD ID
-   associated with the RA.
+   associated with the RA.  PvD-aware hosts will also use this prefix to
+   communicate with non-PvD-aware hosts on the same network.
 
    o  RA Header: router lifetime = 6000 (non-PvD-aware hosts will use
       this router as a default router)
 
-   o  Prefix Information Option: length = 4, prefix = 2001:db8:cafe::/64
 
 
 
-Pfister, et al.         Expires February 7, 2020               [Page 19]
+Pfister, et al.         Expires February 13, 2020              [Page 19]
 
 Internet-Draft            Provisioning Domains               August 2019
 
+
+   o  Prefix Information Option: length = 4, prefix = 2001:db8:cafe::/64
 
    o  Recursive DNS Server Option: length = 3, addresses=
       [2001:db8:cafe::53]
@@ -1079,8 +1081,8 @@ Internet-Draft            Provisioning Domains               August 2019
       this router as a default router)
 
    o  PvD Option header: length = 3 + 2 + 4 + 3, PvD ID FQDN =
-      example.org., R-flag = 1 (actual length of the header 24 bytes = 3
-      * 8 bytes)
+      bar.example.org., R-flag = 1 (actual length of the header 24 bytes
+      = 3 * 8 bytes)
 
       *  RA Header: router lifetime = 1600 (PvD-aware hosts will use
          this router as a default router), implicit length = 2
@@ -1112,16 +1114,16 @@ Internet-Draft            Provisioning Domains               August 2019
 
    Users cannot be assumed to be able to meaningfully differentiate
    between "safe" and "unsafe" networks.  This is a known attack surface
-   that is present whether or not PvDs are in use, and hence cannot be
-   addressed by this document.  However, a host that correctly
 
 
 
-Pfister, et al.         Expires February 7, 2020               [Page 20]
+Pfister, et al.         Expires February 13, 2020              [Page 20]
 
 Internet-Draft            Provisioning Domains               August 2019
 
 
+   that is present whether or not PvDs are in use, and hence cannot be
+   addressed by this document.  However, a host that correctly
    implements the MPvD architecture ([RFC7556]) using the mechanism
    described in this document will be less susceptible to such attacks
    than a host that does not by being able to check for the various
@@ -1164,19 +1166,24 @@ Internet-Draft            Provisioning Domains               August 2019
    IANA is asked to assign the value "pvd" from the Well-Known URIs
    registry.
 
+
+
+
+
+
+
+
+Pfister, et al.         Expires February 13, 2020              [Page 21]
+
+Internet-Draft            Provisioning Domains               August 2019
+
+
 8.1.  Additional Information PvD Keys Registry
 
    IANA is asked to create and maintain a new registry called
    "Additional Information PvD Keys", which will reserve JSON keys for
    use in PvD additional information.  The initial contents of this
    registry are given in Section 4.3.
-
-
-
-Pfister, et al.         Expires February 7, 2020               [Page 21]
-
-Internet-Draft            Provisioning Domains               August 2019
-
 
    New assignments for Additional Information PvD Keys Registry will be
    administered by IANA through Expert Review [RFC8126].
@@ -1218,6 +1225,15 @@ Internet-Draft            Provisioning Domains               August 2019
 
    Additional information: None
 
+
+
+
+
+Pfister, et al.         Expires February 13, 2020              [Page 22]
+
+Internet-Draft            Provisioning Domains               August 2019
+
+
    Person and email address to contact for further information: See
    Authors' Addresses section
 
@@ -1226,13 +1242,6 @@ Internet-Draft            Provisioning Domains               August 2019
    Restrictions on usage: None
 
    Author: IETF
-
-
-
-Pfister, et al.         Expires February 7, 2020               [Page 22]
-
-Internet-Draft            Provisioning Domains               August 2019
-
 
    Change controller: IETF
 
@@ -1271,6 +1280,16 @@ Internet-Draft            Provisioning Domains               August 2019
               DOI 10.17487/RFC2818, May 2000,
               <https://www.rfc-editor.org/info/rfc2818>.
 
+
+
+
+
+
+Pfister, et al.         Expires February 13, 2020              [Page 23]
+
+Internet-Draft            Provisioning Domains               August 2019
+
+
    [RFC3646]  Droms, R., Ed., "DNS Configuration options for Dynamic
               Host Configuration Protocol for IPv6 (DHCPv6)", RFC 3646,
               DOI 10.17487/RFC3646, December 2003,
@@ -1280,15 +1299,6 @@ Internet-Draft            Provisioning Domains               August 2019
               Insensitivity Clarification", RFC 4343,
               DOI 10.17487/RFC4343, January 2006,
               <https://www.rfc-editor.org/info/rfc4343>.
-
-
-
-
-
-Pfister, et al.         Expires February 7, 2020               [Page 23]
-
-Internet-Draft            Provisioning Domains               August 2019
-
 
    [RFC4861]  Narten, T., Nordmark, E., Simpson, W., and H. Soliman,
               "Neighbor Discovery for IP version 6 (IPv6)", RFC 4861,
@@ -1329,6 +1339,13 @@ Internet-Draft            Provisioning Domains               August 2019
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
+
+
+Pfister, et al.         Expires February 13, 2020              [Page 24]
+
+Internet-Draft            Provisioning Domains               August 2019
+
+
    [RFC2131]  Droms, R., "Dynamic Host Configuration Protocol",
               RFC 2131, DOI 10.17487/RFC2131, March 1997,
               <https://www.rfc-editor.org/info/rfc2131>.
@@ -1336,15 +1353,6 @@ Internet-Draft            Provisioning Domains               August 2019
    [RFC3339]  Klyne, G. and C. Newman, "Date and Time on the Internet:
               Timestamps", RFC 3339, DOI 10.17487/RFC3339, July 2002,
               <https://www.rfc-editor.org/info/rfc3339>.
-
-
-
-
-
-Pfister, et al.         Expires February 7, 2020               [Page 24]
-
-Internet-Draft            Provisioning Domains               August 2019
-
 
    [RFC3971]  Arkko, J., Ed., Kempf, J., Zill, B., and P. Nikander,
               "SEcure Neighbor Discovery (SEND)", RFC 3971,
@@ -1385,6 +1393,15 @@ Internet-Draft            Provisioning Domains               August 2019
               DOI 10.17487/RFC6147, April 2011,
               <https://www.rfc-editor.org/info/rfc6147>.
 
+
+
+
+
+Pfister, et al.         Expires February 13, 2020              [Page 25]
+
+Internet-Draft            Provisioning Domains               August 2019
+
+
    [RFC6296]  Wasserman, M. and F. Baker, "IPv6-to-IPv6 Network Prefix
               Translation", RFC 6296, DOI 10.17487/RFC6296, June 2011,
               <https://www.rfc-editor.org/info/rfc6296>.
@@ -1393,14 +1410,6 @@ Internet-Draft            Provisioning Domains               August 2019
               "Default Address Selection for Internet Protocol Version 6
               (IPv6)", RFC 6724, DOI 10.17487/RFC6724, September 2012,
               <https://www.rfc-editor.org/info/rfc6724>.
-
-
-
-
-Pfister, et al.         Expires February 7, 2020               [Page 25]
-
-Internet-Draft            Provisioning Domains               August 2019
-
 
    [RFC7049]  Bormann, C. and P. Hoffman, "Concise Binary Object
               Representation (CBOR)", RFC 7049, DOI 10.17487/RFC7049,
@@ -1438,6 +1447,17 @@ Internet-Draft            Provisioning Domains               August 2019
 
    [URN]      "URN Namespaces", n.d..
 
+
+
+
+
+
+
+Pfister, et al.         Expires February 13, 2020              [Page 26]
+
+Internet-Draft            Provisioning Domains               August 2019
+
+
 Authors' Addresses
 
    Pierre Pfister
@@ -1447,15 +1467,6 @@ Authors' Addresses
    France
 
    Email: ppfister@cisco.com
-
-
-
-
-
-
-Pfister, et al.         Expires February 7, 2020               [Page 26]
-
-Internet-Draft            Provisioning Domains               August 2019
 
 
    Eric Vyncke
@@ -1498,15 +1509,4 @@ Internet-Draft            Provisioning Domains               August 2019
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-Pfister, et al.         Expires February 7, 2020               [Page 27]
+Pfister, et al.         Expires February 13, 2020              [Page 27]
