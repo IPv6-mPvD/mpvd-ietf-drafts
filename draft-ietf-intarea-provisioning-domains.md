@@ -380,7 +380,7 @@ would refer to the same PvD.
 
 While resolving names, executing the default address selection
 algorithm {{?RFC6724}} or executing the default router
-selection algorithm when forwarding packets ({{!RFC2461}},
+selection algorithm when forwarding packets ({{!RFC4861}},
 {{?RFC4191}} and {{?RFC8028}}), hosts and applications MAY
 consider only the configuration associated with an arbitrary set of
 PvDs.
@@ -517,7 +517,7 @@ another PvD cannot be directly used on a NAT64 network.
 
 Additional information about the network characteristics can be
 retrieved based on the PvD ID. This set of information is called PvD
-Additional Information, and is encoded as a JSON object {{!RFC7159}}.
+Additional Information, and is encoded as a JSON object {{!RFC8259}}.
 This JSON object is restricted to the restricted profile of I-JSON,
 as defined in {{!RFC7493}}.
 
@@ -546,8 +546,8 @@ is not defined in this document.
 
 When the H-flag of the PvD Option is set, hosts MAY attempt to
 retrieve the PvD Additional Information associated with a given PvD by
-performing an HTTP over TLS {{!RFC2818}} GET query to
-https://\<PvD-ID\>/.well-known/pvd {{?RFC5785}}.
+performing an HTTP over TLS {{?RFC2818}} GET query to
+https://\<PvD-ID\>/.well-known/pvd {{!RFC8615}}.
 Inversely, hosts MUST NOT do so whenever the H-flag is not set.
 
 HTTP requests and responses for PvD additional information use the
