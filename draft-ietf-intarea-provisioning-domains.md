@@ -51,7 +51,7 @@ author:
     street: 11 Rue Camille Desmoulins
     city: Issy-les-Moulineaux 92130
     country: France
-    email: wenshao@apple.com
+    email: wenshao@cisco.com
 
 informative:
     IEEE8021X:
