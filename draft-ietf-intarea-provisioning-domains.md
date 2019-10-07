@@ -888,8 +888,19 @@ Upon publication of this document, IANA is asked to remove the
 'reclaimable' tag off the value 21 for the PvD Option (from the IPv6
 Neighbor Discovery Option Formats registry).
 
-IANA is asked to assign the value "pvd" from the Well-Known URIs
-registry.
+## New entry in the Well-Known URIs Registry
+
+IANA is asked to add a new entry in the well-known-uris registry with the following information:
+
+URI suffix: ‘pvd’
+
+Change controller: IETF
+
+Specification document: this document
+
+Status: permanent
+
+Related information: N/A
 
 ## Additional Information PvD Keys Registry
 
