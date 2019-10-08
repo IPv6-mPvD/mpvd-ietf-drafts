@@ -622,7 +622,7 @@ Information servers capacity.
 The PvD Additional Information object includes a set of IPv6
 prefixes (under the key "prefixes") which MUST be checked against all
 the Prefix Information Options advertised in the RA. If any of the
-prefixes included in the PIO is not covered by at least one of the
+prefixes included in any associated PIO is not covered by at least one of the
 listed prefixes, the associated PvD information MUST be considered
 to be a misconfiguration, and MUST NOT be used by the host. See
 {{misconfig}} for more discussion on handling such misconfigurations.
@@ -723,7 +723,7 @@ information provided by the trusted Router Advertisement, and the
 HTTPS server. However, this does not mean the Advertising Router and
 the PvD server belong to the same entity.
 
-Hosts MUST verify that all prefixes in the RA PIO are covered by a
+Hosts MUST verify that all prefixes in all the RA PIOs are covered by a
 prefix from the PvD Additional Information. An adversarial router
 attempting to spoof the definition of an Explicit PvD, without the ability to
 modify the PvD Additional Information, would need to perform NAT66 in
