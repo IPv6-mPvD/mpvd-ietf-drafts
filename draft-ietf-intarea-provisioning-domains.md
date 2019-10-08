@@ -355,8 +355,8 @@ a mix of PvD-aware and non-PvD-aware hosts coexist.
 
 Hosts MUST associate received RAs and included configuration
 information (e.g., Router Valid Lifetime, Prefix Information {{!RFC4861}},
-Recursive DNS Server {{?RFC8106}},
-Routing Information {{?RFC4191}} options) with the
+Recursive DNS Server {{!RFC8106}},
+Routing Information {{!RFC4191}} options) with the
 Explicit PvD identified by the first PvD Option present in the
 received RA, if any, or with the Implicit PvD identified by the host
 interface and the source address of the received RA otherwise.
@@ -379,9 +379,9 @@ PvD IDs MUST be compared in a case-insensitive manner as defined by
 would refer to the same PvD.
 
 While resolving names, executing the default address selection
-algorithm {{?RFC6724}} or executing the default router
+algorithm {{!RFC6724}} or executing the default router
 selection algorithm when forwarding packets ({{!RFC4861}},
-{{?RFC4191}} and {{?RFC8028}}), hosts and applications MAY
+{{!RFC4191}} and {{!RFC8028}}), hosts and applications MAY
 consider only the configuration associated with any non-empty subset of
 PvDs.
 
@@ -425,7 +425,7 @@ to assign addresses with DHCPv6 while not sending any matching PIO.
 
 ### DHCPv4 configuration association {#dhcpv4}
 
-Associating DHCPv4 {{?RFC2131}} configuration elements with Explicit PvDs allows
+Associating DHCPv4 {{!RFC2131}} configuration elements with Explicit PvDs allows
 hosts to treat a set of IPv4 and IPv6 configurations as a single PvD
 with shared properties. For example, consider a router that provides two different
 uplinks. One could be a broadband network that has data rate and streaming
@@ -565,7 +565,7 @@ with the PvD, as defined in {{host}}. In some cases, it
 may therefore be necessary to wait for an address to be available for
 use (e.g., once the Duplicate Address Detection or DHCPv6 processes
 are complete) before initiating the HTTP over TLS query. If the host
-has a temporary address per {{?RFC4941}} in this PvD, then
+has a temporary address per {{!RFC4941}} in this PvD, then
 hosts SHOULD use a temporary address to fetch the PvD Additional
 Information and SHOULD deprecate the used temporary address and
 generate a new temporary address afterward.
@@ -656,7 +656,7 @@ included in the object:
 | JSON key | Description         | Type      | Example      |
 |:------------|:-----------------------|:---------------------|:------------|
 | identifier   | PvD ID FQDN  | String | "pvd.example.com." |
-| expires     | Date after which this object is no longer valid  | {{?RFC3339}} Date | "2017-07-23T06:00:00Z" |
+| expires     | Date after which this object is no longer valid  | {{!RFC3339}} Date | "2017-07-23T06:00:00Z" |
 | prefixes    | Array of IPv6 prefixes valid for this PvD   | Array of strings | \["2001:db8:1::/48", "2001:db8:4::/48"\] |
 
 A retrieved object which does not include all three of these keys at
@@ -850,7 +850,7 @@ information that could lead applications or hosts to select a hostile PvD.
 Users cannot be assumed to be able to meaningfully differentiate between
 "safe" and "unsafe" networks. This is a known attack surface that is present
 whether or not PvDs are in use, and hence cannot be addressed by this document.
-However, a host that correctly implements the MPvD architecture ({{?RFC7556}})
+However, a host that correctly implements the multiple PvD architecture ({{?RFC7556}})
 using the mechanism described in this document will be less susceptible to such
 attacks than a host that does not by being able to check for the various
 misconfigurations described in this document.
