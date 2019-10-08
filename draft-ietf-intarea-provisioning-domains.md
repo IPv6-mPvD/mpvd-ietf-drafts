@@ -822,7 +822,7 @@ this router as a default router)
 * PvD Option header: length = 3, PvD ID FQDN = foo.example.org., R-flag = 0 (actual length of the header 24 bytes = 3 * 8 bytes)
 
 The second RA contains a prefix usable only by PvD-aware hosts. Non-PvD-aware
-hosts will ignore this RA.
+hosts will ignore this RA; hence, the only PvD-aware hosts will be multi-home.
 
 * RA Header: router lifetime = 0 (non-PvD-aware hosts will not use
 this router as a default router)
@@ -830,6 +830,8 @@ this router as a default router)
     - RA Header: router lifetime = 1600 (PvD-aware hosts will use this router as a default router), implicit length = 2
     - Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
     - Recursive DNS Server Option: length = 3, addresses = \[2001:db8:f00d::53\]
+
+Note: the above RA assumes that the router has received PvD ID FQDN from its upstream. Another document may define ways for the router to generate PvD ID FQDN to allow the above scenario in the absence of provisioned PvD ID FQDN.
 
 # Security Considerations {#security}
 
