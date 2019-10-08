@@ -190,7 +190,7 @@ PvD ID MUST be different to follow Section 2.4 of {{?RFC7556}}.
 ## PvD ID Option for Router Advertisements
 This document introduces a Router Advertisement (RA) option called
 PvD Option. It is used to convey the FQDN identifying a given PvD (see
-{{format}}, bind the PvD ID with configuration
+{{format}}), bind the PvD ID with configuration
 information received over DHCPv4 (see {{dhcpv4}}), enable
 the use of HTTP over TLS to retrieve the PvD Additional Information
 JSON object (see {{data}}), as well as contain any other
@@ -243,14 +243,14 @@ stating whether the PvD Option is followed (right after padding to
 the next 64 bits boundary) by a Router Advertisement message
 header (See section 4.2 of {{!RFC4861}}).
 
+Reserved:
+: (13 bits) Reserved for later use. It
+MUST be set to zero by the sender and ignored by the receiver.
+
 Delay:
 : (4 bits) Unsigned integer used to
 delay HTTP GET queries from hosts by a randomized backoff (see
 {{retr}}).
-
-Reserved:
-: (13 bits) Reserved for later use. It
-MUST be set to zero by the sender and ignored by the receiver.
 
 Sequence Number:
 : (16 bits) Sequence number for the
@@ -278,7 +278,7 @@ in {{!RFC4861}} or any updating documents.
 Options:
 : Zero or more RA options that would
 otherwise be valid as part of the Router Advertisement main body,
-but are instead included in the PvD Option such as to be ignored
+but are instead included in the PvD Option so as to be ignored
 by hosts that are not PvD-aware.
 
 Here is an example of a PvD Option with "example.org" as the
