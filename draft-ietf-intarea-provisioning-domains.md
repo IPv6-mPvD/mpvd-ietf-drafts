@@ -382,7 +382,7 @@ While resolving names, executing the default address selection
 algorithm {{?RFC6724}} or executing the default router
 selection algorithm when forwarding packets ({{!RFC4861}},
 {{?RFC4191}} and {{?RFC8028}}), hosts and applications MAY
-consider only the configuration associated with an arbitrary set of
+consider only the configuration associated with any non-empty subset of
 PvDs.
 
 For example, a host MAY associate a given process with a specific
