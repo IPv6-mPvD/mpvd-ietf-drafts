@@ -709,7 +709,10 @@ document can be used:
   "identifier": "company.foo.example.com",
   "expires": "2017-07-23T06:00:00Z",
   "prefixes": ["2001:db8:1::/48", "2001:db8:4::/48"],
-  "vendor-foo": { "private-key": "private-value" },
+  "vendor-foo": 
+  	{ 
+  		"private-key": "private-value", 
+  	},
 }
 ~~~
 
@@ -974,7 +977,7 @@ Paul Hoffman, Dave Thaler, Suresh Krishnan, Gorry Fairhurst,
 Jen Lenkova, Veronika McKillop, Mark Townsley and James Woodyatt for
 useful and interesting discussions and reviews.
 
-Finally, special thanks to Thierry Danis and Wenqin Shao for their
+Finally, special thanks to Thierry Danis for his
 valuable inputs and implementation efforts,
 Tom Jones for his integration effort into the NEAT project and Rigil
 Salim for his implementation work.
