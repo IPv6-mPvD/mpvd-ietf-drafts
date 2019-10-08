@@ -709,9 +709,9 @@ document can be used:
   "identifier": "company.foo.example.com",
   "expires": "2017-07-23T06:00:00Z",
   "prefixes": ["2001:db8:1::/48", "2001:db8:4::/48"],
-  "vendor-foo": 
-  	{ 
-  		"private-key": "private-value", 
+  "vendor-foo":
+  	{
+  		"private-key": "private-value",
   	},
 }
 ~~~
@@ -774,8 +774,10 @@ A non-PvD-aware host will only receive one prefix, 2001:db8:cafe::/64.
 It is expected that for some years, networks will have a mixed
 environment of PvD-aware hosts and non-PvD-aware hosts. If there is a
 need to give specific information to PvD-aware hosts only, then it is
-RECOMMENDED to send two RA messages (one for each class of hosts) using two different source LLA(see {{router}}). For
-example, here is the RA sent for non-PvD-aware hosts:
+RECOMMENDED to send two RA messages, one for each class of hosts.
+If two RA messages are sent for this reason, they MUST be sent from two
+different link-local source addresses ({{router}}). For example, here is the
+RA sent for non-PvD-aware hosts:
 
 * RA Header: router lifetime = 6000 (non-PvD-aware hosts will use
 this router as a default router)
@@ -822,7 +824,7 @@ this router as a default router)
 * PvD Option header: length = 3, PvD ID FQDN = foo.example.org., R-flag = 0 (actual length of the header 24 bytes = 3 * 8 bytes)
 
 The second RA contains a prefix usable only by PvD-aware hosts. Non-PvD-aware
-hosts will ignore this RA; hence, the only PvD-aware hosts will be multi-home.
+hosts will ignore this RA; hence, the only PvD-aware hosts will be multi-homed.
 
 * RA Header: router lifetime = 0 (non-PvD-aware hosts will not use
 this router as a default router)
@@ -831,7 +833,9 @@ this router as a default router)
     - Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
     - Recursive DNS Server Option: length = 3, addresses = \[2001:db8:f00d::53\]
 
-Note: the above RA assumes that the router has received PvD ID FQDN from its upstream. Another document may define ways for the router to generate PvD ID FQDN to allow the above scenario in the absence of provisioned PvD ID FQDN.
+Note: the above examples assume that the router has received its PvD IDs from upstream routers
+or via some other configuration mechanism. Another document could define ways for the router
+to generate its own PvD IDs to allow the above scenario in the absence of PvD ID provisioning.
 
 # Security Considerations {#security}
 
