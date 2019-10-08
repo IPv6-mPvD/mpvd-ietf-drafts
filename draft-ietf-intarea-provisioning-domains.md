@@ -771,7 +771,7 @@ A non-PvD-aware host will only receive one prefix, 2001:db8:cafe::/64.
 It is expected that for some years, networks will have a mixed
 environment of PvD-aware hosts and non-PvD-aware hosts. If there is a
 need to give specific information to PvD-aware hosts only, then it is
-recommended to send two RA messages (one for each class of hosts). For
+RECOMMENDED to send two RA messages (one for each class of hosts) using two different source LLA(see {{router}}). For
 example, here is the RA sent for non-PvD-aware hosts:
 
 * RA Header: router lifetime = 6000 (non-PvD-aware hosts will use
