@@ -152,7 +152,7 @@ other traffic on Alice's device uses the broadband provider.
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
 "OPTIONAL" in this document are to be interpreted as described in BCP 14
-{{?RFC2119}} {{?RFC8174}} when, and only when,
+{{!RFC2119}} {{!RFC8174}} when, and only when,
 they appear in all capitals, as shown here.
 
 # Terminology
@@ -190,7 +190,7 @@ PvD ID MUST be different to follow Section 2.4 of {{?RFC7556}}.
 ## PvD ID Option for Router Advertisements
 This document introduces a Router Advertisement (RA) option called
 PvD Option. It is used to convey the FQDN identifying a given PvD (see
-{{format}}, bind the PvD ID with configuration
+{{format}}), bind the PvD ID with configuration
 information received over DHCPv4 (see {{dhcpv4}}), enable
 the use of HTTP over TLS to retrieve the PvD Additional Information
 JSON object (see {{data}}), as well as contain any other
@@ -243,14 +243,14 @@ stating whether the PvD Option is followed (right after padding to
 the next 64 bits boundary) by a Router Advertisement message
 header (See section 4.2 of {{!RFC4861}}).
 
+Reserved:
+: (13 bits) Reserved for later use. It
+MUST be set to zero by the sender and ignored by the receiver.
+
 Delay:
 : (4 bits) Unsigned integer used to
 delay HTTP GET queries from hosts by a randomized backoff (see
 {{retr}}).
-
-Reserved:
-: (13 bits) Reserved for later use. It
-MUST be set to zero by the sender and ignored by the receiver.
 
 Sequence Number:
 : (16 bits) Sequence number for the
@@ -278,7 +278,7 @@ in {{!RFC4861}} or any updating documents.
 Options:
 : Zero or more RA options that would
 otherwise be valid as part of the Router Advertisement main body,
-but are instead included in the PvD Option such as to be ignored
+but are instead included in the PvD Option so as to be ignored
 by hosts that are not PvD-aware.
 
 Here is an example of a PvD Option with "example.org" as the
@@ -355,8 +355,8 @@ a mix of PvD-aware and non-PvD-aware hosts coexist.
 
 Hosts MUST associate received RAs and included configuration
 information (e.g., Router Valid Lifetime, Prefix Information {{!RFC4861}},
-Recursive DNS Server {{?RFC8106}},
-Routing Information {{?RFC4191}} options) with the
+Recursive DNS Server {{!RFC8106}},
+Routing Information {{!RFC4191}} options) with the
 Explicit PvD identified by the first PvD Option present in the
 received RA, if any, or with the Implicit PvD identified by the host
 interface and the source address of the received RA otherwise.
@@ -379,10 +379,10 @@ PvD IDs MUST be compared in a case-insensitive manner as defined by
 would refer to the same PvD.
 
 While resolving names, executing the default address selection
-algorithm {{?RFC6724}} or executing the default router
+algorithm {{!RFC6724}} or executing the default router
 selection algorithm when forwarding packets ({{!RFC4861}},
-{{?RFC4191}} and {{?RFC8028}}), hosts and applications MAY
-consider only the configuration associated with an arbitrary set of
+{{!RFC4191}} and {{!RFC8028}}), hosts and applications MAY
+consider only the configuration associated with any non-empty subset of
 PvDs.
 
 For example, a host MAY associate a given process with a specific
@@ -425,7 +425,7 @@ to assign addresses with DHCPv6 while not sending any matching PIO.
 
 ### DHCPv4 configuration association {#dhcpv4}
 
-Associating DHCPv4 {{?RFC2131}} configuration elements with Explicit PvDs allows
+Associating DHCPv4 {{!RFC2131}} configuration elements with Explicit PvDs allows
 hosts to treat a set of IPv4 and IPv6 configurations as a single PvD
 with shared properties. For example, consider a router that provides two different
 uplinks. One could be a broadband network that has data rate and streaming
@@ -565,7 +565,7 @@ with the PvD, as defined in {{host}}. In some cases, it
 may therefore be necessary to wait for an address to be available for
 use (e.g., once the Duplicate Address Detection or DHCPv6 processes
 are complete) before initiating the HTTP over TLS query. If the host
-has a temporary address per {{?RFC4941}} in this PvD, then
+has a temporary address per {{!RFC4941}} in this PvD, then
 hosts SHOULD use a temporary address to fetch the PvD Additional
 Information and SHOULD deprecate the used temporary address and
 generate a new temporary address afterward.
@@ -622,7 +622,7 @@ Information servers capacity.
 The PvD Additional Information object includes a set of IPv6
 prefixes (under the key "prefixes") which MUST be checked against all
 the Prefix Information Options advertised in the RA. If any of the
-prefixes included in the PIO is not covered by at least one of the
+prefixes included in any associated PIO is not covered by at least one of the
 listed prefixes, the associated PvD information MUST be considered
 to be a misconfiguration, and MUST NOT be used by the host. See
 {{misconfig}} for more discussion on handling such misconfigurations.
@@ -656,7 +656,7 @@ included in the object:
 | JSON key | Description         | Type      | Example      |
 |:------------|:-----------------------|:---------------------|:------------|
 | identifier   | PvD ID FQDN  | String | "pvd.example.com." |
-| expires     | Date after which this object is no longer valid  | {{?RFC3339}} Date | "2017-07-23T06:00:00Z" |
+| expires     | Date after which this object is no longer valid  | {{!RFC3339}} Date | "2017-07-23T06:00:00Z" |
 | prefixes    | Array of IPv6 prefixes valid for this PvD   | Array of strings | \["2001:db8:1::/48", "2001:db8:4::/48"\] |
 
 A retrieved object which does not include all three of these keys at
@@ -709,7 +709,10 @@ document can be used:
   "identifier": "company.foo.example.com",
   "expires": "2017-07-23T06:00:00Z",
   "prefixes": ["2001:db8:1::/48", "2001:db8:4::/48"],
-  "vendor-foo": { "private-key": "private-value" },
+  "vendor-foo":
+  	{
+  		"private-key": "private-value",
+  	},
 }
 ~~~
 
@@ -723,7 +726,7 @@ information provided by the trusted Router Advertisement, and the
 HTTPS server. However, this does not mean the Advertising Router and
 the PvD server belong to the same entity.
 
-Hosts MUST verify that all prefixes in the RA PIO are covered by a
+Hosts MUST verify that all prefixes in all the RA PIOs are covered by a
 prefix from the PvD Additional Information. An adversarial router
 attempting to spoof the definition of an Explicit PvD, without the ability to
 modify the PvD Additional Information, would need to perform NAT66 in
@@ -771,8 +774,10 @@ A non-PvD-aware host will only receive one prefix, 2001:db8:cafe::/64.
 It is expected that for some years, networks will have a mixed
 environment of PvD-aware hosts and non-PvD-aware hosts. If there is a
 need to give specific information to PvD-aware hosts only, then it is
-recommended to send two RA messages (one for each class of hosts). For
-example, here is the RA sent for non-PvD-aware hosts:
+RECOMMENDED to send two RA messages, one for each class of hosts.
+If two RA messages are sent for this reason, they MUST be sent from two
+different link-local source addresses ({{router}}). For example, here is the
+RA sent for non-PvD-aware hosts:
 
 * RA Header: router lifetime = 6000 (non-PvD-aware hosts will use
 this router as a default router)
@@ -819,7 +824,7 @@ this router as a default router)
 * PvD Option header: length = 3, PvD ID FQDN = foo.example.org., R-flag = 0 (actual length of the header 24 bytes = 3 * 8 bytes)
 
 The second RA contains a prefix usable only by PvD-aware hosts. Non-PvD-aware
-hosts will ignore this RA.
+hosts will ignore this RA; hence, the only PvD-aware hosts will be multi-homed.
 
 * RA Header: router lifetime = 0 (non-PvD-aware hosts will not use
 this router as a default router)
@@ -827,6 +832,10 @@ this router as a default router)
     - RA Header: router lifetime = 1600 (PvD-aware hosts will use this router as a default router), implicit length = 2
     - Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
     - Recursive DNS Server Option: length = 3, addresses = \[2001:db8:f00d::53\]
+
+Note: the above examples assume that the router has received its PvD IDs from upstream routers
+or via some other configuration mechanism. Another document could define ways for the router
+to generate its own PvD IDs to allow the above scenario in the absence of PvD ID provisioning.
 
 # Security Considerations {#security}
 
@@ -850,7 +859,7 @@ information that could lead applications or hosts to select a hostile PvD.
 Users cannot be assumed to be able to meaningfully differentiate between
 "safe" and "unsafe" networks. This is a known attack surface that is present
 whether or not PvDs are in use, and hence cannot be addressed by this document.
-However, a host that correctly implements the MPvD architecture ({{?RFC7556}})
+However, a host that correctly implements the multiple PvD architecture ({{?RFC7556}})
 using the mechanism described in this document will be less susceptible to such
 attacks than a host that does not by being able to check for the various
 misconfigurations described in this document.
@@ -888,8 +897,19 @@ Upon publication of this document, IANA is asked to remove the
 'reclaimable' tag off the value 21 for the PvD Option (from the IPv6
 Neighbor Discovery Option Formats registry).
 
-IANA is asked to assign the value "pvd" from the Well-Known URIs
-registry.
+## New entry in the Well-Known URIs Registry
+
+IANA is asked to add a new entry in the well-known-uris registry with the following information:
+
+URI suffix: ‘pvd’
+
+Change controller: IETF
+
+Specification document: this document
+
+Status: permanent
+
+Related information: N/A
 
 ## Additional Information PvD Keys Registry
 
@@ -963,7 +983,7 @@ Paul Hoffman, Dave Thaler, Suresh Krishnan, Gorry Fairhurst,
 Jen Lenkova, Veronika McKillop, Mark Townsley and James Woodyatt for
 useful and interesting discussions and reviews.
 
-Finally, special thanks to Thierry Danis and Wenqin Shao for their
+Finally, special thanks to Thierry Danis for his
 valuable inputs and implementation efforts,
 Tom Jones for his integration effort into the NEAT project and Rigil
 Salim for his implementation work.
