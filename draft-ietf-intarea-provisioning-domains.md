@@ -105,7 +105,7 @@ Discovering Explicit PvDs allows two key advancements in managing multiple PvDs:
 such as when a local router can provide connectivity to two different
 Internet Service Providers.
 
-2. The ability to associate additional informations about PvDs to describe
+2. The ability to associate additional information about PvDs to describe
 the properties of the network.
 
 While {{?RFC7556}} defines the concept of Explicit PvDs, it does not define
@@ -117,11 +117,9 @@ Domain Names (FQDN), called PvD IDs. Those identifiers are advertised in
 a new Router Advertisement (RA) {{!RFC4861}} option called
 the PvD ID Router Advertisement option which, when present, associates
 the PvD ID with all the information present in the Router Advertisement
-as well as any configuration object, such as addresses, deriving from
+as well as any configuration object, such as addresses, derived from
 it. The PVD ID Router Advertisement option may also contain a set of
-other RA options. Since such options are only considered by hosts
-implementing this specification, network operators may configure hosts
-that are 'PvD-aware' with PvDs that are ignored by other hosts.
+other RA options. These options are only visible to 'PvD-aware' hosts.
 
 Since PvD IDs are used to identify different ways to access the
 internet, multiple PvDs (with different PvD IDs) can be provisioned on
@@ -181,8 +179,9 @@ PvDs as described in this document. Also named PvD-aware node in {{?RFC7556}}.
 # Provisioning Domain Identification using Router Advertisements {#ra}
 
 Explicit PvDs are identified by a PvD ID. The PvD ID is a Fully
-Qualified Domain Name (FQDN) which MUST belong to the network operator
-in order to avoid naming collisions. The same PvD ID MAY be used in
+Qualified Domain Name (FQDN) which that identifies the network operator.
+Network operators SHOULD use names that they own and manage to
+avoid naming conflicts. The same PvD ID MAY be used in
 several access networks when they ultimately provide identical services
 (e.g., in all home networks subscribed to the same service); else, the
 PvD ID MUST be different to follow Section 2.4 of {{?RFC7556}}.
@@ -233,9 +232,8 @@ some PvD Additional Information is made available through HTTP
 over TLS, as described in {{data}}.
 
 L-flag:
-: (1 bit) 'Legacy' flag stating whether
-the router is also providing IPv4 information using DHCPv4 (see
-{{dhcpv4}}).
+: (1 bit) 'Legacy' flag stating whether the PvD is associated with
+IPv4 information assigned using DHCPv4 (see {{dhcpv4}}).
 
 R-flag:
 : (1 bit) 'Router Advertisement' flag
@@ -547,7 +545,7 @@ is not defined in this document.
 When the H-flag of the PvD Option is set, hosts MAY attempt to
 retrieve the PvD Additional Information associated with a given PvD by
 performing an HTTP over TLS {{?RFC2818}} GET query to
-https://\<PvD-ID\>/.well-known/pvd {{!RFC8615}}.
+https://\<PvD-ID\>/.well-known/pvd.
 Inversely, hosts MUST NOT do so whenever the H-flag is not set.
 
 HTTP requests and responses for PvD additional information use the
@@ -899,7 +897,7 @@ Neighbor Discovery Option Formats registry).
 
 ## New entry in the Well-Known URIs Registry
 
-IANA is asked to add a new entry in the well-known-uris registry with the following information:
+IANA is asked to add a new entry in the Well-Known URIs registry {{!RFC8615}} with the following information:
 
 URI suffix: ‘pvd’
 
