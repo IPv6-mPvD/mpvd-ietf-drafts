@@ -562,11 +562,12 @@ while using exclusively the set of configuration information attached
 with the PvD, as defined in {{host}}. In some cases, it
 may therefore be necessary to wait for an address to be available for
 use (e.g., once the Duplicate Address Detection or DHCPv6 processes
-are complete) before initiating the HTTP over TLS query. If the host
-has a temporary address per {{!RFC4941}} in this PvD, then
-hosts SHOULD use a temporary address to fetch the PvD Additional
-Information and SHOULD deprecate the used temporary address and
-generate a new temporary address afterward.
+are complete) before initiating the HTTP over TLS query. In order to
+address privacy concerns around linkability of the PvD HTTP connection
+with future user-initiated connections, if the host has a temporary address
+per {{!RFC4941}} in this PvD, then it SHOULD use a temporary address
+to fetch the PvD Additional Information and SHOULD deprecate the used
+temporary address and generate a new temporary address afterward.
 
 If the HTTP status of the answer is greater than or equal to 400
 the host MUST abandon and consider that there is no additional PvD
