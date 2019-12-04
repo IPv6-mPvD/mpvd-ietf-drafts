@@ -99,13 +99,13 @@ Table of Contents
      5.1.  Exposing Extra RA Options to PvD-Aware Hosts  . . . . . .  18
      5.2.  Different RAs for PvD-Aware and Non-PvD-Aware Hosts . . .  18
      5.3.  Enabling Multi-homing for PvD-Aware Hosts . . . . . . . .  20
-   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  21
-   7.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .  21
-   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  22
-     8.1.  New entry in the Well-Known URIs Registry . . . . . . . .  22
-     8.2.  Additional Information PvD Keys Registry  . . . . . . . .  22
-     8.3.  PvD Option Flags Registry . . . . . . . . . . . . . . . .  22
-     8.4.  PvD JSON Media Type Registration  . . . . . . . . . . . .  23
+     5.4.  Providing Additional Information to PvD-Aware Hosts . . .  21
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  22
+   7.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .  22
+   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  23
+     8.1.  New entry in the Well-Known URIs Registry . . . . . . . .  23
+     8.2.  Additional Information PvD Keys Registry  . . . . . . . .  23
+     8.3.  PvD Option Flags Registry . . . . . . . . . . . . . . . .  24
 
 
 
@@ -114,11 +114,12 @@ Pfister, et al.           Expires June 6, 2020                  [Page 2]
 Internet-Draft            Provisioning Domains             December 2019
 
 
-   9.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  23
-   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  24
-     10.1.  Normative References . . . . . . . . . . . . . . . . . .  24
-     10.2.  Informative References . . . . . . . . . . . . . . . . .  25
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  27
+     8.4.  PvD JSON Media Type Registration  . . . . . . . . . . . .  24
+   9.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  25
+   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  25
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .  25
+     10.2.  Informative References . . . . . . . . . . . . . . . . .  27
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  28
 
 1.  Introduction
 
@@ -160,7 +161,6 @@ Internet-Draft            Provisioning Domains             December 2019
    derived from it.  The PVD ID Router Advertisement option may also
    contain a set of other RA options.  These options are only visible to
    'PvD-aware' hosts.
-
 
 
 
@@ -1122,6 +1122,71 @@ Pfister, et al.           Expires June 6, 2020                 [Page 20]
 Internet-Draft            Provisioning Domains             December 2019
 
 
+5.4.  Providing Additional Information to PvD-Aware Hosts
+
+   In this example, the router indicates that it provides additional
+   information using the H-flag.  The Sequence Number on the PvD Option
+   is set to 7 in this example.
+
+   o  RA Header: router lifetime = 6000
+
+   o  Prefix Information Option: length = 4, prefix = 2001:db8:cafe::/64
+
+   o  Recursive DNS Server Option: length = 3, addresses=
+      [2001:db8:cafe::53]
+
+   o  PvD Option header: length = 3 + 5 + 4 , PvD ID FQDN =
+      cafe.example.com., Sequence Number = 7, R-flag = 0, H-flag = 1
+      (actual length of the header with padding 24 bytes = 3 * 8 bytes)
+
+   A PvD-aware host will fetch https://cafe.example.com/.well-known/pvd
+   to get the additonal information.  The following example shows a GET
+   request that the host sends:
+
+   :method = GET
+   :scheme = https
+   :authority = cafe.example.com
+   :path = /.well-known/pvd
+   accept = application/pvd+json
+
+   The HTTP server will respond with the JSON additional information:
+
+   :status = 200
+   content-type = application/pvd+json
+   content-length = 116
+
+   {
+     "identifier": "cafe.example.com",
+     "expires": "2017-07-23T06:00:00Z",
+     "prefixes": ["2001:db8:cafe::53/48"],
+   }
+
+   At this point, the host has the additional information, and knows the
+   expiry time.  When either the expiry time passes, or a new Sequence
+   Number is provided in an RA, the host will re-fetch the additional
+   information.
+
+   For example, if the router sends a new RA with the Sequence Number
+   set to 8, the host will re-fetch the additional information:
+
+
+
+
+
+Pfister, et al.           Expires June 6, 2020                 [Page 21]
+
+Internet-Draft            Provisioning Domains             December 2019
+
+
+   o  PvD Option header: length = 3 + 5 + 4 , PvD ID FQDN =
+      cafe.example.com., Sequence Number = 8, R-flag = 0, H-flag = 1
+      (actual length of the header with padding 24 bytes = 3 * 8 bytes)
+
+   However, if the router sends a new RA, but the Sequence Number has
+   not changed, the host would not re-fetch the additional information
+   (until and unless the expiry time of the additional information has
+   passed).
+
 6.  Security Considerations
 
    Although some solutions such as IPsec or SeND [RFC3971] can be used
@@ -1160,6 +1225,15 @@ Internet-Draft            Provisioning Domains             December 2019
    willing to retrieve the PvD Additional Information before using it
    without leaking identity information, SHOULD make use of an IPv6
    Privacy Address and SHOULD NOT include any privacy sensitive data,
+
+
+
+
+Pfister, et al.           Expires June 6, 2020                 [Page 22]
+
+Internet-Draft            Provisioning Domains             December 2019
+
+
    such as User Agent header or HTTP cookie, while performing the HTTP
    over TLS query.
 
@@ -1169,14 +1243,6 @@ Internet-Draft            Provisioning Domains             December 2019
    operating systems already perform early queries to well known web
    sites, such as http://captive.example.com/hotspot-detect.html, in
    order to detect the presence of a captive portal.
-
-
-
-
-Pfister, et al.           Expires June 6, 2020                 [Page 21]
-
-Internet-Draft            Provisioning Domains             December 2019
-
 
    There may be some cases where hosts, for privacy reasons, should
    refrain from accessing servers that are located outside a certain
@@ -1217,6 +1283,13 @@ Internet-Draft            Provisioning Domains             December 2019
    New assignments for Additional Information PvD Keys Registry will be
    administered by IANA through Expert Review [RFC8126].
 
+
+
+Pfister, et al.           Expires June 6, 2020                 [Page 23]
+
+Internet-Draft            Provisioning Domains             December 2019
+
+
 8.3.  PvD Option Flags Registry
 
    IANA is also asked to create and maintain a new registry entitled
@@ -1224,15 +1297,6 @@ Internet-Draft            Provisioning Domains             December 2019
    the PvD Option bitmask.  Bit position 0, 1 and 2 are reserved by this
    document (as specified in Figure 1).  Future assignments require
    Standards Action [RFC8126], via a Standards Track RFC document.
-
-
-
-
-
-Pfister, et al.           Expires June 6, 2020                 [Page 22]
-
-Internet-Draft            Provisioning Domains             December 2019
-
 
 8.4.  PvD JSON Media Type Registration
 
@@ -1274,6 +1338,14 @@ Internet-Draft            Provisioning Domains             December 2019
 
    Change controller: IETF
 
+
+
+
+Pfister, et al.           Expires June 6, 2020                 [Page 24]
+
+Internet-Draft            Provisioning Domains             December 2019
+
+
 9.  Acknowledgments
 
    Many thanks to M.  Stenberg and S.  Barth for their earlier work:
@@ -1282,14 +1354,6 @@ Internet-Draft            Provisioning Domains             December 2019
 
    Thanks also to Marcus Keane, Mikael Abrahamsson, Ray Bellis, Zhen
    Cao, Tim Chown, Lorenzo Colitti, Michael Di Bartolomeo, Ian Farrer,
-
-
-
-Pfister, et al.           Expires June 6, 2020                 [Page 23]
-
-Internet-Draft            Provisioning Domains             December 2019
-
-
    Phillip Hallam-Baker, Bob Hinden, Tatuya Jinmei, Erik Kline, Ted
    Lemon, Paul Hoffman, Dave Thaler, Suresh Krishnan, Gorry Fairhurst,
    Jen Lenkova, Veronika McKillop, Mark Townsley and James Woodyatt for
@@ -1329,6 +1393,15 @@ Internet-Draft            Provisioning Domains             December 2019
               More-Specific Routes", RFC 4191, DOI 10.17487/RFC4191,
               November 2005, <https://www.rfc-editor.org/info/rfc4191>.
 
+
+
+
+
+Pfister, et al.           Expires June 6, 2020                 [Page 25]
+
+Internet-Draft            Provisioning Domains             December 2019
+
+
    [RFC4343]  Eastlake 3rd, D., "Domain Name System (DNS) Case
               Insensitivity Clarification", RFC 4343,
               DOI 10.17487/RFC4343, January 2006,
@@ -1338,13 +1411,6 @@ Internet-Draft            Provisioning Domains             December 2019
               "Neighbor Discovery for IP version 6 (IPv6)", RFC 4861,
               DOI 10.17487/RFC4861, September 2007,
               <https://www.rfc-editor.org/info/rfc4861>.
-
-
-
-Pfister, et al.           Expires June 6, 2020                 [Page 24]
-
-Internet-Draft            Provisioning Domains             December 2019
-
 
    [RFC4941]  Narten, T., Draves, R., and S. Krishnan, "Privacy
               Extensions for Stateless Address Autoconfiguration in
@@ -1384,6 +1450,14 @@ Internet-Draft            Provisioning Domains             December 2019
               DOI 10.17487/RFC8259, December 2017,
               <https://www.rfc-editor.org/info/rfc8259>.
 
+
+
+
+Pfister, et al.           Expires June 6, 2020                 [Page 26]
+
+Internet-Draft            Provisioning Domains             December 2019
+
+
    [RFC8615]  Nottingham, M., "Well-Known Uniform Resource Identifiers
               (URIs)", RFC 8615, DOI 10.17487/RFC8615, May 2019,
               <https://www.rfc-editor.org/info/rfc8615>.
@@ -1394,13 +1468,6 @@ Internet-Draft            Provisioning Domains             December 2019
               Kline, E., "Multiple Provisioning Domains API
               Requirements", draft-kline-mif-mpvd-api-reqs-00 (work in
               progress), November 2015.
-
-
-
-Pfister, et al.           Expires June 6, 2020                 [Page 25]
-
-Internet-Draft            Provisioning Domains             December 2019
-
 
    [I-D.stenberg-mif-mpvd-dns]
               Stenberg, M. and S. Barth, "Multiple Provisioning Domains
@@ -1440,6 +1507,13 @@ Internet-Draft            Provisioning Domains             December 2019
               DOI 10.17487/RFC6147, April 2011,
               <https://www.rfc-editor.org/info/rfc6147>.
 
+
+
+Pfister, et al.           Expires June 6, 2020                 [Page 27]
+
+Internet-Draft            Provisioning Domains             December 2019
+
+
    [RFC6296]  Wasserman, M. and F. Baker, "IPv6-to-IPv6 Network Prefix
               Translation", RFC 6296, DOI 10.17487/RFC6296, June 2011,
               <https://www.rfc-editor.org/info/rfc6296>.
@@ -1447,16 +1521,6 @@ Internet-Draft            Provisioning Domains             December 2019
    [RFC7049]  Bormann, C. and P. Hoffman, "Concise Binary Object
               Representation (CBOR)", RFC 7049, DOI 10.17487/RFC7049,
               October 2013, <https://www.rfc-editor.org/info/rfc7049>.
-
-
-
-
-
-
-Pfister, et al.           Expires June 6, 2020                 [Page 26]
-
-Internet-Draft            Provisioning Domains             December 2019
-
 
    [RFC7278]  Byrne, C., Drown, D., and A. Vizdal, "Extending an IPv6
               /64 Prefix from a Third Generation Partnership Project
@@ -1496,6 +1560,16 @@ Authors' Addresses
    Email: evyncke@cisco.com
 
 
+
+
+
+
+
+Pfister, et al.           Expires June 6, 2020                 [Page 28]
+
+Internet-Draft            Provisioning Domains             December 2019
+
+
    Tommy Pauly
    Apple Inc.
    One Apple Park Way
@@ -1503,15 +1577,6 @@ Authors' Addresses
    United States of America
 
    Email: tpauly@apple.com
-
-
-
-
-
-
-Pfister, et al.           Expires June 6, 2020                 [Page 27]
-
-Internet-Draft            Provisioning Domains             December 2019
 
 
    David Schinazi
@@ -1556,13 +1621,4 @@ Internet-Draft            Provisioning Domains             December 2019
 
 
 
-
-
-
-
-
-
-
-
-
-Pfister, et al.           Expires June 6, 2020                 [Page 28]
+Pfister, et al.           Expires June 6, 2020                 [Page 29]

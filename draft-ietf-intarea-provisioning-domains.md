@@ -840,6 +840,58 @@ Note: the above examples assume that the router has received its PvD IDs from up
 or via some other configuration mechanism. Another document could define ways for the router
 to generate its own PvD IDs to allow the above scenario in the absence of PvD ID provisioning.
 
+## Providing Additional Information to PvD-Aware Hosts
+
+In this example, the router indicates that it provides additional information using the H-flag.
+The Sequence Number on the PvD Option is set to 7 in this example.
+
+* RA Header: router lifetime = 6000
+* Prefix Information Option: length = 4, prefix = 2001:db8:cafe::/64
+* Recursive DNS Server Option: length = 3, addresses= \[2001:db8:cafe::53\]
+* PvD Option header: length = 3 + 5 + 4 , PvD ID FQDN = cafe.example.com.,
+Sequence Number = 7, R-flag = 0, H-flag = 1 (actual length of the header with padding
+24 bytes = 3 * 8 bytes)
+	
+A PvD-aware host will fetch https://cafe.example.com/.well-known/pvd to get the additonal
+information. The following example shows a GET request that the host sends:
+
+~~~
+:method = GET
+:scheme = https
+:authority = cafe.example.com
+:path = /.well-known/pvd
+accept = application/pvd+json
+~~~
+
+The HTTP server will respond with the JSON additional information:
+
+~~~
+:status = 200
+content-type = application/pvd+json
+content-length = 116
+
+{
+  "identifier": "cafe.example.com",
+  "expires": "2017-07-23T06:00:00Z",
+  "prefixes": ["2001:db8:cafe::53/48"],
+}
+~~~
+
+At this point, the host has the additional information, and knows the expiry time.
+When either the expiry time passes, or a new Sequence Number is provided in an RA,
+the host will re-fetch the additional information.
+
+For example, if the router sends a new RA with the Sequence Number set to 8,
+the host will re-fetch the additional information:
+
+* PvD Option header: length = 3 + 5 + 4 , PvD ID FQDN = cafe.example.com.,
+Sequence Number = 8, R-flag = 0, H-flag = 1 (actual length of the header with padding
+24 bytes = 3 * 8 bytes)
+
+However, if the router sends a new RA, but the Sequence Number has not changed,
+the host would not re-fetch the additional information (until and unless the expiry time
+of the additional information has passed).
+
 # Security Considerations {#security}
 
 Although some solutions such as IPsec or SeND {{?RFC3971}}
