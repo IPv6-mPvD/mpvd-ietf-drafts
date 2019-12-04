@@ -239,7 +239,8 @@ R-flag:
 : (1 bit) 'Router Advertisement' flag
 stating whether the PvD Option is followed (right after padding to
 the next 64 bits boundary) by a Router Advertisement message
-header (See section 4.2 of {{!RFC4861}}).
+header (see section 4.2 of {{!RFC4861}}). The usage of the
+inner message header is described in {{host}}.
 
 Reserved:
 : (13 bits) Reserved for later use. It
@@ -358,6 +359,9 @@ Routing Information {{!RFC4191}} options) with the
 Explicit PvD identified by the first PvD Option present in the
 received RA, if any, or with the Implicit PvD identified by the host
 interface and the source address of the received RA otherwise.
+If the same options are present both within the PvD Option and
+outside it, but have different values, the values within the PvD Option
+take precedence.
 
 In case multiple PvD Options are found in a given RA, hosts MUST
 ignore all but the first PvD Option.
