@@ -180,7 +180,7 @@ PvDs as described in this document. Also named PvD-aware node in {{?RFC7556}}.
 
 Explicit PvDs are identified by a PvD ID. The PvD ID is a Fully
 Qualified Domain Name (FQDN) which that identifies the network operator.
-Network operators SHOULD use names that they own and manage to
+Network operators MUST use names that they own or manage to
 avoid naming conflicts. The same PvD ID MAY be used in
 several access networks when they ultimately provide identical services
 (e.g., in all home networks subscribed to the same service); else, the
@@ -359,9 +359,9 @@ Routing Information {{!RFC4191}} options) with the
 Explicit PvD identified by the first PvD Option present in the
 received RA, if any, or with the Implicit PvD identified by the host
 interface and the source address of the received RA otherwise.
-If the same options are present both within the PvD Option and
-outside it, but have different values, the values within the PvD Option
-take precedence.
+If a RA message header is present both within the PvD Option and
+outside it, as indicated by the R-flag, the header within the PvD Option
+takes precedence.
 
 In case multiple PvD Options are found in a given RA, hosts MUST
 ignore all but the first PvD Option.
@@ -469,14 +469,14 @@ PVD option within the RAs sent downstream with:
 
 - The same PVD-ID FQDN
 
-- The same H-bit, Delay and Sequence Number values
+- The same H-flag, Delay and Sequence Number values
 
 - The L bit set whenever the host is sharing IPv4 connectivity
 received from the same upstream interface
 
 - The bits from the Reserved field set to 0
 
-The values of the R-bit, Router Advertisement message
+The values of the R-flag, Router Advertisement message
 header and Options field depend on whether the connectivity should
 be shared only with PvD-aware hosts or not (see {{router}}). In particular,
 all options received within the upstream PvD Option and included in

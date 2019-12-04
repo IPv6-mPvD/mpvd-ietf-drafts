@@ -239,12 +239,11 @@ Internet-Draft            Provisioning Domains             December 2019
 
    Explicit PvDs are identified by a PvD ID.  The PvD ID is a Fully
    Qualified Domain Name (FQDN) which that identifies the network
-   operator.  Network operators SHOULD use names that they own and
-   manage to avoid naming conflicts.  The same PvD ID MAY be used in
-   several access networks when they ultimately provide identical
-   services (e.g., in all home networks subscribed to the same service);
-   else, the PvD ID MUST be different to follow Section 2.4 of
-   [RFC7556].
+   operator.  Network operators MUST use names that they own or manage
+   to avoid naming conflicts.  The same PvD ID MAY be used in several
+   access networks when they ultimately provide identical services
+   (e.g., in all home networks subscribed to the same service); else,
+   the PvD ID MUST be different to follow Section 2.4 of [RFC7556].
 
 3.1.  PvD ID Option for Router Advertisements
 
@@ -255,6 +254,7 @@ Internet-Draft            Provisioning Domains             December 2019
    TLS to retrieve the PvD Additional Information JSON object (see
    Section 4), as well as contain any other RA options which would
    otherwise be valid in the RA.
+
 
 
 
@@ -475,9 +475,9 @@ Internet-Draft            Provisioning Domains             December 2019
    [RFC4191] options) with the Explicit PvD identified by the first PvD
    Option present in the received RA, if any, or with the Implicit PvD
    identified by the host interface and the source address of the
-   received RA otherwise.  If the same options are present both within
-   the PvD Option and outside it, but have different values, the values
-   within the PvD Option take precedence.
+   received RA otherwise.  If a RA message header is present both within
+   the PvD Option and outside it, as indicated by the R-flag, the header
+   within the PvD Option takes precedence.
 
    In case multiple PvD Options are found in a given RA, hosts MUST
    ignore all but the first PvD Option.
@@ -602,7 +602,7 @@ Internet-Draft            Provisioning Domains             December 2019
 
    o  The same PVD-ID FQDN
 
-   o  The same H-bit, Delay and Sequence Number values
+   o  The same H-flag, Delay and Sequence Number values
 
    o  The L bit set whenever the host is sharing IPv4 connectivity
       received from the same upstream interface
@@ -618,7 +618,7 @@ Pfister, et al.           Expires June 6, 2020                 [Page 11]
 Internet-Draft            Provisioning Domains             December 2019
 
 
-   The values of the R-bit, Router Advertisement message header and
+   The values of the R-flag, Router Advertisement message header and
    Options field depend on whether the connectivity should be shared
    only with PvD-aware hosts or not (see Section 3.2).  In particular,
    all options received within the upstream PvD Option and included in
