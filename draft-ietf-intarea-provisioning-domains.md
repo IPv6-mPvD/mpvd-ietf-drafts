@@ -570,7 +570,7 @@ are complete) before initiating the HTTP over TLS query. In order to
 address privacy concerns around linkability of the PvD HTTP connection
 with future user-initiated connections, if the host has a temporary address
 per {{!RFC4941}} in this PvD, then it SHOULD use a temporary address
-to fetch the PvD Additional Information and SHOULD deprecate the used
+to fetch the PvD Additional Information and MAY deprecate the used
 temporary address and generate a new temporary address afterward.
 
 If the HTTP status of the answer is greater than or equal to 400
@@ -762,7 +762,7 @@ Option that also contains other options only visible to PvD-aware hosts.
 * RA Header: router lifetime = 6000
 * Prefix Information Option: length = 4, prefix =
 2001:db8:cafe::/64
-* PvD Option header: length = 3 + 5 + 4 , PvD ID FQDN =
+* PvD Option header: length = 3 + 5 + 4, PvD ID FQDN =
 example.org., R-flag = 0 (actual length of the header with padding
 24 bytes = 3 * 8 bytes)
     - Recursive DNS Server: length = 5, addresses = \[2001:db8:cafe::53, 2001:db8:f00d::53\]
@@ -848,7 +848,7 @@ The Sequence Number on the PvD Option is set to 7 in this example.
 * RA Header: router lifetime = 6000
 * Prefix Information Option: length = 4, prefix = 2001:db8:cafe::/64
 * Recursive DNS Server Option: length = 3, addresses= \[2001:db8:cafe::53\]
-* PvD Option header: length = 3 + 5 + 4 , PvD ID FQDN = cafe.example.com.,
+* PvD Option header: length = 3, PvD ID FQDN = cafe.example.com.,
 Sequence Number = 7, R-flag = 0, H-flag = 1 (actual length of the header with padding
 24 bytes = 3 * 8 bytes)
 	
@@ -873,7 +873,7 @@ content-length = 116
 {
   "identifier": "cafe.example.com",
   "expires": "2017-07-23T06:00:00Z",
-  "prefixes": ["2001:db8:cafe::53/48"],
+  "prefixes": ["2001:db8:cafe::/48"],
 }
 ~~~
 
