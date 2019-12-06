@@ -105,7 +105,7 @@ Discovering Explicit PvDs allows two key advancements in managing multiple PvDs:
 such as when a local router can provide connectivity to two different
 Internet Service Providers.
 
-2. The ability to associate additional informations about PvDs to describe
+2. The ability to associate additional information about PvDs to describe
 the properties of the network.
 
 While {{?RFC7556}} defines the concept of Explicit PvDs, it does not define
@@ -117,11 +117,9 @@ Domain Names (FQDN), called PvD IDs. Those identifiers are advertised in
 a new Router Advertisement (RA) {{!RFC4861}} option called
 the PvD ID Router Advertisement option which, when present, associates
 the PvD ID with all the information present in the Router Advertisement
-as well as any configuration object, such as addresses, deriving from
+as well as any configuration object, such as addresses, derived from
 it. The PVD ID Router Advertisement option may also contain a set of
-other RA options. Since such options are only considered by hosts
-implementing this specification, network operators may configure hosts
-that are 'PvD-aware' with PvDs that are ignored by other hosts.
+other RA options. These options are only visible to 'PvD-aware' hosts.
 
 Since PvD IDs are used to identify different ways to access the
 internet, multiple PvDs (with different PvD IDs) can be provisioned on
@@ -181,8 +179,9 @@ PvDs as described in this document. Also named PvD-aware node in {{?RFC7556}}.
 # Provisioning Domain Identification using Router Advertisements {#ra}
 
 Explicit PvDs are identified by a PvD ID. The PvD ID is a Fully
-Qualified Domain Name (FQDN) which MUST belong to the network operator
-in order to avoid naming collisions. The same PvD ID MAY be used in
+Qualified Domain Name (FQDN) which that identifies the network operator.
+Network operators MUST use names that they own or manage to
+avoid naming conflicts. The same PvD ID MAY be used in
 several access networks when they ultimately provide identical services
 (e.g., in all home networks subscribed to the same service); else, the
 PvD ID MUST be different to follow Section 2.4 of {{?RFC7556}}.
@@ -233,15 +232,15 @@ some PvD Additional Information is made available through HTTP
 over TLS, as described in {{data}}.
 
 L-flag:
-: (1 bit) 'Legacy' flag stating whether
-the router is also providing IPv4 information using DHCPv4 (see
-{{dhcpv4}}).
+: (1 bit) 'Legacy' flag stating whether the PvD is associated with
+IPv4 information assigned using DHCPv4 (see {{dhcpv4}}).
 
 R-flag:
 : (1 bit) 'Router Advertisement' flag
 stating whether the PvD Option is followed (right after padding to
 the next 64 bits boundary) by a Router Advertisement message
-header (See section 4.2 of {{!RFC4861}}).
+header (see section 4.2 of {{!RFC4861}}). The usage of the
+inner message header is described in {{host}}.
 
 Reserved:
 : (13 bits) Reserved for later use. It
@@ -360,6 +359,9 @@ Routing Information {{!RFC4191}} options) with the
 Explicit PvD identified by the first PvD Option present in the
 received RA, if any, or with the Implicit PvD identified by the host
 interface and the source address of the received RA otherwise.
+If a RA message header is present both within the PvD Option and
+outside it, as indicated by the R-flag, the header within the PvD Option
+takes precedence.
 
 In case multiple PvD Options are found in a given RA, hosts MUST
 ignore all but the first PvD Option.
@@ -467,14 +469,14 @@ PVD option within the RAs sent downstream with:
 
 - The same PVD-ID FQDN
 
-- The same H-bit, Delay and Sequence Number values
+- The same H-flag, Delay and Sequence Number values
 
 - The L bit set whenever the host is sharing IPv4 connectivity
 received from the same upstream interface
 
 - The bits from the Reserved field set to 0
 
-The values of the R-bit, Router Advertisement message
+The values of the R-flag, Router Advertisement message
 header and Options field depend on whether the connectivity should
 be shared only with PvD-aware hosts or not (see {{router}}). In particular,
 all options received within the upstream PvD Option and included in
@@ -547,7 +549,7 @@ is not defined in this document.
 When the H-flag of the PvD Option is set, hosts MAY attempt to
 retrieve the PvD Additional Information associated with a given PvD by
 performing an HTTP over TLS {{?RFC2818}} GET query to
-https://\<PvD-ID\>/.well-known/pvd {{!RFC8615}}.
+https://\<PvD-ID\>/.well-known/pvd.
 Inversely, hosts MUST NOT do so whenever the H-flag is not set.
 
 HTTP requests and responses for PvD additional information use the
@@ -564,11 +566,12 @@ while using exclusively the set of configuration information attached
 with the PvD, as defined in {{host}}. In some cases, it
 may therefore be necessary to wait for an address to be available for
 use (e.g., once the Duplicate Address Detection or DHCPv6 processes
-are complete) before initiating the HTTP over TLS query. If the host
-has a temporary address per {{!RFC4941}} in this PvD, then
-hosts SHOULD use a temporary address to fetch the PvD Additional
-Information and SHOULD deprecate the used temporary address and
-generate a new temporary address afterward.
+are complete) before initiating the HTTP over TLS query. In order to
+address privacy concerns around linkability of the PvD HTTP connection
+with future user-initiated connections, if the host has a temporary address
+per {{!RFC4941}} in this PvD, then it SHOULD use a temporary address
+to fetch the PvD Additional Information and MAY deprecate the used
+temporary address and generate a new temporary address afterward.
 
 If the HTTP status of the answer is greater than or equal to 400
 the host MUST abandon and consider that there is no additional PvD
@@ -759,7 +762,7 @@ Option that also contains other options only visible to PvD-aware hosts.
 * RA Header: router lifetime = 6000
 * Prefix Information Option: length = 4, prefix =
 2001:db8:cafe::/64
-* PvD Option header: length = 3 + 5 + 4 , PvD ID FQDN =
+* PvD Option header: length = 3 + 5 + 4, PvD ID FQDN =
 example.org., R-flag = 0 (actual length of the header with padding
 24 bytes = 3 * 8 bytes)
     - Recursive DNS Server: length = 5, addresses = \[2001:db8:cafe::53, 2001:db8:f00d::53\]
@@ -837,6 +840,58 @@ Note: the above examples assume that the router has received its PvD IDs from up
 or via some other configuration mechanism. Another document could define ways for the router
 to generate its own PvD IDs to allow the above scenario in the absence of PvD ID provisioning.
 
+## Providing Additional Information to PvD-Aware Hosts
+
+In this example, the router indicates that it provides additional information using the H-flag.
+The Sequence Number on the PvD Option is set to 7 in this example.
+
+* RA Header: router lifetime = 6000
+* Prefix Information Option: length = 4, prefix = 2001:db8:cafe::/64
+* Recursive DNS Server Option: length = 3, addresses= \[2001:db8:cafe::53\]
+* PvD Option header: length = 3, PvD ID FQDN = cafe.example.com.,
+Sequence Number = 7, R-flag = 0, H-flag = 1 (actual length of the header with padding
+24 bytes = 3 * 8 bytes)
+	
+A PvD-aware host will fetch https://cafe.example.com/.well-known/pvd to get the additonal
+information. The following example shows a GET request that the host sends:
+
+~~~
+:method = GET
+:scheme = https
+:authority = cafe.example.com
+:path = /.well-known/pvd
+accept = application/pvd+json
+~~~
+
+The HTTP server will respond with the JSON additional information:
+
+~~~
+:status = 200
+content-type = application/pvd+json
+content-length = 116
+
+{
+  "identifier": "cafe.example.com",
+  "expires": "2017-07-23T06:00:00Z",
+  "prefixes": ["2001:db8:cafe::/48"],
+}
+~~~
+
+At this point, the host has the additional information, and knows the expiry time.
+When either the expiry time passes, or a new Sequence Number is provided in an RA,
+the host will re-fetch the additional information.
+
+For example, if the router sends a new RA with the Sequence Number set to 8,
+the host will re-fetch the additional information:
+
+* PvD Option header: length = 3 + 5 + 4 , PvD ID FQDN = cafe.example.com.,
+Sequence Number = 8, R-flag = 0, H-flag = 1 (actual length of the header with padding
+24 bytes = 3 * 8 bytes)
+
+However, if the router sends a new RA, but the Sequence Number has not changed,
+the host would not re-fetch the additional information (until and unless the expiry time
+of the additional information has passed).
+
 # Security Considerations {#security}
 
 Although some solutions such as IPsec or SeND {{?RFC3971}}
@@ -899,7 +954,7 @@ Neighbor Discovery Option Formats registry).
 
 ## New entry in the Well-Known URIs Registry
 
-IANA is asked to add a new entry in the well-known-uris registry with the following information:
+IANA is asked to add a new entry in the Well-Known URIs registry {{!RFC8615}} with the following information:
 
 URI suffix: ‘pvd’
 
