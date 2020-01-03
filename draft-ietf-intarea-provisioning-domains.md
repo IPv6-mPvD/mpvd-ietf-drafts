@@ -359,7 +359,7 @@ Routing Information {{!RFC4191}} options) with the
 Explicit PvD identified by the first PvD Option present in the
 received RA, if any, or with the Implicit PvD identified by the host
 interface and the source address of the received RA otherwise.
-If a RA message header is present both within the PvD Option and
+If an RA message header is present both within the PvD Option and
 outside it, as indicated by the R-flag, the header within the PvD Option
 takes precedence.
 
