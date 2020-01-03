@@ -188,7 +188,7 @@ PvD ID MUST be different to follow Section 2.4 of {{?RFC7556}}.
 
 ## PvD ID Option for Router Advertisements
 This document introduces a Router Advertisement (RA) option called
-PvD Option. It is used to convey the FQDN identifying a given PvD (see
+the PvD Option. It is used to convey the FQDN identifying a given PvD (see
 {{format}}), bind the PvD ID with configuration
 information received over DHCPv4 (see {{dhcpv4}}), enable
 the use of HTTP over TLS to retrieve the PvD Additional Information
@@ -257,7 +257,7 @@ PvD Additional Information, as described in {{data}}.
 
 PvD ID FQDN:
 : The FQDN used as PvD ID encoded in
-DNS format, as described in Section 3.1 of {{!RFC1035}}. Domain names
+DNS format, as described in Section 3.1 of {{!RFC1035}}. Domain name
 compression described in Section 4.1.4 of {{!RFC1035}} MUST NOT be used.
 
 Padding:
@@ -280,7 +280,7 @@ otherwise be valid as part of the Router Advertisement main body,
 but are instead included in the PvD Option so as to be ignored
 by hosts that are not PvD-aware.
 
-Here is an example of a PvD Option with "example.org" as the
+{{pvd_example}} shows an example of a PvD Option with "example.org" as the
 PvD ID FQDN and including both an RDNSS option and a prefix information option.
 It has a Sequence Number of 123, and indicates the presence of additional
 information that is expected to be fetched with a delay factor of 5.
@@ -301,7 +301,7 @@ information that is expected to be fetched with a delay factor of 5.
 +---------------------------------------------------------------+
 |   0 (padding) |  0 (padding)  |   0 (padding) |   0 (padding) |
 +---------------+---------------+---------------+---------------+
-|  RDNSS option (RFC 6106) length: 5                          ...
+|  RDNSS option (RFC 8106) length: 5                          ...
 ...                                                           ...
 ...                                                             |
 +---------------------------------------------------------------+
@@ -320,10 +320,11 @@ NOT contain further PvD Options.
 
 The PvD Option MAY contain zero, one, or more RA options which
 would otherwise be valid as part of the same RA. Such options are
-processed by PvD-aware hosts, while ignored by other hosts per section 4.2 of {{?RFC4861}}.
+processed by PvD-aware hosts, while ignored by other hosts as per
+section 4.2 of {{?RFC4861}}.
 
 In order to provide multiple different PvDs, a router MUST send
-multiple RAs. If more than one different Implicit PvDs are advertised, the RAs
+multiple RAs. If more than one different Implicit PvD is advertised, the RAs
 MUST be sent from different link-local source addresses. Explicit
 PvDs MAY share link-local source addresses with an Implicit PvD
 and any number of other Explicit PvDs.
@@ -332,11 +333,13 @@ In other words, different Explicit PvDs MAY be advertised with RAs using
 the same link-local source address; but different Implicit PvDs, advertised
 by different RAs, MUST use different link-local addresses because
 these Implicit PvDs are identified by the source addresses of the
-RAs.
+RAs. If a link-local address on the router is changed, then any new RA
+sent from the changed link-local address without an Explicit PvD option
+will be interpreted as a new Implicit PvD by PvD-aware hosts.
 
-As specified in {{!RFC4861}}, when the set of options
+As specified in {{!RFC4861}} and {{!RFC6980}}, when the set of options
 causes the size of an advertisement to exceed the link MTU, multiple
-router advertisements can be sent, each containing a subset of the
+router advertisements MUST be sent, each containing a subset of the
 options. In such cases, the PvD Option header (i.e., all fields except
 the 'Options' field) MUST be repeated in all the transmitted RAs. The
 options within the 'Options' field, MAY be transmitted only once,
@@ -346,8 +349,8 @@ included in one of the transmitted PvD Options.
 
 As the PvD Option has a new option code, non-PvD-aware hosts will
 simply ignore the PvD Option and all the options it contains (see section 4.2 of {{?RFC4861}}. This
-ensure the backward compatibility required in Section 3.3 of {{?RFC7556}}.
-This behavior allows for a mixed-mode network with
+ensures the backward compatibility required in Section 3.3 of {{?RFC7556}}.
+This behavior allows for a mixed-mode network where
 a mix of PvD-aware and non-PvD-aware hosts coexist.
 
 ## PvD-aware Host Behavior {#host}
@@ -451,7 +454,7 @@ flag is a misconfiguration, and hosts SHOULD NOT associate the DHCPv4
 information with any Explicit PvD in this case.
 
 If no single Explicit PvD claims association with DHCPv4, the configuration
-elements coming from DHCPv4 MUST be associated with the
+elements coming from DHCPv4 MUST be associated with
 all Implicit PvDs identified by the interface on which the DHCPv4
 transaction happened. This maintains existing host behavior.
 
@@ -499,8 +502,9 @@ for DNS resolution and connections, which allows them to effectively
 use multiple Explicit PvDs. In order to support non-PvD-aware
 applications, however, PvD-aware hosts SHOULD ensure that
 non-PvD-aware name resolution APIs like "getaddrinfo" only
-use resolvers from a single PvD for each query. More discussion is
-provided in Section 5.2.1 of {{?RFC7556}}.
+use resolvers from a single PvD for each query.
+Handling DNS across PvDs is discussed in Section 5.2.1 of {{?RFC7556}},
+and PvD APIs are discussed in Section 6 of {{?RFC7556}}.
 
 Maintaining the correct usage of DNS within PvDs avoids various
 practical errors, such as:
@@ -612,7 +616,7 @@ fetching the updated object is calculated as a uniformly random time
 in the interval \[(B-A)/2,B\].
 
 In the example {{pvd_example}}, the delay field value
-is 5, this means that host calculates its delay by choosing a random
+is 5, this means that the host calculates its delay by choosing a random
 number between 0 and 2**(5 * 2) milliseconds, i.e., between 0 and 1024
 milliseconds.
 
@@ -749,7 +753,7 @@ SHOULD NOT have a DNS A record.
 
 # Operational Considerations
 
-This section describes some example use cases of PvD. For the sake of
+This section describes some example use cases of PvDs. For the sake of
 simplicity, the RA messages will not be described in the usual ASCII art
 but rather in an indented list.
 
