@@ -179,7 +179,7 @@ PvDs as described in this document. Also named PvD-aware node in {{?RFC7556}}.
 # Provisioning Domain Identification using Router Advertisements {#ra}
 
 Explicit PvDs are identified by a PvD ID. The PvD ID is a Fully
-Qualified Domain Name (FQDN) which that identifies the network operator.
+Qualified Domain Name (FQDN) that identifies the network operator.
 Network operators MUST use names that they own or manage to
 avoid naming conflicts. The same PvD ID MAY be used in
 several access networks when they ultimately provide identical services
@@ -271,8 +271,9 @@ set, a full Router Advertisement message header as specified in
 the value for "Router Advertisement", and set the 'Code' to 0.
 Receivers MUST ignore both of these fields. The 'Checksum' MUST be
 set to 0 by the sender; non-zero checksums MUST be ignored by the
-receiver. All other fields are to be set and parsed as specified
-in {{!RFC4861}} or any updating documents.
+receiver without causing the processing of the message to fail.
+All other fields are to be set and parsed as specified in {{!RFC4861}}
+or any updating documents.
 
 Options:
 : Zero or more RA options that would
@@ -281,9 +282,10 @@ but are instead included in the PvD Option so as to be ignored
 by hosts that are not PvD-aware.
 
 Here is an example of a PvD Option with "example.org" as the
-PvD ID FQDN and including both an RDNSS option and a prefix information option.
-It has a Sequence Number of 123, and indicates the presence of additional
-information that is expected to be fetched with a delay factor of 5.
+PvD ID FQDN and including both a Recursive DNS Server (RDNSS) option
+and a prefix information option. It has a Sequence Number of 123, and
+indicates the presence of additional information that is expected to be
+fetched with a delay factor of 5.
 
 ~~~
  0                   1                   2                   3
@@ -778,6 +780,8 @@ It is expected that for some years, networks will have a mixed
 environment of PvD-aware hosts and non-PvD-aware hosts. If there is a
 need to give specific information to PvD-aware hosts only, then it is
 RECOMMENDED to send two RA messages, one for each class of hosts.
+This approach allows for two distinct sets of configuration information
+to be sent in a way that will not disrupt non-PvD-aware hosts.
 If two RA messages are sent for this reason, they MUST be sent from two
 different link-local source addresses ({{router}}). For example, here is the
 RA sent for non-PvD-aware hosts:
