@@ -1247,7 +1247,7 @@ Internet-Draft            Provisioning Domains              January 2020
    The DNS queries associated with the PvD Additional Information MUST
    use the DNS servers indicated by the associated PvD, as described in
    Section 4.1.  This ensures the name of the PvD Additional Information
-   server is not unintentionally sent on another network, thus
+   server is not unintentionally sent on another network, thus leaking
    identifying information about the networks with which the client is
    associated.
 

@@ -943,8 +943,8 @@ detect the presence of a captive portal.
 The DNS queries associated with the PvD Additional Information MUST
 use the DNS servers indicated by the associated PvD, as described in
 {{retr}}. This ensures the name of the PvD Additional Information server
-is not unintentionally sent on another network, thus identifying information
-about the networks with which the client is associated.
+is not unintentionally sent on another network, thus leaking identifying
+information about the networks with which the client is associated.
 
 There may be some cases where hosts, for privacy reasons, should
 refrain from accessing servers that are located outside a certain
