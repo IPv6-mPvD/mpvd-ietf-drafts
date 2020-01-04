@@ -781,7 +781,10 @@ environment of PvD-aware hosts and non-PvD-aware hosts. If there is a
 need to give specific information to PvD-aware hosts only, then it is
 RECOMMENDED to send two RA messages, one for each class of hosts.
 This approach allows for two distinct sets of configuration information
-to be sent in a way that will not disrupt non-PvD-aware hosts.
+to be sent in a way that will not disrupt non-PvD-aware hosts. It also
+lowers the risk that a single RA message will approach its MTU limit due
+to duplicated information.
+
 If two RA messages are sent for this reason, they MUST be sent from two
 different link-local source addresses ({{router}}). For example, here is the
 RA sent for non-PvD-aware hosts:
