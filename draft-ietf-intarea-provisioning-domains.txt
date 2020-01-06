@@ -104,7 +104,7 @@ Table of Contents
    7.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .  22
    8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  23
      8.1.  New entry in the Well-Known URIs Registry . . . . . . . .  23
-     8.2.  Additional Information PvD Keys Registry  . . . . . . . .  23
+     8.2.  Additional Information PvD Keys Registry  . . . . . . . .  24
      8.3.  PvD Option Flags Registry . . . . . . . . . . . . . . . .  24
 
 
@@ -119,7 +119,7 @@ Internet-Draft            Provisioning Domains              January 2020
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  25
      10.1.  Normative References . . . . . . . . . . . . . . . . . .  25
      10.2.  Informative References . . . . . . . . . . . . . . . . .  27
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  28
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  29
 
 1.  Introduction
 
@@ -630,9 +630,9 @@ Internet-Draft            Provisioning Domains              January 2020
    options passed within an Explicit PvD, via RA options associated with
    an Implicit PvD, via DHCPv6 or DHCPv4, or from some other
    provisioning mechanism that creates an Implicit PvD (such as a VPN).
-   In all of these cases, the DNS server addresses SHOULD be associated
-   with the corresponding PvD.  Specifically, queries sent to a
-   configured recursive DNS server SHOULD be sent from a local IP
+   In all of these cases, the recursive DNS server addresses SHOULD be
+   associated with the corresponding PvD.  Specifically, queries sent to
+   a configured recursive DNS server SHOULD be sent from a local IP
    address that was provisioned by the PvD via RA or DHCP.  Answers
    received from the DNS server SHOULD only be used on the same PvD.
 
@@ -649,7 +649,9 @@ Internet-Draft            Provisioning Domains              January 2020
 
    o  A PvD associated with a VPN or otherwise private network may
       provide DNS answers that contain addresses inaccessible over
-      another PvD.
+      another PvD.  This includes the DNS queries to retrieve PvD
+      additional information, which could otherwise send identifying
+      information to the recursive DNS system (see Section 4.1).
 
    o  A PvD that uses a NAT64 [RFC6146] and DNS64 [RFC6147] will
       synthesize IPv6 addresses in DNS answers that are not globally
@@ -664,8 +666,6 @@ Internet-Draft            Provisioning Domains              January 2020
    Additional Information, and is encoded as a JSON object [RFC8259].
    This JSON object is restricted to the restricted profile of I-JSON,
    as defined in [RFC7493].
-
-
 
 
 
@@ -1239,12 +1239,19 @@ Internet-Draft            Provisioning Domains              January 2020
    such as User Agent header or HTTP cookie, while performing the HTTP
    over TLS query.
 
-   From a privacy perspective, retrieving the PvD Additional Information
-   is not different from establishing a first connection to a remote
-   server, or even performing a single DNS lookup.  For example, most
-   operating systems already perform early queries to well known web
-   sites, such as http://captive.example.com/hotspot-detect.html, in
-   order to detect the presence of a captive portal.
+   From a user privacy perspective, retrieving the PvD Additional
+   Information is not different from establishing a first connection to
+   a remote server, or even performing a single DNS lookup.  For
+   example, most operating systems already perform early queries to well
+   known web sites, such as http://captive.example.com/hotspot-
+   detect.html, in order to detect the presence of a captive portal.
+
+   The DNS queries associated with the PvD Additional Information MUST
+   use the DNS servers indicated by the associated PvD, as described in
+   Section 4.1.  This ensures the name of the PvD Additional Information
+   server is not unintentionally sent on another network, thus leaking
+   identifying information about the networks with which the client is
+   associated.
 
    There may be some cases where hosts, for privacy reasons, should
    refrain from accessing servers that are located outside a certain
@@ -1253,6 +1260,14 @@ Internet-Draft            Provisioning Domains              January 2020
    allowed to communicate with.  In such scenarios, the host SHOULD
    check that the provided PvD ID, as well as the IP address that it
    resolves into, are part of the allowed whitelist.
+
+   Network operators SHOULD restrict access to PvD Additional
+   Information to only expose it to hosts that are connected to the
+   local network, especially if the Additional Information would provide
+   information about local network configuration to attackers.  This can
+   be implemented by whitelisting access from the addresses and prefixes
+   that the router provides for the PvD, which will match the prefixes
+   contained in the PvD Additional Information.
 
 8.  IANA Considerations
 
@@ -1266,6 +1281,14 @@ Internet-Draft            Provisioning Domains              January 2020
    [RFC8615] with the following information:
 
    URI suffix: 'pvd'
+
+
+
+
+Pfister, et al.           Expires July 9, 2020                 [Page 23]
+
+Internet-Draft            Provisioning Domains              January 2020
+
 
    Change controller: IETF
 
@@ -1281,14 +1304,6 @@ Internet-Draft            Provisioning Domains              January 2020
    "Additional Information PvD Keys", which will reserve JSON keys for
    use in PvD additional information.  The initial contents of this
    registry are given in Section 4.3.
-
-
-
-
-Pfister, et al.           Expires July 9, 2020                 [Page 23]
-
-Internet-Draft            Provisioning Domains              January 2020
-
 
    New assignments for Additional Information PvD Keys Registry will be
    administered by IANA through Expert Review [RFC8126].
@@ -1324,6 +1339,13 @@ Internet-Draft            Provisioning Domains              January 2020
 
    Published specification: This document
 
+
+
+Pfister, et al.           Expires July 9, 2020                 [Page 24]
+
+Internet-Draft            Provisioning Domains              January 2020
+
+
    Applications that use this media type: This media type is intended to
    be used by network advertising additional Provisioning Domain
    information, and clients looking up such information.
@@ -1338,13 +1360,6 @@ Internet-Draft            Provisioning Domains              January 2020
    Restrictions on usage: None
 
    Author: IETF
-
-
-
-Pfister, et al.           Expires July 9, 2020                 [Page 24]
-
-Internet-Draft            Provisioning Domains              January 2020
-
 
    Change controller: IETF
 
@@ -1378,6 +1393,15 @@ Internet-Draft            Provisioning Domains              January 2020
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
+
+
+
+
+Pfister, et al.           Expires July 9, 2020                 [Page 25]
+
+Internet-Draft            Provisioning Domains              January 2020
+
+
    [RFC2131]  Droms, R., "Dynamic Host Configuration Protocol",
               RFC 2131, DOI 10.17487/RFC2131, March 1997,
               <https://www.rfc-editor.org/info/rfc2131>.
@@ -1394,13 +1418,6 @@ Internet-Draft            Provisioning Domains              January 2020
    [RFC4191]  Draves, R. and D. Thaler, "Default Router Preferences and
               More-Specific Routes", RFC 4191, DOI 10.17487/RFC4191,
               November 2005, <https://www.rfc-editor.org/info/rfc4191>.
-
-
-
-Pfister, et al.           Expires July 9, 2020                 [Page 25]
-
-Internet-Draft            Provisioning Domains              January 2020
-
 
    [RFC4343]  Eastlake 3rd, D., "Domain Name System (DNS) Case
               Insensitivity Clarification", RFC 4343,
@@ -1431,6 +1448,16 @@ Internet-Draft            Provisioning Domains              January 2020
               DOI 10.17487/RFC8028, November 2016,
               <https://www.rfc-editor.org/info/rfc8028>.
 
+
+
+
+
+
+Pfister, et al.           Expires July 9, 2020                 [Page 26]
+
+Internet-Draft            Provisioning Domains              January 2020
+
+
    [RFC8106]  Jeong, J., Park, S., Beloeil, L., and S. Madanapalli,
               "IPv6 Router Advertisement Options for DNS Configuration",
               RFC 8106, DOI 10.17487/RFC8106, March 2017,
@@ -1449,14 +1476,6 @@ Internet-Draft            Provisioning Domains              January 2020
               Interchange Format", STD 90, RFC 8259,
               DOI 10.17487/RFC8259, December 2017,
               <https://www.rfc-editor.org/info/rfc8259>.
-
-
-
-
-Pfister, et al.           Expires July 9, 2020                 [Page 26]
-
-Internet-Draft            Provisioning Domains              January 2020
-
 
    [RFC8615]  Nottingham, M., "Well-Known Uniform Resource Identifiers
               (URIs)", RFC 8615, DOI 10.17487/RFC8615, May 2019,
@@ -1487,6 +1506,14 @@ Internet-Draft            Provisioning Domains              January 2020
               DOI 10.17487/RFC3971, March 2005,
               <https://www.rfc-editor.org/info/rfc3971>.
 
+
+
+
+Pfister, et al.           Expires July 9, 2020                 [Page 27]
+
+Internet-Draft            Provisioning Domains              January 2020
+
+
    [RFC4389]  Thaler, D., Talwar, M., and C. Patel, "Neighbor Discovery
               Proxies (ND Proxy)", RFC 4389, DOI 10.17487/RFC4389, April
               2006, <https://www.rfc-editor.org/info/rfc4389>.
@@ -1506,13 +1533,6 @@ Internet-Draft            Provisioning Domains              January 2020
               Translation from IPv6 Clients to IPv4 Servers", RFC 6147,
               DOI 10.17487/RFC6147, April 2011,
               <https://www.rfc-editor.org/info/rfc6147>.
-
-
-
-Pfister, et al.           Expires July 9, 2020                 [Page 27]
-
-Internet-Draft            Provisioning Domains              January 2020
-
 
    [RFC6296]  Wasserman, M. and F. Baker, "IPv6-to-IPv6 Network Prefix
               Translation", RFC 6296, DOI 10.17487/RFC6296, June 2011,
@@ -1540,6 +1560,16 @@ Internet-Draft            Provisioning Domains              January 2020
 
    [URN]      "URN Namespaces", n.d..
 
+
+
+
+
+
+Pfister, et al.           Expires July 9, 2020                 [Page 28]
+
+Internet-Draft            Provisioning Domains              January 2020
+
+
 Authors' Addresses
 
    Pierre Pfister
@@ -1558,16 +1588,6 @@ Authors' Addresses
    Belgium
 
    Email: evyncke@cisco.com
-
-
-
-
-
-
-
-Pfister, et al.           Expires July 9, 2020                 [Page 28]
-
-Internet-Draft            Provisioning Domains              January 2020
 
 
    Tommy Pauly
@@ -1595,26 +1615,6 @@ Internet-Draft            Provisioning Domains              January 2020
    France
 
    Email: wenshao@cisco.com
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

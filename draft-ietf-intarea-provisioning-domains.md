@@ -493,7 +493,7 @@ PvD-aware hosts can be provisioned with recursive DNS servers via
 RA options passed within an Explicit PvD, via RA options associated
 with an Implicit PvD, via DHCPv6 or DHCPv4, or from some other
 provisioning mechanism that creates an Implicit PvD (such as a VPN).
-In all of these cases, the DNS server addresses SHOULD be
+In all of these cases, the recursive DNS server addresses SHOULD be
 associated with the corresponding PvD. Specifically, queries sent
 to a configured recursive DNS server SHOULD be sent from a local IP
 address that was provisioned by the PvD via RA or DHCP. Answers
@@ -512,7 +512,9 @@ practical errors, such as:
 
 - A PvD associated with a VPN or otherwise private network may
 provide DNS answers that contain addresses inaccessible over
-another PvD.
+another PvD. This includes the DNS queries to retrieve PvD
+additional information, which could otherwise send identifying
+information to the recursive DNS system (see {{retr}}).
 
 - A PvD that uses a NAT64 {{?RFC6146}} and DNS64
 {{?RFC6147}} will synthesize IPv6 addresses in DNS
@@ -941,12 +943,18 @@ leaking identity information, SHOULD make use of an IPv6 Privacy Address
 and SHOULD NOT include any privacy sensitive data, such as User Agent
 header or HTTP cookie, while performing the HTTP over TLS query.
 
-From a privacy perspective, retrieving the PvD Additional Information
+From a user privacy perspective, retrieving the PvD Additional Information
 is not different from establishing a first connection to a remote
 server, or even performing a single DNS lookup. For example, most
 operating systems already perform early queries to well known web sites,
 such as http://captive.example.com/hotspot-detect.html, in order to
 detect the presence of a captive portal.
+
+The DNS queries associated with the PvD Additional Information MUST
+use the DNS servers indicated by the associated PvD, as described in
+{{retr}}. This ensures the name of the PvD Additional Information server
+is not unintentionally sent on another network, thus leaking identifying
+information about the networks with which the client is associated.
 
 There may be some cases where hosts, for privacy reasons, should
 refrain from accessing servers that are located outside a certain
@@ -955,6 +963,14 @@ of 'trusted' FQDNs and/or IP prefixes that the host is allowed to
 communicate with. In such scenarios, the host SHOULD check that the
 provided PvD ID, as well as the IP address that it resolves into, are
 part of the allowed whitelist.
+
+Network operators SHOULD restrict access to PvD Additional
+Information to only expose it to hosts that are connected to the local
+network, especially if the Additional Information would provide information
+about local network configuration to attackers. This can be implemented by
+whitelisting access from the addresses and prefixes that the router provides
+for the PvD, which will match the prefixes contained in the PvD Additional
+Information.
 
 # IANA Considerations {#iana}
 
