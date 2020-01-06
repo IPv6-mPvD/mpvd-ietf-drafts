@@ -119,7 +119,10 @@ the PvD ID Router Advertisement option which, when present, associates
 the PvD ID with all the information present in the Router Advertisement
 as well as any configuration object, such as addresses, derived from
 it. The PVD ID Router Advertisement option may also contain a set of
-other RA options. These options are only visible to 'PvD-aware' hosts.
+other RA options, along with an optional inner Router Advertisement
+message header. These options and optional inner header are only visible
+to 'PvD-aware' hosts, allowing such hosts to have a specialized view of the
+network configuration.
 
 Since PvD IDs are used to identify different ways to access the
 internet, multiple PvDs (with different PvD IDs) can be provisioned on
@@ -179,7 +182,7 @@ PvDs as described in this document. Also named PvD-aware node in {{?RFC7556}}.
 # Provisioning Domain Identification using Router Advertisements {#ra}
 
 Explicit PvDs are identified by a PvD ID. The PvD ID is a Fully
-Qualified Domain Name (FQDN) which that identifies the network operator.
+Qualified Domain Name (FQDN) that identifies the network operator.
 Network operators MUST use names that they own or manage to
 avoid naming conflicts. The same PvD ID MAY be used in
 several access networks when they ultimately provide identical services
@@ -271,8 +274,9 @@ set, a full Router Advertisement message header as specified in
 the value for "Router Advertisement", and set the 'Code' to 0.
 Receivers MUST ignore both of these fields. The 'Checksum' MUST be
 set to 0 by the sender; non-zero checksums MUST be ignored by the
-receiver. All other fields are to be set and parsed as specified
-in {{!RFC4861}} or any updating documents.
+receiver without causing the processing of the message to fail.
+All other fields are to be set and parsed as specified in {{!RFC4861}}
+or any updating documents.
 
 Options:
 : Zero or more RA options that would
@@ -281,9 +285,10 @@ but are instead included in the PvD Option so as to be ignored
 by hosts that are not PvD-aware.
 
 Here is an example of a PvD Option with "example.org" as the
-PvD ID FQDN and including both an RDNSS option and a prefix information option.
-It has a Sequence Number of 123, and indicates the presence of additional
-information that is expected to be fetched with a delay factor of 5.
+PvD ID FQDN and including both a Recursive DNS Server (RDNSS) option
+and a prefix information option. It has a Sequence Number of 123, and
+indicates the presence of additional information that is expected to be
+fetched with a delay factor of 5.
 
 ~~~
  0                   1                   2                   3
@@ -391,7 +396,7 @@ For example, a host MAY associate a given process with a specific
 PvD, or a specific set of PvDs, while associating another process with
 another PvD. A PvD-aware application might also be able to select, on
 a per-connection basis, which PvDs should be used. In particular,
-constrained devices such as small battery operated devices (e.g. IoT),
+constrained devices such as small battery operated devices (e.g., IoT),
 or devices with limited CPU or memory resources may purposefully use a
 single PvD while ignoring some received RAs containing different PvD
 IDs.
@@ -458,9 +463,9 @@ transaction happened. This maintains existing host behavior.
 ### Connection Sharing by the Host
 
 The situation when a host shares connectivity from an upstream
-interface (e.g. cellular) to a downstream interface (e.g. Wi-Fi) is
+interface (e.g., cellular) to a downstream interface (e.g., Wi-Fi) is
 known as 'tethering'. Techniques such as ND-proxy {{?RFC4389}},
-64share {{?RFC7278}} or prefix delegation (e.g. using DHCPv6-PD
+64share {{?RFC7278}} or prefix delegation (e.g., using DHCPv6-PD
 {{?RFC8415}}) may be used for that purpose.
 
 Whenever the RAs received from the upstream interface contain a
@@ -725,7 +730,7 @@ document can be used:
 
 When a host retrieves the PvD Additional Information, it MUST
 verify that the TLS server certificate is valid for the performed
-request (e.g., that the Subject Name is equal to the PvD ID expressed
+request (e.g., that the Subject Alternative Name is equal to the PvD ID expressed
 as an FQDN). This authentication creates a secure binding between the
 information provided by the trusted Router Advertisement, and the
 HTTPS server. However, this does not mean the Advertising Router and
@@ -780,6 +785,11 @@ It is expected that for some years, networks will have a mixed
 environment of PvD-aware hosts and non-PvD-aware hosts. If there is a
 need to give specific information to PvD-aware hosts only, then it is
 RECOMMENDED to send two RA messages, one for each class of hosts.
+This approach allows for two distinct sets of configuration information
+to be sent in a way that will not disrupt non-PvD-aware hosts. It also
+lowers the risk that a single RA message will approach its MTU limit due
+to duplicated information.
+
 If two RA messages are sent for this reason, they MUST be sent from two
 different link-local source addresses ({{router}}). For example, here is the
 RA sent for non-PvD-aware hosts:
@@ -899,7 +909,7 @@ of the additional information has passed).
 Although some solutions such as IPsec or SeND {{?RFC3971}}
 can be used in order to secure the IPv6 Neighbor
 Discovery Protocol, in practice actual deployments largely rely on link
-layer or physical layer security mechanisms (e.g. 802.1x {{IEEE8021X}})
+layer or physical layer security mechanisms (e.g., 802.1x {{IEEE8021X}})
 in conjunction with RA Guard {{?RFC6105}}.
 
 This specification does not improve the Neighbor Discovery Protocol
@@ -995,7 +1005,7 @@ be administered by IANA through Expert Review {{!RFC8126}}.
 
 IANA is also asked to create and maintain a new registry entitled
 "PvD Option Flags" reserving bit positions from 0 to 15 to be used in
-the PvD Option bitmask. Bit position 0, 1 and 2 are reserved by this
+the PvD Option bitmask. Bit position 0, 1 and 2 are assigned by this
 document (as specified in {{format}}). Future assignments
 require Standards Action {{!RFC8126}}, via a
 Standards Track RFC document.
