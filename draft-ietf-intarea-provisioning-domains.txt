@@ -116,8 +116,8 @@ Internet-Draft            Provisioning Domains              January 2020
 
      8.4.  PvD JSON Media Type Registration  . . . . . . . . . . . .  24
    9.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  25
-   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  25
-     10.1.  Normative References . . . . . . . . . . . . . . . . . .  25
+   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  26
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .  26
      10.2.  Informative References . . . . . . . . . . . . . . . . .  27
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  29
 
@@ -1303,10 +1303,19 @@ Internet-Draft            Provisioning Domains              January 2020
    IANA is asked to create and maintain a new registry called
    "Additional Information PvD Keys", which will reserve JSON keys for
    use in PvD additional information.  The initial contents of this
-   registry are given in Section 4.3.
+   registry are given in Section 4.3, including both the table of
+   mandatory keys and the table of optional keys.
+
+   The status of a key as mandatory or optional is intentionally not
+   denoted in the table to allow for flexibility in future use cases.
+   Any new assignments of keys will be considered as optional for the
+   purpose of the mechanism described in this document.
 
    New assignments for Additional Information PvD Keys Registry will be
    administered by IANA through Expert Review [RFC8126].
+
+   IANA is asked to place this registry in a new page, entitled
+   "Provisioning Domains (PvDs)".
 
 8.3.  PvD Option Flags Registry
 
@@ -1316,6 +1325,11 @@ Internet-Draft            Provisioning Domains              January 2020
    document (as specified in Figure 1).  Future assignments require
    Standards Action [RFC8126], via a Standards Track RFC document.
 
+   Since these flags apply to an IPv6 Router Advertisement Option, IANA
+   is asked to place this registry under the existing "Internet Control
+   Message Protocol version 6 (ICMPv6) Parameters" page, as well as
+   providing a link on the new "Provisioning Domains (PvDs)" page.
+
 8.4.  PvD JSON Media Type Registration
 
    This document registers the media type for PvD JSON text,
@@ -1324,6 +1338,13 @@ Internet-Draft            Provisioning Domains              January 2020
    Type Name: application
 
    Subtype Name: pvd+json
+
+
+
+Pfister, et al.           Expires July 9, 2020                 [Page 24]
+
+Internet-Draft            Provisioning Domains              January 2020
+
 
    Required parameters: None
 
@@ -1338,13 +1359,6 @@ Internet-Draft            Provisioning Domains              January 2020
    conforming messages and the interpretation thereof.
 
    Published specification: This document
-
-
-
-Pfister, et al.           Expires July 9, 2020                 [Page 24]
-
-Internet-Draft            Provisioning Domains              January 2020
-
 
    Applications that use this media type: This media type is intended to
    be used by network advertising additional Provisioning Domain
@@ -1380,6 +1394,14 @@ Internet-Draft            Provisioning Domains              January 2020
    implementation efforts, Tom Jones for his integration effort into the
    NEAT project and Rigil Salim for his implementation work.
 
+
+
+
+Pfister, et al.           Expires July 9, 2020                 [Page 25]
+
+Internet-Draft            Provisioning Domains              January 2020
+
+
 10.  References
 
 10.1.  Normative References
@@ -1392,15 +1414,6 @@ Internet-Draft            Provisioning Domains              January 2020
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
-
-
-
-
-
-Pfister, et al.           Expires July 9, 2020                 [Page 25]
-
-Internet-Draft            Provisioning Domains              January 2020
-
 
    [RFC2131]  Droms, R., "Dynamic Host Configuration Protocol",
               RFC 2131, DOI 10.17487/RFC2131, March 1997,
@@ -1434,6 +1447,17 @@ Internet-Draft            Provisioning Domains              January 2020
               IPv6", RFC 4941, DOI 10.17487/RFC4941, September 2007,
               <https://www.rfc-editor.org/info/rfc4941>.
 
+
+
+
+
+
+
+Pfister, et al.           Expires July 9, 2020                 [Page 26]
+
+Internet-Draft            Provisioning Domains              January 2020
+
+
    [RFC6724]  Thaler, D., Ed., Draves, R., Matsumoto, A., and T. Chown,
               "Default Address Selection for Internet Protocol Version 6
               (IPv6)", RFC 6724, DOI 10.17487/RFC6724, September 2012,
@@ -1447,16 +1471,6 @@ Internet-Draft            Provisioning Domains              January 2020
    [RFC7493]  Bray, T., Ed., "The I-JSON Message Format", RFC 7493,
               DOI 10.17487/RFC7493, March 2015,
               <https://www.rfc-editor.org/info/rfc7493>.
-
-
-
-
-
-
-Pfister, et al.           Expires July 9, 2020                 [Page 26]
-
-Internet-Draft            Provisioning Domains              January 2020
-
 
    [RFC8028]  Baker, F. and B. Carpenter, "First-Hop Router Selection by
               Hosts in a Multi-Prefix Network", RFC 8028,
@@ -1493,6 +1507,13 @@ Internet-Draft            Provisioning Domains              January 2020
               Requirements", draft-kline-mif-mpvd-api-reqs-00 (work in
               progress), November 2015.
 
+
+
+Pfister, et al.           Expires July 9, 2020                 [Page 27]
+
+Internet-Draft            Provisioning Domains              January 2020
+
+
    [I-D.stenberg-mif-mpvd-dns]
               Stenberg, M. and S. Barth, "Multiple Provisioning Domains
               using Domain Name System", draft-stenberg-mif-mpvd-dns-00
@@ -1505,14 +1526,6 @@ Internet-Draft            Provisioning Domains              January 2020
    [RFC2818]  Rescorla, E., "HTTP Over TLS", RFC 2818,
               DOI 10.17487/RFC2818, May 2000,
               <https://www.rfc-editor.org/info/rfc2818>.
-
-
-
-
-Pfister, et al.           Expires July 9, 2020                 [Page 27]
-
-Internet-Draft            Provisioning Domains              January 2020
-
 
    [RFC3971]  Arkko, J., Ed., Kempf, J., Zill, B., and P. Nikander,
               "SEcure Neighbor Discovery (SEND)", RFC 3971,
@@ -1547,6 +1560,16 @@ Internet-Draft            Provisioning Domains              January 2020
               Representation (CBOR)", RFC 7049, DOI 10.17487/RFC7049,
               October 2013, <https://www.rfc-editor.org/info/rfc7049>.
 
+
+
+
+
+
+Pfister, et al.           Expires July 9, 2020                 [Page 28]
+
+Internet-Draft            Provisioning Domains              January 2020
+
+
    [RFC7278]  Byrne, C., Drown, D., and A. Vizdal, "Extending an IPv6
               /64 Prefix from a Third Generation Partnership Project
               (3GPP) Mobile Interface to a LAN Link", RFC 7278,
@@ -1562,13 +1585,6 @@ Internet-Draft            Provisioning Domains              January 2020
               "Dynamic Host Configuration Protocol for IPv6 (DHCPv6)",
               RFC 8415, DOI 10.17487/RFC8415, November 2018,
               <https://www.rfc-editor.org/info/rfc8415>.
-
-
-
-Pfister, et al.           Expires July 9, 2020                 [Page 28]
-
-Internet-Draft            Provisioning Domains              January 2020
-
 
    [URN]      "URN Namespaces", n.d..
 
@@ -1601,6 +1617,15 @@ Authors' Addresses
    Email: tpauly@apple.com
 
 
+
+
+
+
+Pfister, et al.           Expires July 9, 2020                 [Page 29]
+
+Internet-Draft            Provisioning Domains              January 2020
+
+
    David Schinazi
    Google LLC
    1600 Amphitheatre Parkway
@@ -1621,4 +1646,35 @@ Authors' Addresses
 
 
 
-Pfister, et al.           Expires July 9, 2020                 [Page 29]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Pfister, et al.           Expires July 9, 2020                 [Page 30]

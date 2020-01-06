@@ -1000,10 +1000,19 @@ Related information: N/A
 IANA is asked to create and maintain a new registry called
 "Additional Information PvD Keys", which will reserve JSON keys for
 use in PvD additional information. The initial contents of this
-registry are given in {{aiformat}}.
+registry are given in {{aiformat}}, including both the table of mandatory
+keys and the table of optional keys.
+
+The status of a key as mandatory or optional is intentionally not
+denoted in the table to allow for flexibility in future use cases.
+Any new assignments of keys will be considered as optional for the
+purpose of the mechanism described in this document.
 
 New assignments for Additional Information PvD Keys Registry will
 be administered by IANA through Expert Review {{!RFC8126}}.
+
+IANA is asked to place this registry in a new page, entitled
+"Provisioning Domains (PvDs)".
 
 ## PvD Option Flags Registry
 
@@ -1013,6 +1022,11 @@ the PvD Option bitmask. Bit position 0, 1 and 2 are assigned by this
 document (as specified in {{format}}). Future assignments
 require Standards Action {{!RFC8126}}, via a
 Standards Track RFC document.
+
+Since these flags apply to an IPv6 Router Advertisement Option, IANA
+is asked to place this registry under the existing "Internet Control Message
+Protocol version 6 (ICMPv6) Parameters" page, as well as providing a link
+on the new "Provisioning Domains (PvDs)" page.
 
 ## PvD JSON Media Type Registration
 
