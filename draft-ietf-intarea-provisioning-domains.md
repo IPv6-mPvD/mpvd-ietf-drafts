@@ -339,16 +339,15 @@ the same link-local source address; but different Implicit PvDs, advertised
 by different RAs, MUST use different link-local addresses because
 these Implicit PvDs are identified by the source addresses of the
 RAs. If a link-local address on the router is changed, then any new RA
-sent from the changed link-local address without an Explicit PvD option
-will be interpreted as a new Implicit PvD by PvD-aware hosts.
+will be interpreted as a different Implicit PvD by PvD-aware hosts.
 
 As specified in {{!RFC4861}} and {{!RFC6980}}, when the set of options
 causes the size of an advertisement to exceed the link MTU, multiple
-router advertisements MUST be sent, each containing a subset of the
-options. In such cases, the PvD Option header (i.e., all fields except
-the 'Options' field) MUST be repeated in all the transmitted RAs. The
-options within the 'Options' field, MAY be transmitted only once,
-included in one of the transmitted PvD Options.
+router advertisements MUST be sent to avoid fragmentation, each
+containing a subset of the options. In such cases, the PvD Option
+header (i.e., all fields except the 'Options' field) MUST be repeated
+in all the transmitted RAs. The options within the 'Options' field, MAY
+be transmitted only once, included in one of the transmitted PvD Options.
 
 ## Non-PvD-aware Host Behavior
 
