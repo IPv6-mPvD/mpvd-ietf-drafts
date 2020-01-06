@@ -493,7 +493,7 @@ PvD-aware hosts can be provisioned with recursive DNS servers via
 RA options passed within an Explicit PvD, via RA options associated
 with an Implicit PvD, via DHCPv6 or DHCPv4, or from some other
 provisioning mechanism that creates an Implicit PvD (such as a VPN).
-In all of these cases, the DNS server addresses SHOULD be
+In all of these cases, the recursive DNS server addresses SHOULD be
 associated with the corresponding PvD. Specifically, queries sent
 to a configured recursive DNS server SHOULD be sent from a local IP
 address that was provisioned by the PvD via RA or DHCP. Answers
@@ -964,12 +964,13 @@ communicate with. In such scenarios, the host SHOULD check that the
 provided PvD ID, as well as the IP address that it resolves into, are
 part of the allowed whitelist.
 
-Network operators might want to restrict access to PvD Additional
-Information to only expose this to hosts that are connected to the local
+Network operators SHOULD restrict access to PvD Additional
+Information to only expose it to hosts that are connected to the local
 network, especially if the Additional Information would provide information
-about local network configuration to attackers. In such cases, operators
-SHOULD filter access to the Additional Information server, such as by
-whitelisting access from the addresses and prefixes that the router provides.
+about local network configuration to attackers. This can be implemented by
+whitelisting access from the addresses and prefixes that the router provides
+for the PvD, which will match the prefixes contained in the PvD Additional
+Information.
 
 # IANA Considerations {#iana}
 
