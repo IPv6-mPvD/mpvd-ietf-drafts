@@ -170,8 +170,8 @@ Pfister, et al.           Expires July 9, 2020                  [Page 3]
 Internet-Draft            Provisioning Domains              January 2020
 
 
-   header are only visible to 'PvD-aware' hosts, allowing such hosts to
-   have a specialized view of the network configuration.
+   inner header are only visible to 'PvD-aware' hosts, allowing such
+   hosts to have a specialized view of the network configuration.
 
    Since PvD IDs are used to identify different ways to access the
    internet, multiple PvDs (with different PvD IDs) can be provisioned

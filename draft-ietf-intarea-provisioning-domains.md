@@ -120,7 +120,7 @@ the PvD ID with all the information present in the Router Advertisement
 as well as any configuration object, such as addresses, derived from
 it. The PVD ID Router Advertisement option may also contain a set of
 other RA options, along with an optional inner Router Advertisement
-message header. These options and optional header are only visible
+message header. These options and optional inner header are only visible
 to 'PvD-aware' hosts, allowing such hosts to have a specialized view of the
 network configuration.
 
