@@ -119,7 +119,10 @@ the PvD ID Router Advertisement option which, when present, associates
 the PvD ID with all the information present in the Router Advertisement
 as well as any configuration object, such as addresses, derived from
 it. The PVD ID Router Advertisement option may also contain a set of
-other RA options. These options are only visible to 'PvD-aware' hosts.
+other RA options, along with an optional inner Router Advertisement
+message header. These options and optional inner header are only visible
+to 'PvD-aware' hosts, allowing such hosts to have a specialized view of the
+network configuration.
 
 Since PvD IDs are used to identify different ways to access the
 internet, multiple PvDs (with different PvD IDs) can be provisioned on
@@ -393,7 +396,7 @@ For example, a host MAY associate a given process with a specific
 PvD, or a specific set of PvDs, while associating another process with
 another PvD. A PvD-aware application might also be able to select, on
 a per-connection basis, which PvDs should be used. In particular,
-constrained devices such as small battery operated devices (e.g. IoT),
+constrained devices such as small battery operated devices (e.g., IoT),
 or devices with limited CPU or memory resources may purposefully use a
 single PvD while ignoring some received RAs containing different PvD
 IDs.
@@ -460,9 +463,9 @@ transaction happened. This maintains existing host behavior.
 ### Connection Sharing by the Host
 
 The situation when a host shares connectivity from an upstream
-interface (e.g. cellular) to a downstream interface (e.g. Wi-Fi) is
+interface (e.g., cellular) to a downstream interface (e.g., Wi-Fi) is
 known as 'tethering'. Techniques such as ND-proxy {{?RFC4389}},
-64share {{?RFC7278}} or prefix delegation (e.g. using DHCPv6-PD
+64share {{?RFC7278}} or prefix delegation (e.g., using DHCPv6-PD
 {{?RFC8415}}) may be used for that purpose.
 
 Whenever the RAs received from the upstream interface contain a
@@ -725,7 +728,7 @@ document can be used:
 
 When a host retrieves the PvD Additional Information, it MUST
 verify that the TLS server certificate is valid for the performed
-request (e.g., that the Subject Name is equal to the PvD ID expressed
+request (e.g., that the Subject Alternative Name is equal to the PvD ID expressed
 as an FQDN). This authentication creates a secure binding between the
 information provided by the trusted Router Advertisement, and the
 HTTPS server. However, this does not mean the Advertising Router and
@@ -904,7 +907,7 @@ of the additional information has passed).
 Although some solutions such as IPsec or SeND {{?RFC3971}}
 can be used in order to secure the IPv6 Neighbor
 Discovery Protocol, in practice actual deployments largely rely on link
-layer or physical layer security mechanisms (e.g. 802.1x {{IEEE8021X}})
+layer or physical layer security mechanisms (e.g., 802.1x {{IEEE8021X}})
 in conjunction with RA Guard {{?RFC6105}}.
 
 This specification does not improve the Neighbor Discovery Protocol
@@ -987,7 +990,7 @@ be administered by IANA through Expert Review {{!RFC8126}}.
 
 IANA is also asked to create and maintain a new registry entitled
 "PvD Option Flags" reserving bit positions from 0 to 15 to be used in
-the PvD Option bitmask. Bit position 0, 1 and 2 are reserved by this
+the PvD Option bitmask. Bit position 0, 1 and 2 are assigned by this
 document (as specified in {{format}}). Future assignments
 require Standards Action {{!RFC8126}}, via a
 Standards Track RFC document.
