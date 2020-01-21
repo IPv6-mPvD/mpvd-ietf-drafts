@@ -5,13 +5,13 @@
 Network Working Group                                         P. Pfister
 Internet-Draft                                                 E. Vyncke
 Intended status: Standards Track                                   Cisco
-Expires: July 9, 2020                                           T. Pauly
+Expires: July 24, 2020                                          T. Pauly
                                                               Apple Inc.
                                                              D. Schinazi
                                                               Google LLC
                                                                  W. Shao
                                                                    Cisco
-                                                        January 06, 2020
+                                                        January 21, 2020
 
 
              Discovering Provisioning Domain Names and Data
@@ -47,13 +47,13 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 9, 2020.
+   This Internet-Draft will expire on July 24, 2020.
 
 
 
 
 
-Pfister, et al.           Expires July 9, 2020                  [Page 1]
+Pfister, et al.           Expires July 24, 2020                 [Page 1]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Pfister, et al.           Expires July 9, 2020                  [Page 2]
+Pfister, et al.           Expires July 24, 2020                 [Page 2]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -165,7 +165,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                  [Page 3]
+Pfister, et al.           Expires July 24, 2020                 [Page 3]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -221,7 +221,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                  [Page 4]
+Pfister, et al.           Expires July 24, 2020                 [Page 4]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -277,7 +277,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                  [Page 5]
+Pfister, et al.           Expires July 24, 2020                 [Page 5]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -333,7 +333,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                  [Page 6]
+Pfister, et al.           Expires July 24, 2020                 [Page 6]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -389,7 +389,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                  [Page 7]
+Pfister, et al.           Expires July 24, 2020                 [Page 7]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -445,7 +445,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                  [Page 8]
+Pfister, et al.           Expires July 24, 2020                 [Page 8]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -501,7 +501,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                  [Page 9]
+Pfister, et al.           Expires July 24, 2020                 [Page 9]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -557,7 +557,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                 [Page 10]
+Pfister, et al.           Expires July 24, 2020                [Page 10]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -613,7 +613,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                 [Page 11]
+Pfister, et al.           Expires July 24, 2020                [Page 11]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -669,7 +669,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                 [Page 12]
+Pfister, et al.           Expires July 24, 2020                [Page 12]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -725,7 +725,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                 [Page 13]
+Pfister, et al.           Expires July 24, 2020                [Page 13]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -747,8 +747,8 @@ Internet-Draft            Provisioning Domains              January 2020
    host MUST abandon and consider that there is no additional PvD
    information.  If the HTTP status of the answer is between 300 and
    399, inclusive, it MUST follow the redirection(s).  If the HTTP
-   status of the answer is between 200 and 299, inclusive, the host MAY
-   get a file containing a single JSON object.
+   status of the answer is between 200 and 299, inclusive, the response
+   is expected to be a single JSON object.
 
    After retrieval of the PvD Additional Information, hosts MUST
    remember the last Sequence Number value received in the RA including
@@ -781,7 +781,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                 [Page 14]
+Pfister, et al.           Expires July 24, 2020                [Page 14]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -837,7 +837,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                 [Page 15]
+Pfister, et al.           Expires July 24, 2020                [Page 15]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -893,7 +893,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                 [Page 16]
+Pfister, et al.           Expires July 24, 2020                [Page 16]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -902,9 +902,10 @@ Internet-Draft            Provisioning Domains              January 2020
    where the "*" is replaced by the implementer's or vendor's
    identifier.  For example, keys specific to the FooBar organization
    could use "vendor-foobar".  Upon receiving such a sub-dictionary,
-   host MUST ignore this sub-dictionary if it is unknown.  When the
-   vendor or implementer is part of an IANA URN namespace [URN], the URN
-   namespace SHOULD be used rather than the "vendor-*" format.
+   host MUST ignore this sub-dictionary if it is unknown.  If a set of
+   PvD Additional Information keys are defined by an organization that
+   has a Formal URN Namespace [URN], the URN namespace SHOULD be used
+   rather than the "vendor-*" format.
 
 4.3.1.  Example
 
@@ -931,11 +932,11 @@ Internet-Draft            Provisioning Domains              January 2020
 
    When a host retrieves the PvD Additional Information, it MUST verify
    that the TLS server certificate is valid for the performed request
-   (e.g., that the Subject Alternative Name is equal to the PvD ID
-   expressed as an FQDN).  This authentication creates a secure binding
-   between the information provided by the trusted Router Advertisement,
-   and the HTTPS server.  However, this does not mean the Advertising
-   Router and the PvD server belong to the same entity.
+   (e.g., that a DNS-ID [RFC6125] on the certificate is equal to the PvD
+   ID expressed as an FQDN).  This authentication creates a secure
+   binding between the information provided by the trusted Router
+   Advertisement, and the HTTPS server.  However, this does not mean the
+   Advertising Router and the PvD server belong to the same entity.
 
    Hosts MUST verify that all prefixes in all the RA PIOs are covered by
    a prefix from the PvD Additional Information.  An adversarial router
@@ -948,8 +949,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-
-Pfister, et al.           Expires July 9, 2020                 [Page 17]
+Pfister, et al.           Expires July 24, 2020                [Page 17]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -1005,7 +1005,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                 [Page 18]
+Pfister, et al.           Expires July 24, 2020                [Page 18]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -1061,7 +1061,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                 [Page 19]
+Pfister, et al.           Expires July 24, 2020                [Page 19]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -1117,7 +1117,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                 [Page 20]
+Pfister, et al.           Expires July 24, 2020                [Page 20]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -1145,7 +1145,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
    A PvD-aware host will fetch https://cafe.example.com/.well-known/pvd
    to get the additonal information.  The following example shows a GET
-   request that the host sends:
+   request that the host sends, in HTTP/2 syntax [RFC7540]:
 
    :method = GET
    :scheme = https
@@ -1173,7 +1173,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                 [Page 21]
+Pfister, et al.           Expires July 24, 2020                [Page 21]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -1205,9 +1205,10 @@ Internet-Draft            Provisioning Domains              January 2020
    the FQDN received within the trusted PvD ID RA option.
 
    It must be noted that Section 4.4 of this document only provides
-   reasonable assurance against misconfiguration but does not prevent an
-   hostile network access provider to advertise wrong information that
-   could lead applications or hosts to select a hostile PvD.
+   reasonable assurance against misconfiguration but does not prevent a
+   hostile network access provider from advertising incorrect
+   information that could lead applications or hosts to select a hostile
+   PvD.
 
    Users cannot be assumed to be able to meaningfully differentiate
    between "safe" and "unsafe" networks.  This is a known attack surface
@@ -1225,17 +1226,17 @@ Internet-Draft            Provisioning Domains              January 2020
    located further than the first hop router.  Although this server is
    likely to be located within the same administrative domain as the
    default router, this property can't be ensured.  Therefore, hosts
-   willing to retrieve the PvD Additional Information before using it
 
 
 
-Pfister, et al.           Expires July 9, 2020                 [Page 22]
+Pfister, et al.           Expires July 24, 2020                [Page 22]
 
 Internet-Draft            Provisioning Domains              January 2020
 
 
+   willing to retrieve the PvD Additional Information before using it
    without leaking identity information, SHOULD make use of an IPv6
-   Privacy Address and SHOULD NOT include any privacy sensitive data,
+   temporary address and SHOULD NOT include any privacy-sensitive data,
    such as User Agent header or HTTP cookie, while performing the HTTP
    over TLS query.
 
@@ -1284,8 +1285,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-
-Pfister, et al.           Expires July 9, 2020                 [Page 23]
+Pfister, et al.           Expires July 24, 2020                [Page 23]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -1341,14 +1341,14 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                 [Page 24]
+Pfister, et al.           Expires July 24, 2020                [Page 24]
 
 Internet-Draft            Provisioning Domains              January 2020
 
 
-   Required parameters: None
+   Required parameters: N/A
 
-   Optional parameters: None
+   Optional parameters: N/A
 
    Encoding considerations: Encoding considerations are identical to
    those specified for the "application/json" media type.
@@ -1364,14 +1364,16 @@ Internet-Draft            Provisioning Domains              January 2020
    be used by network advertising additional Provisioning Domain
    information, and clients looking up such information.
 
-   Additional information: None
+   Fragment identifier considerations: N/A
+
+   Additional information: N/A
 
    Person and email address to contact for further information: See
    Authors' Addresses section
 
    Intended usage: COMMON
 
-   Restrictions on usage: None
+   Restrictions on usage: N/A
 
    Author: IETF
 
@@ -1390,17 +1392,19 @@ Internet-Draft            Provisioning Domains              January 2020
    Jen Lenkova, Veronika McKillop, Mark Townsley and James Woodyatt for
    useful and interesting discussions and reviews.
 
-   Finally, special thanks to Thierry Danis for his valuable inputs and
-   implementation efforts, Tom Jones for his integration effort into the
-   NEAT project and Rigil Salim for his implementation work.
 
 
 
 
-Pfister, et al.           Expires July 9, 2020                 [Page 25]
+
+Pfister, et al.           Expires July 24, 2020                [Page 25]
 
 Internet-Draft            Provisioning Domains              January 2020
 
+
+   Finally, special thanks to Thierry Danis for his valuable inputs and
+   implementation efforts, Tom Jones for his integration effort into the
+   NEAT project and Rigil Salim for his implementation work.
 
 10.  References
 
@@ -1449,11 +1453,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-
-
-
-
-Pfister, et al.           Expires July 9, 2020                 [Page 26]
+Pfister, et al.           Expires July 24, 2020                [Page 26]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -1509,7 +1509,7 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-Pfister, et al.           Expires July 9, 2020                 [Page 27]
+Pfister, et al.           Expires July 24, 2020                [Page 27]
 
 Internet-Draft            Provisioning Domains              January 2020
 
@@ -1520,8 +1520,8 @@ Internet-Draft            Provisioning Domains              January 2020
               (work in progress), October 2015.
 
    [IEEE8021X]
-              "IEEE Standards for Local and Metropolitan Area Networks,
-              Port-based Network Access Control, IEEE Std", n.d..
+              IEEE, "IEEE Standards for Local and Metropolitan Area
+              Networks, Port-based Network Access Control, IEEE Std".
 
    [RFC2818]  Rescorla, E., "HTTP Over TLS", RFC 2818,
               DOI 10.17487/RFC2818, May 2000,
@@ -1541,6 +1541,13 @@ Internet-Draft            Provisioning Domains              January 2020
               DOI 10.17487/RFC6105, February 2011,
               <https://www.rfc-editor.org/info/rfc6105>.
 
+   [RFC6125]  Saint-Andre, P. and J. Hodges, "Representation and
+              Verification of Domain-Based Application Service Identity
+              within Internet Public Key Infrastructure Using X.509
+              (PKIX) Certificates in the Context of Transport Layer
+              Security (TLS)", RFC 6125, DOI 10.17487/RFC6125, March
+              2011, <https://www.rfc-editor.org/info/rfc6125>.
+
    [RFC6146]  Bagnulo, M., Matthews, P., and I. van Beijnum, "Stateful
               NAT64: Network Address and Protocol Translation from IPv6
               Clients to IPv4 Servers", RFC 6146, DOI 10.17487/RFC6146,
@@ -1556,25 +1563,27 @@ Internet-Draft            Provisioning Domains              January 2020
               Translation", RFC 6296, DOI 10.17487/RFC6296, June 2011,
               <https://www.rfc-editor.org/info/rfc6296>.
 
-   [RFC7049]  Bormann, C. and P. Hoffman, "Concise Binary Object
-              Representation (CBOR)", RFC 7049, DOI 10.17487/RFC7049,
-              October 2013, <https://www.rfc-editor.org/info/rfc7049>.
 
 
-
-
-
-
-Pfister, et al.           Expires July 9, 2020                 [Page 28]
+Pfister, et al.           Expires July 24, 2020                [Page 28]
 
 Internet-Draft            Provisioning Domains              January 2020
 
+
+   [RFC7049]  Bormann, C. and P. Hoffman, "Concise Binary Object
+              Representation (CBOR)", RFC 7049, DOI 10.17487/RFC7049,
+              October 2013, <https://www.rfc-editor.org/info/rfc7049>.
 
    [RFC7278]  Byrne, C., Drown, D., and A. Vizdal, "Extending an IPv6
               /64 Prefix from a Third Generation Partnership Project
               (3GPP) Mobile Interface to a LAN Link", RFC 7278,
               DOI 10.17487/RFC7278, June 2014,
               <https://www.rfc-editor.org/info/rfc7278>.
+
+   [RFC7540]  Belshe, M., Peon, R., and M. Thomson, Ed., "Hypertext
+              Transfer Protocol Version 2 (HTTP/2)", RFC 7540,
+              DOI 10.17487/RFC7540, May 2015,
+              <https://www.rfc-editor.org/info/rfc7540>.
 
    [RFC7556]  Anipko, D., Ed., "Multiple Provisioning Domain
               Architecture", RFC 7556, DOI 10.17487/RFC7556, June 2015,
@@ -1586,7 +1595,9 @@ Internet-Draft            Provisioning Domains              January 2020
               RFC 8415, DOI 10.17487/RFC8415, November 2018,
               <https://www.rfc-editor.org/info/rfc8415>.
 
-   [URN]      "URN Namespaces", n.d..
+   [URN]      IANA, "Uniform Resource Names (URN) Namespaces",
+              <https://www.iana.org/assignments/urn-namespaces/
+              urn-namespaces.xhtml>.
 
 Authors' Addresses
 
@@ -1608,6 +1619,13 @@ Authors' Addresses
    Email: evyncke@cisco.com
 
 
+
+
+Pfister, et al.           Expires July 24, 2020                [Page 29]
+
+Internet-Draft            Provisioning Domains              January 2020
+
+
    Tommy Pauly
    Apple Inc.
    One Apple Park Way
@@ -1615,15 +1633,6 @@ Authors' Addresses
    United States of America
 
    Email: tpauly@apple.com
-
-
-
-
-
-
-Pfister, et al.           Expires July 9, 2020                 [Page 29]
-
-Internet-Draft            Provisioning Domains              January 2020
 
 
    David Schinazi
@@ -1668,13 +1677,4 @@ Internet-Draft            Provisioning Domains              January 2020
 
 
 
-
-
-
-
-
-
-
-
-
-Pfister, et al.           Expires July 9, 2020                 [Page 30]
+Pfister, et al.           Expires July 24, 2020                [Page 30]

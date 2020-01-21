@@ -56,13 +56,15 @@ author:
 informative:
     IEEE8021X:
       title: IEEE Standards for Local and Metropolitan Area Networks, Port-based Network Access Control, IEEE Std
-      authors:
+      date: false
+      author:
         -
           org: IEEE
     URN:
-      title: URN Namespaces
-      url: https://www.iana.org/assignments/urn-namespaces/urn-namespaces.xhtml#urn-namespaces-1
-      authors:
+      title: Uniform Resource Names (URN) Namespaces
+      target: https://www.iana.org/assignments/urn-namespaces/urn-namespaces.xhtml
+      date: false
+      author:
         -
           org: IANA
 
@@ -587,8 +589,8 @@ If the HTTP status of the answer is greater than or equal to 400
 the host MUST abandon and consider that there is no additional PvD
 information. If the HTTP status of the answer is between 300 and 399,
 inclusive, it MUST follow the redirection(s). If the HTTP status of
-the answer is between 200 and 299, inclusive, the host MAY get a file
-containing a single JSON object.
+the answer is between 200 and 299, inclusive, the response is expected to
+be a single JSON object.
 
 After retrieval of the PvD Additional Information, hosts MUST remember
 the last Sequence Number value received in the RA including the same
@@ -702,9 +704,9 @@ into the top-level JSON dictionary with a key of the format "vendor-\*"
 where the "\*" is replaced by the implementer's or vendor's identifier.
 For example, keys specific to the FooBar organization could use "vendor-foobar".
 Upon receiving such a sub-dictionary, host MUST ignore this
-sub-dictionary if it is unknown. When the vendor or implementer is
-part of an IANA URN namespace {{URN}}, the URN namespace
-SHOULD be used rather than the "vendor-*" format.
+sub-dictionary if it is unknown. If a set of PvD Additional Information keys
+are defined by an organization that has a Formal URN Namespace {{URN}},
+the URN namespace SHOULD be used rather than the "vendor-*" format.
 
 ### Example
 
@@ -733,11 +735,11 @@ document can be used:
 
 When a host retrieves the PvD Additional Information, it MUST
 verify that the TLS server certificate is valid for the performed
-request (e.g., that the Subject Alternative Name is equal to the PvD ID expressed
-as an FQDN). This authentication creates a secure binding between the
-information provided by the trusted Router Advertisement, and the
-HTTPS server. However, this does not mean the Advertising Router and
-the PvD server belong to the same entity.
+request (e.g., that a DNS-ID {{?RFC6125}} on the certificate is equal to
+the PvD ID expressed as an FQDN). This authentication creates a secure
+binding between the information provided by the trusted Router
+Advertisement, and the HTTPS server. However, this does not mean
+the Advertising Router and the PvD server belong to the same entity.
 
 Hosts MUST verify that all prefixes in all the RA PIOs are covered by a
 prefix from the PvD Additional Information. An adversarial router
@@ -868,7 +870,8 @@ Sequence Number = 7, R-flag = 0, H-flag = 1 (actual length of the header with pa
 24 bytes = 3 * 8 bytes)
 	
 A PvD-aware host will fetch https://cafe.example.com/.well-known/pvd to get the additonal
-information. The following example shows a GET request that the host sends:
+information. The following example shows a GET request that the host sends, in HTTP/2
+syntax {{?RFC7540}}:
 
 ~~~
 :method = GET
@@ -923,7 +926,7 @@ FQDN received within the trusted PvD ID RA option.
 
 It must be noted that {{misconfig}} of this document
 only provides reasonable assurance against misconfiguration but does not
-prevent an hostile network access provider to advertise wrong
+prevent a hostile network access provider from advertising incorrect
 information that could lead applications or hosts to select a hostile PvD.
 
 Users cannot be assumed to be able to meaningfully differentiate between
@@ -942,8 +945,8 @@ located further than the first hop router. Although this server is
 likely to be located within the same administrative domain as the
 default router, this property can't be ensured. Therefore, hosts willing
 to retrieve the PvD Additional Information before using it without
-leaking identity information, SHOULD make use of an IPv6 Privacy Address
-and SHOULD NOT include any privacy sensitive data, such as User Agent
+leaking identity information, SHOULD make use of an IPv6 temporary address
+and SHOULD NOT include any privacy-sensitive data, such as User Agent
 header or HTTP cookie, while performing the HTTP over TLS query.
 
 From a user privacy perspective, retrieving the PvD Additional Information
@@ -1037,9 +1040,9 @@ Type Name: application
 
 Subtype Name: pvd+json
 
-Required parameters: None
+Required parameters: N/A
 
-Optional parameters: None
+Optional parameters: N/A
 
 Encoding considerations: Encoding considerations are identical to
 those specified for the "application/json" media type.
@@ -1055,14 +1058,16 @@ Applications that use this media type: This media type is intended
 to be used by network advertising additional Provisioning Domain
 information, and clients looking up such information.
 
-Additional information: None
+Fragment identifier considerations: N/A
+
+Additional information: N/A
 
 Person and email address to contact for further information: See
 Authors' Addresses section
 
 Intended usage: COMMON
 
-Restrictions on usage: None
+Restrictions on usage: N/A
 
 Author: IETF
 
