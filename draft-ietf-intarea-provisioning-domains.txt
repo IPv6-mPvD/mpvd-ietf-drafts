@@ -118,7 +118,7 @@ Internet-Draft            Provisioning Domains              January 2020
    9.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  25
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  26
      10.1.  Normative References . . . . . . . . . . . . . . . . . .  26
-     10.2.  Informative References . . . . . . . . . . . . . . . . .  27
+     10.2.  Informative References . . . . . . . . . . . . . . . . .  28
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  29
 
 1.  Introduction
@@ -1472,6 +1472,10 @@ Internet-Draft            Provisioning Domains              January 2020
               DOI 10.17487/RFC7493, March 2015,
               <https://www.rfc-editor.org/info/rfc7493>.
 
+   [RFC7556]  Anipko, D., Ed., "Multiple Provisioning Domain
+              Architecture", RFC 7556, DOI 10.17487/RFC7556, June 2015,
+              <https://www.rfc-editor.org/info/rfc7556>.
+
    [RFC8028]  Baker, F. and B. Carpenter, "First-Hop Router Selection by
               Hosts in a Multi-Prefix Network", RFC 8028,
               DOI 10.17487/RFC8028, November 2016,
@@ -1500,12 +1504,8 @@ Internet-Draft            Provisioning Domains              January 2020
               (URIs)", RFC 8615, DOI 10.17487/RFC8615, May 2019,
               <https://www.rfc-editor.org/info/rfc8615>.
 
-10.2.  Informative References
 
-   [I-D.kline-mif-mpvd-api-reqs]
-              Kline, E., "Multiple Provisioning Domains API
-              Requirements", draft-kline-mif-mpvd-api-reqs-00 (work in
-              progress), November 2015.
+
 
 
 
@@ -1513,6 +1513,13 @@ Pfister, et al.           Expires July 24, 2020                [Page 27]
 
 Internet-Draft            Provisioning Domains              January 2020
 
+
+10.2.  Informative References
+
+   [I-D.kline-mif-mpvd-api-reqs]
+              Kline, E., "Multiple Provisioning Domains API
+              Requirements", draft-kline-mif-mpvd-api-reqs-00 (work in
+              progress), November 2015.
 
    [I-D.stenberg-mif-mpvd-dns]
               Stenberg, M. and S. Barth, "Multiple Provisioning Domains
@@ -1553,6 +1560,16 @@ Internet-Draft            Provisioning Domains              January 2020
               Clients to IPv4 Servers", RFC 6146, DOI 10.17487/RFC6146,
               April 2011, <https://www.rfc-editor.org/info/rfc6146>.
 
+
+
+
+
+
+Pfister, et al.           Expires July 24, 2020                [Page 28]
+
+Internet-Draft            Provisioning Domains              January 2020
+
+
    [RFC6147]  Bagnulo, M., Sullivan, A., Matthews, P., and I. van
               Beijnum, "DNS64: DNS Extensions for Network Address
               Translation from IPv6 Clients to IPv4 Servers", RFC 6147,
@@ -1562,13 +1579,6 @@ Internet-Draft            Provisioning Domains              January 2020
    [RFC6296]  Wasserman, M. and F. Baker, "IPv6-to-IPv6 Network Prefix
               Translation", RFC 6296, DOI 10.17487/RFC6296, June 2011,
               <https://www.rfc-editor.org/info/rfc6296>.
-
-
-
-Pfister, et al.           Expires July 24, 2020                [Page 28]
-
-Internet-Draft            Provisioning Domains              January 2020
-
 
    [RFC7049]  Bormann, C. and P. Hoffman, "Concise Binary Object
               Representation (CBOR)", RFC 7049, DOI 10.17487/RFC7049,
@@ -1584,10 +1594,6 @@ Internet-Draft            Provisioning Domains              January 2020
               Transfer Protocol Version 2 (HTTP/2)", RFC 7540,
               DOI 10.17487/RFC7540, May 2015,
               <https://www.rfc-editor.org/info/rfc7540>.
-
-   [RFC7556]  Anipko, D., Ed., "Multiple Provisioning Domain
-              Architecture", RFC 7556, DOI 10.17487/RFC7556, June 2015,
-              <https://www.rfc-editor.org/info/rfc7556>.
 
    [RFC8415]  Mrugalski, T., Siodelski, M., Volz, B., Yourtchenko, A.,
               Richardson, M., Jiang, S., Lemon, T., and T. Winters,
@@ -1610,13 +1616,7 @@ Authors' Addresses
    Email: ppfister@cisco.com
 
 
-   Eric Vyncke
-   Cisco
-   De Kleetlaan, 6
-   Diegem 1831
-   Belgium
 
-   Email: evyncke@cisco.com
 
 
 
@@ -1624,6 +1624,15 @@ Authors' Addresses
 Pfister, et al.           Expires July 24, 2020                [Page 29]
 
 Internet-Draft            Provisioning Domains              January 2020
+
+
+   Eric Vyncke
+   Cisco
+   De Kleetlaan, 6
+   Diegem 1831
+   Belgium
+
+   Email: evyncke@cisco.com
 
 
    Tommy Pauly
@@ -1651,15 +1660,6 @@ Internet-Draft            Provisioning Domains              January 2020
    France
 
    Email: wenshao@cisco.com
-
-
-
-
-
-
-
-
-
 
 
 

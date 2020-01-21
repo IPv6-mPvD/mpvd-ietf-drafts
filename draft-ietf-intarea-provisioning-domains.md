@@ -86,7 +86,7 @@ PvD information that can be retrieved using HTTP over TLS.
 
 # Introduction
 
-Provisioning Domains (PvDs) are defined in {{?RFC7556}} as consistent
+Provisioning Domains (PvDs) are defined in {{!RFC7556}} as consistent
 sets of network configuration information. This information includes
 properties that are traditionally associated with a single networking
 interface, such as source addresses, DNS configuration, proxy configuration,
@@ -98,7 +98,7 @@ separate connections or for multi-path transports.
 
 While most PvDs today are discovered implicitly (such as by receiving
 information via Router Advertisements from a router on a network
-that a client host directly connects to), {{?RFC7556}} also defines the notion
+that a client host directly connects to), {{!RFC7556}} also defines the notion
 of Explicit PvDs. IPsec Virtual Private Networks are considered Explicit PvDs,
 but Explicit PvDs can also be discovered via the local network router.
 Discovering Explicit PvDs allows two key advancements in managing multiple PvDs:
@@ -110,7 +110,7 @@ Internet Service Providers.
 2. The ability to associate additional information about PvDs to describe
 the properties of the network.
 
-While {{?RFC7556}} defines the concept of Explicit PvDs, it does not define
+While {{!RFC7556}} defines the concept of Explicit PvDs, it does not define
 the mechanism for discovering multiple Explicit PvDs on a single network
 and their additional information.
 
@@ -163,23 +163,23 @@ they appear in all capitals, as shown here.
 This document uses the following terminology:
 
 Provisioning Domain (PvD):
-: A set of network configuration information; for more information, see {{?RFC7556}}.
+: A set of network configuration information; for more information, see {{!RFC7556}}.
 
 PvD ID:
 : A Fully Qualified Domain Name (FQDN) used to identify a PvD.
 
 Explicit PvD:
-: A PvD uniquely identified with a PvD ID. For more information, see {{?RFC7556}}.
+: A PvD uniquely identified with a PvD ID. For more information, see {{!RFC7556}}.
 
 Implicit PvD:
 : A PvD that, in the absence of a PvD ID,
 is identified by the host interface to which it is attached and the
-address of the advertising router. See also {{?RFC7556}}.
+address of the advertising router. See also {{!RFC7556}}.
 
 PvD-aware host:
 : A host that supports the association of
 network configuration information into PvDs and the use of these
-PvDs as described in this document. Also named PvD-aware node in {{?RFC7556}}.
+PvDs as described in this document. Also named PvD-aware node in {{!RFC7556}}.
 
 # Provisioning Domain Identification using Router Advertisements {#ra}
 
@@ -189,7 +189,7 @@ Network operators MUST use names that they own or manage to
 avoid naming conflicts. The same PvD ID MAY be used in
 several access networks when they ultimately provide identical services
 (e.g., in all home networks subscribed to the same service); else, the
-PvD ID MUST be different to follow Section 2.4 of {{?RFC7556}}.
+PvD ID MUST be different to follow Section 2.4 of {{!RFC7556}}.
 
 ## PvD ID Option for Router Advertisements
 This document introduces a Router Advertisement (RA) option called
@@ -355,7 +355,7 @@ be transmitted only once, included in one of the transmitted PvD Options.
 
 As the PvD Option has a new option code, non-PvD-aware hosts will
 simply ignore the PvD Option and all the options it contains (see section 4.2 of {{?RFC4861}}. This
-ensures the backward compatibility required in Section 3.3 of {{?RFC7556}}.
+ensures the backward compatibility required in Section 3.3 of {{!RFC7556}}.
 This behavior allows for a mixed-mode network where
 a mix of PvD-aware and non-PvD-aware hosts coexist.
 
@@ -509,8 +509,8 @@ use multiple Explicit PvDs. In order to support non-PvD-aware
 applications, however, PvD-aware hosts SHOULD ensure that
 non-PvD-aware name resolution APIs like "getaddrinfo" only
 use resolvers from a single PvD for each query.
-Handling DNS across PvDs is discussed in Section 5.2.1 of {{?RFC7556}},
-and PvD APIs are discussed in Section 6 of {{?RFC7556}}.
+Handling DNS across PvDs is discussed in Section 5.2.1 of {{!RFC7556}},
+and PvD APIs are discussed in Section 6 of {{!RFC7556}}.
 
 Maintaining the correct usage of DNS within PvDs avoids various
 practical errors, such as:
@@ -932,7 +932,7 @@ information that could lead applications or hosts to select a hostile PvD.
 Users cannot be assumed to be able to meaningfully differentiate between
 "safe" and "unsafe" networks. This is a known attack surface that is present
 whether or not PvDs are in use, and hence cannot be addressed by this document.
-However, a host that correctly implements the multiple PvD architecture ({{?RFC7556}})
+However, a host that correctly implements the multiple PvD architecture ({{!RFC7556}})
 using the mechanism described in this document will be less susceptible to such
 attacks than a host that does not by being able to check for the various
 misconfigurations described in this document.
