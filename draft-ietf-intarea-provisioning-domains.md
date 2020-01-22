@@ -293,13 +293,13 @@ by hosts that are not PvD-aware.
 PvD ID FQDN and including both a Recursive DNS Server (RDNSS) option
 and a prefix information option. It has a Sequence Number of 123, and
 indicates the presence of additional information that is expected to be
-fetched with a delay factor of 5.
+fetched with a delay factor of 1.
 
 ~~~
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +---------------+-----------------------------------------------+
-| Type: 21      |  Length: 12   |1|0|0|     Reserved    |Delay:5|
+| Type: 21      |  Length: 12   |1|0|0|     Reserved    |Delay:1|
 +---------------+-------------------------------+---------------+
 |       Seq number: 123         |      7        |       e       |
 +---------------+-----------------------------------------------+
@@ -623,7 +623,7 @@ are delayed by a randomized backoff time.
 - When a host performs a JSON object update after it detected a
 change in the PvD Option Sequence Number, it MUST add a delay
 before sending the query. The target time for the delay is calculated
-as a random time between zero and 2**(Delay * 2) milliseconds,
+as a random time between zero and 2**(10 + Delay) milliseconds,
 where 'Delay' corresponds to the 4-bit unsigned integer in
 the last received PvD Option.
 
@@ -635,8 +635,8 @@ fetching the updated object is calculated as a uniformly random time
 in the interval \[(B-A)/2,B\].
 
 In the example {{pvd_example}}, the delay field value
-is 5, this means that the host calculates its delay by choosing a uniformly
-random time between 0 and 2**(5 * 2) milliseconds, i.e., between 0 and 1024
+is 1, this means that the host calculates its delay by choosing a uniformly
+random time between 0 and 2**(10 + 1) milliseconds, i.e., between 0 and 2048
 milliseconds.
 
 Since the 'Delay' value is directly within the PvD Option rather
@@ -667,7 +667,11 @@ If the request for PvD Additional Information fails due to a TLS error,
 an HTTP error, or because the retrieved file does not contain valid PvD JSON,
 hosts MUST close any connection used to fetch the PvD Additional Information,
 and MUST NOT request the information for that PvD ID again for the duration
-of the local network attachment. For more discussion, see {{security}}.
+of the local network attachment. If a host detects 10 or more such failures
+to fetch PvD Additional Information, the local network is assumed to be
+misconfigured or under attack, and the host MUST NOT make any further
+requests for any PvD Additional Information, belonging to any PvD ID, for
+the duration of the local network attachment. For more discussion, see {{security}}.
 
 ## Operational Consideration to Providing the PvD Additional Information {#serverop}
 
@@ -975,17 +979,27 @@ functionality or decisions.
 
 An attacker generating RAs on a local network can use the H-flag and the PvD ID
 to cause hosts on the network to make requests for PvD Additional Information
-from servers. This can become a denial-of-service attack if not mitigated. To mitigate
-this attack, hosts MUST limit the rate at which they fetch a particular PvD's
-Additional Information, limit the rate at which they fetch any PvD Additional
-Information on a given local network, and stop making requests to any PvD ID
-that does not respond with valid JSON. Details are provided in {{retr}}. This attack
-can be targeted at generic web servers, in which case the host behavior of stopping
-requesting for any server that doesn't behave like a PvD Additional Information server
-is critical. For cases in which an attacker is pointing hosts at a valid PvD Additional
-Information server (but one that is not actually associated with the local network),
-the server SHOULD reject any requests that do not originate from the expected IPv6
-prefix as described in {{serverop}}.
+from servers. This can become a denial-of-service attack, in which an attacker
+can amplify its attack by triggering TLS connections to arbitrary servers in response
+to sending UDP packets containing RA messages. To mitigate this attack, hosts
+MUST:
+
+- limit the rate at which they fetch a particular PvD's Additional Information;
+- limit the rate at which they fetch any PvD Additional Information on a given local
+network;
+- stop making requests for a PvD ID that does not respond with valid JSON;
+- stop making requests for all PvD IDs once a certain number of failures is reached
+on a particular network.
+
+Details are provided in {{retr}}. This attack can be targeted at generic web servers,
+in which case the host behavior of stopping requesting for any server that doesn't
+behave like a PvD Additional Information server is critical. Limiting requests for
+a specific PvD ID might not be sufficient if the attacker changes the PvD ID values
+quickly, so hosts also need to stop requesting if they detect consistent failure when
+on a network that is under attack. For cases in which an attacker is pointing hosts at
+a valid PvD Additional Information server (but one that is not actually associated
+with the local network), the server SHOULD reject any requests that do not originate
+from the expected IPv6 prefix as described in {{serverop}}.
 
 # Privacy Considerations
 
