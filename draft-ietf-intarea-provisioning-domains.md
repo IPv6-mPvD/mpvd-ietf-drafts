@@ -242,7 +242,7 @@ IPv4 information assigned using DHCPv4 (see {{dhcpv4}}).
 
 R-flag:
 : (1 bit) 'Router Advertisement' flag
-stating whether the PvD Option is followed (right after padding to
+stating whether the PvD Option header is followed (right after padding to
 the next 64 bits boundary) by a Router Advertisement message
 header (see section 4.2 of {{!RFC4861}}). The usage of the
 inner message header is described in {{host}}.
@@ -254,11 +254,14 @@ MUST be set to zero by the sender and ignored by the receiver.
 Delay:
 : (4 bits) Unsigned integer used to
 delay HTTP GET queries from hosts by a randomized backoff (see
-{{retr}}).
+{{retr}}). If the H-flag is not set, senders SHOULD set the delay to zero,
+and receivers SHOULD ignore the value.
 
 Sequence Number:
 : (16 bits) Sequence number for the
-PvD Additional Information, as described in {{data}}.
+PvD Additional Information, as described in {{data}}. If the H-flag is not
+set, senders SHOULD set the Sequence Number to zero, and receivers
+SHOULD ignore the value.
 
 PvD ID FQDN:
 : The FQDN used as PvD ID encoded in
@@ -331,8 +334,8 @@ processed by PvD-aware hosts, while ignored by other hosts as per
 section 4.2 of {{?RFC4861}}.
 
 In order to provide multiple different PvDs, a router MUST send
-multiple RAs. If more than one different Implicit PvD is advertised, the RAs
-MUST be sent from different link-local source addresses. Explicit
+multiple RAs. RAs sent from different link-local source addresses
+establish distinct implicit PvDs, in the absence of a PvD Option. Explicit
 PvDs MAY share link-local source addresses with an Implicit PvD
 and any number of other Explicit PvDs.
 
@@ -362,15 +365,14 @@ a mix of PvD-aware and non-PvD-aware hosts coexist.
 ## PvD-aware Host Behavior {#host}
 
 Hosts MUST associate received RAs and included configuration
-information (e.g., Router Valid Lifetime, Prefix Information {{!RFC4861}},
-Recursive DNS Server {{!RFC8106}},
-Routing Information {{!RFC4191}} options) with the
+information (e.g., Router Valid Lifetime, Prefix Information {{?RFC4861}},
+Recursive DNS Server {{?RFC8106}},
+Routing Information {{?RFC4191}} options) with the
 Explicit PvD identified by the first PvD Option present in the
 received RA, if any, or with the Implicit PvD identified by the host
 interface and the source address of the received RA otherwise.
 If an RA message header is present both within the PvD Option and
-outside it, as indicated by the R-flag, the header within the PvD Option
-takes precedence.
+outside it, the header within the PvD Option takes precedence.
 
 In case multiple PvD Options are found in a given RA, hosts MUST
 ignore all but the first PvD Option.
@@ -380,7 +382,7 @@ If a host receives PvD Options flags that it does not recognize
 
 Similarly, hosts MUST associate all network configuration objects
 (e.g., default routers, addresses, more specific routes, DNS Recursive
-Resolvers) with the PvD associated with the RA which last updated the
+Resolvers) with the PvD associated with the RA that provisioned
 object. For example, addresses that are generated using a received
 Prefix Information option (PIO) are associated with the PvD of the
 last received RA which included the given PIO.
@@ -389,14 +391,12 @@ PvD IDs MUST be compared in a case-insensitive manner as defined by
 {{!RFC4343}}. For example, "pvd.example.com." or "PvD.Example.coM."
 would refer to the same PvD.
 
-While resolving names, executing the default address selection
-algorithm {{!RFC6724}} or executing the default router
-selection algorithm when forwarding packets ({{!RFC4861}},
+While performing PvD-specific operations such as resolving names,
+executing the default address selection algorithm {{!RFC6724}} or executing
+the default router selection algorithm when forwarding packets ({{!RFC4861}},
 {{!RFC4191}} and {{!RFC8028}}), hosts and applications MAY
 consider only the configuration associated with any non-empty subset of
-PvDs.
-
-For example, a host MAY associate a given process with a specific
+PvDs. For example, a host MAY associate a given process with a specific
 PvD, or a specific set of PvDs, while associating another process with
 another PvD. A PvD-aware application might also be able to select, on
 a per-connection basis, which PvDs should be used. In particular,
@@ -414,7 +414,7 @@ be found in {{?I-D.kline-mif-mpvd-api-reqs}}.
 
 When a host retrieves stateless configuration elements using DHCPv6
 (e.g., DNS recursive resolvers or DNS domain search lists
-{{!RFC3646}}), they MUST be associated with all the explicit and
+{{?RFC3646}}), they MUST be associated with all the explicit and
 implicit PvDs received on the same interface and contained in a RA with the O-flag set
 {{!RFC4861}}.
 
@@ -429,7 +429,7 @@ would be considered to match.
 
 In cases where an address would be assigned by DHCPv6 and no matching
 PvD could be found, hosts MAY associate the assigned address with any
-implicit PvD received on the same interface or to multiple of implicit PvD
+implicit PvD received on the same interface or to multiple implicit PvDs
 received on the same interface. This is intended to resolve backward compatibility
 issues with rare deployments choosing to assign addresses with DHCPv6 while
 not sending any matching PIO. Implementations are suggested to flag or log
@@ -437,7 +437,7 @@ such scenarios as errors to help detect misconfigurations.
 
 ### DHCPv4 configuration association {#dhcpv4}
 
-Associating DHCPv4 {{!RFC2131}} configuration elements with Explicit PvDs allows
+Associating DHCPv4 {{?RFC2131}} configuration elements with Explicit PvDs allows
 hosts to treat a set of IPv4 and IPv6 configurations as a single PvD
 with shared properties. For example, consider a router that provides two different
 uplinks. One could be a broadband network that has data rate and streaming
@@ -497,11 +497,11 @@ the downstream RA SHOULD be included in the downstream PvD Option.
 PvD-aware hosts can be provisioned with recursive DNS servers via
 RA options passed within an Explicit PvD, via RA options associated
 with an Implicit PvD, via DHCPv6 or DHCPv4, or from some other
-provisioning mechanism that creates an Implicit PvD (such as a VPN).
+provisioning mechanism that creates an Explicit PvD (such as a VPN).
 In all of these cases, the recursive DNS server addresses SHOULD be
 associated with the corresponding PvD. Specifically, queries sent
 to a configured recursive DNS server SHOULD be sent from a local IP
-address that was provisioned by the PvD via RA or DHCP. Answers
+address that was provisioned for the PvD via RA or DHCP. Answers
 received from the DNS server SHOULD only be used on the same PvD.
 
 PvD-aware applications will be able to select which PvD(s) to use
@@ -509,7 +509,7 @@ for DNS resolution and connections, which allows them to effectively
 use multiple Explicit PvDs. In order to support non-PvD-aware
 applications, however, PvD-aware hosts SHOULD ensure that
 non-PvD-aware name resolution APIs like "getaddrinfo" only
-use resolvers from a single PvD for each query.
+use resolvers from a single PvD for a given query.
 Handling DNS across PvDs is discussed in Section 5.2.1 of {{!RFC7556}},
 and PvD APIs are discussed in Section 6 of {{!RFC7556}}.
 
@@ -533,8 +533,7 @@ another PvD cannot be directly used on a NAT64 network.
 Additional information about the network characteristics can be
 retrieved based on the PvD ID. This set of information is called PvD
 Additional Information, and is encoded as a JSON object {{!RFC8259}}.
-This JSON object is restricted to the restricted profile of I-JSON,
-as defined in {{!RFC7493}}.
+This JSON object is restricted to the I-JSON profile, as defined in {{!RFC7493}}.
 
 The purpose of this JSON object is to provide additional information
 to applications on a client host about the connectivity
@@ -561,9 +560,19 @@ is not defined in this document.
 
 When the H-flag of the PvD Option is set, hosts MAY attempt to
 retrieve the PvD Additional Information associated with a given PvD by
-performing an HTTP over TLS {{?RFC2818}} GET query to
+performing an HTTP over TLS {{!RFC2818}} GET query to
 https://\<PvD-ID\>/.well-known/pvd.
 Inversely, hosts MUST NOT do so whenever the H-flag is not set.
+
+Recommendations for how to use TLS securely can be found in {{!RFC7525}}.
+
+When a host retrieves the PvD Additional Information, it MUST
+verify that the TLS server certificate is valid for the performed
+request; specifically, that a DNS-ID {{?RFC6125}} on the certificate is equal to
+the PvD ID expressed as an FQDN. This validation indicates that the
+owner of the FQDN authorizes its use with the prefix advertised by the router.
+If this validation fails, hosts MUST close the connection and treat the PvD
+as if it has no Additional Information.
 
 HTTP requests and responses for PvD additional information use the
 "application/pvd+json" media type (see {{iana}}). Clients
@@ -571,8 +580,9 @@ SHOULD include this media type as an Accept header field in their GET
 requests, and servers MUST mark this media type as their Content-Type
 header field in responses.
 
-Note that the DNS name resolution of the PvD ID, the PKI (Public Key Infrastructure) checks as
-well as the actual query MUST be performed using the considered PvD.
+Note that the DNS name resolution of the PvD ID, any connections made
+for certficate validation (such as OCSP {{?RFC6960}}), and
+the HTTP request itself MUST be performed using the considered PvD.
 In other words, the name resolution, PKI checks, source address
 selection, as well as the next-hop router selection MUST be performed
 while using exclusively the set of configuration information attached
@@ -587,18 +597,18 @@ to fetch the PvD Additional Information and MAY deprecate the used
 temporary address and generate a new temporary address afterward.
 
 If the HTTP status of the answer is greater than or equal to 400
-the host MUST abandon and consider that there is no additional PvD
+the host MUST close its connection and consider that there is no additional PvD
 information. If the HTTP status of the answer is between 300 and 399,
 inclusive, it MUST follow the redirection(s). If the HTTP status of
 the answer is between 200 and 299, inclusive, the response is expected to
 be a single JSON object.
 
 After retrieval of the PvD Additional Information, hosts MUST remember
-the last Sequence Number value received in the RA including the same
+the last Sequence Number value received in an RA including the same
 PvD ID. Whenever a new RA for the same PvD is received with a different
 Sequence Number value, or whenever the expiry date for the additional
 information is reached, hosts MUST deprecate the additional information
-and stop using it until a new JSON object is retrieved.
+and stop using it.
 
 Hosts retrieving a new PvD Additional Information object MUST check
 for the presence and validity of the mandatory fields specified in
@@ -625,13 +635,13 @@ fetching the updated object is calculated as a uniformly random time
 in the interval \[(B-A)/2,B\].
 
 In the example {{pvd_example}}, the delay field value
-is 5, this means that the host calculates its delay by choosing a random
-number between 0 and 2**(5 * 2) milliseconds, i.e., between 0 and 1024
+is 5, this means that the host calculates its delay by choosing a uniformly
+random time between 0 and 2**(5 * 2) milliseconds, i.e., between 0 and 1024
 milliseconds.
 
 Since the 'Delay' value is directly within the PvD Option rather
 than the object itself, an operator may perform a push-based update by
-incrementing the Sequence value while changing the Delay value
+incrementing the Sequence Number value while changing the Delay value
 depending on the criticality of the update and its PvD Additional
 Information servers capacity.
 
@@ -649,17 +659,17 @@ Whenever the H-flag is set in the PvD Option, a valid PvD
 Additional Information object MUST be made available to all hosts
 receiving the RA by the network operator. In particular, when a
 captive portal is present, hosts MUST still be allowed to perform DNS,
-PKI and HTTP over TLS operations related to the retrieval of the
+certficate validation, and HTTP over TLS operations related to the retrieval of the
 object, even before logging into the captive portal.
 
 Routers SHOULD increment the PVD Option Sequence Number by one
 whenever a new PvD Additional Information object is available
 and should be retrieved by hosts. If the value exceeds what can be stored
-in the Sequence Number field, it SHOULD wrap back to zero.
+in the Sequence Number field, it MUST wrap back to zero.
 
 The server providing the JSON files SHOULD also check whether the
-client address is part of the prefixes listed into the additional
-information and SHOULD return a 403 response code if there is no
+client address is contained by the prefixes listed in the additional
+information, and SHOULD return a 403 response code if there is no
 match.
 
 ## PvD Additional Information Format {#aiformat}
@@ -672,7 +682,7 @@ included in the object:
 | JSON key | Description         | Type      | Example      |
 |:------------|:-----------------------|:---------------------|:------------|
 | identifier   | PvD ID FQDN  | String | "pvd.example.com." |
-| expires     | Date after which this object is no longer valid  | {{!RFC3339}} Date | "2017-07-23T06:00:00Z" |
+| expires     | Date after which this object is no longer valid  | {{!RFC3339}} Date | "2020-05-23T06:00:00Z" |
 | prefixes    | Array of IPv6 prefixes valid for this PvD   | Array of strings | \["2001:db8:1::/48", "2001:db8:4::/48"\] |
 
 A retrieved object which does not include all three of these keys at
@@ -691,7 +701,7 @@ included in the object.
 |:------------|:-----------------------|:---------------------|:------------|
 | dnsZones     | DNS zones searchable and accessible  | Array of strings | \["example.com", |
 |       |    |   | "sub.example.com"\] |
-| noInternet    | No Internet, set when the PvD is restricted.   | Boolean | true |
+| noInternet    | No Internet, set to "true" when the PvD is restricted.   | Boolean | true |
 
 It is worth noting that the JSON format allows for extensions.
 Whenever an unknown key is encountered, it MUST be ignored along with
@@ -717,13 +727,13 @@ document can be used:
 ~~~
 {
   "identifier": "cafe.example.com.",
-  "expires": "2017-07-23T06:00:00Z",
+  "expires": "2020-05-23T06:00:00Z",
   "prefixes": ["2001:db8:1::/48", "2001:db8:4::/48"],
 }
 
 {
   "identifier": "company.foo.example.com.",
-  "expires": "2017-07-23T06:00:00Z",
+  "expires": "2020-05-23T06:00:00Z",
   "prefixes": ["2001:db8:1::/48", "2001:db8:4::/48"],
   "vendor-foo":
   	{
@@ -734,13 +744,8 @@ document can be used:
 
 ## Detecting misconfiguration and misuse {#misconfig}
 
-When a host retrieves the PvD Additional Information, it MUST
-verify that the TLS server certificate is valid for the performed
-request (e.g., that a DNS-ID {{?RFC6125}} on the certificate is equal to
-the PvD ID expressed as an FQDN). This authentication creates a secure
-binding between the information provided by the trusted Router
-Advertisement, and the HTTPS server. However, this does not mean
-the Advertising Router and the PvD server belong to the same entity.
+Hosts MUST validate the TLS server certificate when retrieving PvD
+Additional Information, as detailed in {{retr}}.
 
 Hosts MUST verify that all prefixes in all the RA PIOs are covered by a
 prefix from the PvD Additional Information. An adversarial router
@@ -764,7 +769,9 @@ SHOULD NOT have a DNS A record.
 
 This section describes some example use cases of PvDs. For the sake of
 simplicity, the RA messages will not be described in the usual ASCII art
-but rather in an indented list.
+but rather in an indented list. Values in the PvD Option header that are not
+included in the example are assumed to be zero or false (such as the
+H-flag, Sequence Number, and Delay fields).
 
 ## Exposing Extra RA Options to PvD-Aware Hosts
 
@@ -819,12 +826,12 @@ bar.example.org., R-flag = 1 (actual length of the header 24 bytes = 3 *
     - Recursive DNS Server Option: length = 3, addresses = \[2001:db8:f00d::53\]
 
 In the above example, non-PvD-aware hosts will only use the first RA
-sent from their default router and using the 2001:db8:cafe::/64 prefix.
+sent by their default router and using the 2001:db8:cafe::/64 prefix.
 PvD-aware hosts will autonomously configure addresses from both PIOs,
 but will only use the source address in 2001:db8:f00d::/64 to
 communicate past the first hop router since only the router sending the
 second RA will be used as default router; similarly, they will use the
-DNS server 2001:db8:f00d::53 when communicating with this address.
+DNS server 2001:db8:f00d::53 when communicating from this address.
 
 ## Enabling Multi-homing for PvD-Aware Hosts
 
@@ -891,7 +898,7 @@ content-length = 116
 
 {
   "identifier": "cafe.example.com.",
-  "expires": "2017-07-23T06:00:00Z",
+  "expires": "2020-05-23T06:00:00Z",
   "prefixes": ["2001:db8:cafe::/48"],
 }
 ~~~
@@ -913,30 +920,42 @@ of the additional information has passed).
 
 # Security Considerations {#security}
 
+Since the PvD ID RA option can contain an RA header and other RA options,
+any security considerations that apply for specific RA options continue to
+apply when used within a PvD ID option.
+
 Although some solutions such as IPsec or SeND {{?RFC3971}}
 can be used in order to secure the IPv6 Neighbor
 Discovery Protocol, in practice actual deployments largely rely on link
 layer or physical layer security mechanisms (e.g., 802.1x {{IEEE8021X}})
 in conjunction with RA Guard {{?RFC6105}}.
 
+Fragmentation of RAs can lead to processing only part of a PvD ID
+option, which could lead to hosts receiving only part of the contained
+options. As discussed in {{router}}, routers MUST include the PvD ID
+option in all fragments generated.
+
 This specification does not improve the Neighbor Discovery Protocol
-security model, but extends the purely link-local trust relationship
-between the host and the default routers with HTTP over TLS
-communications which servers are authenticated as rightful owners of the
-FQDN received within the trusted PvD ID RA option.
+security model, but simply validates that the owner of the PvD FQDN
+authorizes its use with the prefix advertised by the router. In
+combination with implicit trust in the local router (if present), this
+gives the host some level of assurance that the PvD is authorized for
+use in this environment. However, when the local router cannot be
+trusted, no such guarantee is available.
 
 It must be noted that {{misconfig}} of this document
 only provides reasonable assurance against misconfiguration but does not
 prevent a hostile network access provider from advertising incorrect
 information that could lead applications or hosts to select a hostile PvD.
-
-Users cannot be assumed to be able to meaningfully differentiate between
-"safe" and "unsafe" networks. This is a known attack surface that is present
-whether or not PvDs are in use, and hence cannot be addressed by this document.
 However, a host that correctly implements the multiple PvD architecture ({{!RFC7556}})
-using the mechanism described in this document will be less susceptible to such
-attacks than a host that does not by being able to check for the various
-misconfigurations described in this document.
+using the mechanism described in this document will be less susceptible to
+some attacks than a host that does not by being able to check for the various
+misconfigurations or inconsistencies described in this document.
+
+Since expiration times provided in PvD Additional Information use absolute time,
+these values can be skewed for hosts without an accurate time base, or
+due to clock skew. Such time values MUST NOT be used for security-sensitive
+functionality or decisions.
 
 # Privacy Considerations
 
@@ -944,11 +963,19 @@ Retrieval of the PvD Additional Information over HTTPS requires early
 communications between the connecting host and a server which may be
 located further than the first hop router. Although this server is
 likely to be located within the same administrative domain as the
-default router, this property can't be ensured. Therefore, hosts willing
-to retrieve the PvD Additional Information before using it without
-leaking identity information, SHOULD make use of an IPv6 temporary address
-and SHOULD NOT include any privacy-sensitive data, such as a User-Agent
-header field or an HTTP cookie, while performing the HTTP over TLS query.
+default router, this property can't be ensured. To minimize the leakage of
+identity information while retrieving the PvD Additional Information, hosts
+SHOULD make use of an IPv6 temporary address and SHOULD NOT
+include any privacy-sensitive data, such as a User-Agent header field
+or an HTTP cookie.
+
+Hosts might not always fetch PvD Additional Information, depending on
+whether or not they expect to use the information. However, if a host
+whitelisted only certain PvD IDs for which to fetch Additional Information,
+an attacker could send various PvD IDs in RAs to detect which PvD IDs
+are whitelisted by the client. To avoid this, hosts SHOULD either fetch
+Additional Information for all eligible PvD IDs on a given local network, or
+fetch the information for none of them.
 
 From a user privacy perspective, retrieving the PvD Additional Information
 is not different from establishing a first connection to a remote
@@ -1014,6 +1041,9 @@ purpose of the mechanism described in this document.
 
 New assignments for Additional Information PvD Keys Registry will
 be administered by IANA through Expert Review {{!RFC8126}}.
+Experts are requested to ensure that defined keys do not overlap,
+and represent non-vendor-specific use cases. Vendor-specific keys
+SHOULD use sub-dictionaries, as described in {{aiformat}}.
 
 IANA is asked to place this registry in a new page, entitled
 "Provisioning Domains (PvDs)".
@@ -1021,11 +1051,10 @@ IANA is asked to place this registry in a new page, entitled
 ## PvD Option Flags Registry
 
 IANA is also asked to create and maintain a new registry entitled
-"PvD Option Flags" reserving bit positions from 0 to 15 to be used in
+"PvD Option Flags" reserving bit positions from 0 to 12 to be used in
 the PvD Option bitmask. Bit position 0, 1 and 2 are assigned by this
 document (as specified in {{format}}). Future assignments
-require Standards Action {{!RFC8126}}, via a
-Standards Track RFC document.
+require Standards Action {{!RFC8126}}.
 
 Since these flags apply to an IPv6 Router Advertisement Option, IANA
 is asked to place this registry under the existing "Internet Control Message
@@ -1050,13 +1079,13 @@ those specified for the "application/json" media type.
 
 Security considerations: See {{security}}.
 
-Interoperability considerations: This document specifies format of
+Interoperability considerations: This document specifies the format of
 conforming messages and the interpretation thereof.
 
 Published specification: This document
 
 Applications that use this media type: This media type is intended
-to be used by network advertising additional Provisioning Domain
+to be used by networks advertising additional Provisioning Domain
 information, and clients looking up such information.
 
 Fragment identifier considerations: N/A
