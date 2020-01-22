@@ -382,7 +382,7 @@ If a host receives PvD Options flags that it does not recognize
 
 Similarly, hosts MUST associate all network configuration objects
 (e.g., default routers, addresses, more specific routes, DNS Recursive
-Resolvers) with the PvD associated with the RA that provisioned
+Resolvers) with the PvD associated with the RA that provisioned the
 object. For example, addresses that are generated using a received
 Prefix Information option (PIO) are associated with the PvD of the
 last received RA which included the given PIO.
