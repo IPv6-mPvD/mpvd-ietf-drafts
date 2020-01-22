@@ -134,7 +134,7 @@ ultimately provide equivalent services.
 
 This document also introduces a mechanism for hosts to retrieve optional
 additional information related to a specific PvD by means of an HTTP
-over TLS query using an URI derived from the PvD ID. The retrieved JSON
+over TLS query using a URI derived from the PvD ID. The retrieved JSON
 object contains additional information that would typically be
 considered too large to be directly included in the Router
 Advertisement, but might be considered useful to the applications, or
@@ -430,9 +430,10 @@ would be considered to match.
 In cases where an address would be assigned by DHCPv6 and no matching
 PvD could be found, hosts MAY associate the assigned address with any
 implicit PvD received on the same interface or to multiple of implicit PvD
-received on the same interface. This is intended to
-resolve backward compatibility issues with rare deployments choosing
-to assign addresses with DHCPv6 while not sending any matching PIO.
+received on the same interface. This is intended to resolve backward compatibility
+issues with rare deployments choosing to assign addresses with DHCPv6 while
+not sending any matching PIO. Implementations are suggested to flag or log
+such scenarios as errors to help detect misconfigurations.
 
 ### DHCPv4 configuration association {#dhcpv4}
 
@@ -566,9 +567,9 @@ Inversely, hosts MUST NOT do so whenever the H-flag is not set.
 
 HTTP requests and responses for PvD additional information use the
 "application/pvd+json" media type (see {{iana}}). Clients
-SHOULD include this media type as an Accept header in their GET
+SHOULD include this media type as an Accept header field in their GET
 requests, and servers MUST mark this media type as their Content-Type
-header in responses.
+header field in responses.
 
 Note that the DNS name resolution of the PvD ID, the PKI (Public Key Infrastructure) checks as
 well as the actual query MUST be performed using the considered PvD.
@@ -699,14 +700,14 @@ its associated elements.
 Private-use or experimental keys MAY be used in the JSON
 dictionary. In order to avoid such keys colliding with IANA registry
 keys, implementers or vendors defining private-use or experimental
-keys MUST create sub-dictionaries, where the sub-dictionary is added
-into the top-level JSON dictionary with a key of the format "vendor-\*"
-where the "\*" is replaced by the implementer's or vendor's identifier.
-For example, keys specific to the FooBar organization could use "vendor-foobar".
-Upon receiving such a sub-dictionary, host MUST ignore this
-sub-dictionary if it is unknown. If a set of PvD Additional Information keys
+keys MUST create sub-dictionaries. If a set of PvD Additional Information keys
 are defined by an organization that has a Formal URN Namespace {{URN}},
-the URN namespace SHOULD be used rather than the "vendor-*" format.
+the URN namespace SHOULD be used as the top-level JSON key for
+the sub-dictionary. For other private uses, the sub-dictionary key
+SHOULD follow the format of "vendor-\*", where the "\*" is replaced by the
+implementer's or vendor's identifier. For example, keys specific to the FooBar
+organization could use "vendor-foobar". If a host receives a sub-dictionary with
+an unknown key, the host MUST ignore the contents of the sub-dictionary.
 
 ### Example
 
@@ -715,13 +716,13 @@ document can be used:
 
 ~~~
 {
-  "identifier": "cafe.example.com",
+  "identifier": "cafe.example.com.",
   "expires": "2017-07-23T06:00:00Z",
   "prefixes": ["2001:db8:1::/48", "2001:db8:4::/48"],
 }
 
 {
-  "identifier": "company.foo.example.com",
+  "identifier": "company.foo.example.com.",
   "expires": "2017-07-23T06:00:00Z",
   "prefixes": ["2001:db8:1::/48", "2001:db8:4::/48"],
   "vendor-foo":
@@ -889,7 +890,7 @@ content-type = application/pvd+json
 content-length = 116
 
 {
-  "identifier": "cafe.example.com",
+  "identifier": "cafe.example.com.",
   "expires": "2017-07-23T06:00:00Z",
   "prefixes": ["2001:db8:cafe::/48"],
 }
@@ -946,8 +947,8 @@ likely to be located within the same administrative domain as the
 default router, this property can't be ensured. Therefore, hosts willing
 to retrieve the PvD Additional Information before using it without
 leaking identity information, SHOULD make use of an IPv6 temporary address
-and SHOULD NOT include any privacy-sensitive data, such as User Agent
-header or HTTP cookie, while performing the HTTP over TLS query.
+and SHOULD NOT include any privacy-sensitive data, such as a User-Agent
+header field or an HTTP cookie, while performing the HTTP over TLS query.
 
 From a user privacy perspective, retrieving the PvD Additional Information
 is not different from establishing a first connection to a remote
