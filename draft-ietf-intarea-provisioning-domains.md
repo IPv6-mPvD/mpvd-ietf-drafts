@@ -645,6 +645,16 @@ incrementing the Sequence Number value while changing the Delay value
 depending on the criticality of the update and its PvD Additional
 Information servers capacity.
 
+In addition to adding a random delay when fetching Additional Information, hosts
+MUST enforce a minimum time between requesting Additional Information
+for a given PvD on the same network. This minimum time is RECOMMENDED
+to be 10 seconds, in order to avoid hosts causing a denial-of-service on the
+PvD server. Hosts also MUST limit the number of requests that are made to
+different PvD Additional Information servers on the same network within a short
+period of time. A RECOMMENDED value is to issue no more than five PvD
+Additional Information requests in total on a given network within 10 seconds.
+For more discussion, see {{security}}.
+
 The PvD Additional Information object includes a set of IPv6
 prefixes (under the key "prefixes") which MUST be checked against all
 the Prefix Information Options advertised in the RA. If any of the
@@ -653,7 +663,13 @@ listed prefixes, the associated PvD information MUST be considered
 to be a misconfiguration, and MUST NOT be used by the host. See
 {{misconfig}} for more discussion on handling such misconfigurations.
 
-## Operational Consideration to Providing the PvD Additional Information
+If the request for PvD Additional Information fails due to a TLS error,
+an HTTP error, or because the retrieved file does not contain valid PvD JSON,
+hosts MUST close any connection used to fetch the PvD Additional Information,
+and MUST NOT request the information for that PvD ID again for the duration
+of the local network attachment. For more discussion, see {{security}}.
+
+## Operational Consideration to Providing the PvD Additional Information {#serverop}
 
 Whenever the H-flag is set in the PvD Option, a valid PvD
 Additional Information object MUST be made available to all hosts
@@ -736,9 +752,9 @@ document can be used:
   "expires": "2020-05-23T06:00:00Z",
   "prefixes": ["2001:db8:1::/48", "2001:db8:4::/48"],
   "vendor-foo":
-  	{
-  		"private-key": "private-value",
-  	},
+    {
+        "private-key": "private-value",
+    },
 }
 ~~~
 
@@ -787,7 +803,7 @@ example.org., R-flag = 0 (actual length of the header with padding
 24 bytes = 3 * 8 bytes)
     - Recursive DNS Server: length = 5, addresses = \[2001:db8:cafe::53, 2001:db8:f00d::53\]
     - Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
-	
+
 Note that a PvD-aware host will receive two different prefixes, 2001:db8:cafe::/64 and
 2001:db8:f00d::/64, both associated with the same PvD (identified by "example.org.").
 A non-PvD-aware host will only receive one prefix, 2001:db8:cafe::/64.
@@ -876,7 +892,7 @@ The Sequence Number on the PvD Option is set to 7 in this example.
 * PvD Option header: length = 3, PvD ID FQDN = cafe.example.com.,
 Sequence Number = 7, R-flag = 0, H-flag = 1 (actual length of the header with padding
 24 bytes = 3 * 8 bytes)
-	
+
 A PvD-aware host will fetch https://cafe.example.com/.well-known/pvd to get the additonal
 information. The following example shows a GET request that the host sends, in HTTP/2
 syntax {{?RFC7540}}:
@@ -957,6 +973,20 @@ these values can be skewed for hosts without an accurate time base, or
 due to clock skew. Such time values MUST NOT be used for security-sensitive
 functionality or decisions.
 
+An attacker generating RAs on a local network can use the H-flag and the PvD ID
+to cause hosts on the network to make requests for PvD Additional Information
+from servers. This can become a denial-of-service attack if not mitigated. To mitigate
+this attack, hosts MUST limit the rate at which they fetch a particular PvD's
+Additional Information, limit the rate at which they fetch any PvD Additional
+Information on a given local network, and stop making requests to any PvD ID
+that does not respond with valid JSON. Details are provided in {{retr}}. This attack
+can be targeted at generic web servers, in which case the host behavior of stopping
+requesting for any server that doesn't behave like a PvD Additional Information server
+is critical. For cases in which an attacker is pointing hosts at a valid PvD Additional
+Information server (but one that is not actually associated with the local network),
+the server SHOULD reject any requests that do not originate from the expected IPv6
+prefix as described in {{serverop}}.
+
 # Privacy Considerations
 
 Retrieval of the PvD Additional Information over HTTPS requires early
@@ -1004,7 +1034,7 @@ network, especially if the Additional Information would provide information
 about local network configuration to attackers. This can be implemented by
 whitelisting access from the addresses and prefixes that the router provides
 for the PvD, which will match the prefixes contained in the PvD Additional
-Information.
+Information. This technique is described in {{serverop}}.
 
 # IANA Considerations {#iana}
 
