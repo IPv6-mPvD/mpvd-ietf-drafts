@@ -663,8 +663,8 @@ listed prefixes, the associated PvD information MUST be considered
 to be a misconfiguration, and MUST NOT be used by the host. See
 {{misconfig}} for more discussion on handling such misconfigurations.
 
-If the request for PvD Additional Information fails due to a TLS error,
-an HTTP error, or because the retrieved file does not contain valid PvD JSON,
+If the request for PvD Additional Information fails due to a TLS certificate validation
+error, an HTTP error, or because the retrieved file does not contain valid PvD JSON,
 hosts MUST close any connection used to fetch the PvD Additional Information,
 and MUST NOT request the information for that PvD ID again for the duration
 of the local network attachment. If a host detects 10 or more such failures
@@ -950,10 +950,10 @@ Discovery Protocol, in practice actual deployments largely rely on link
 layer or physical layer security mechanisms (e.g., 802.1x {{IEEE8021X}})
 in conjunction with RA Guard {{?RFC6105}}.
 
-Fragmentation of RAs can lead to processing only part of a PvD ID
-option, which could lead to hosts receiving only part of the contained
-options. As discussed in {{router}}, routers MUST include the PvD ID
-option in all fragments generated.
+If multiple RAs are sent for a single PvD to avoid fragmentation, dropping packets
+can lead to processing only part of a PvD ID option, which could lead to hosts
+receiving only part of the contained options. As discussed in {{router}}, routers
+MUST include the PvD ID option in all fragments generated.
 
 This specification does not improve the Neighbor Discovery Protocol
 security model, but simply validates that the owner of the PvD FQDN
