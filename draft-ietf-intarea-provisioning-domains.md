@@ -845,7 +845,7 @@ bar.example.org., R-flag = 1 (actual length of the header 24 bytes = 3 *
     - Prefix Information Option: length = 4, prefix = 2001:db8:f00d::/64
     - Recursive DNS Server Option: length = 3, addresses = \[2001:db8:f00d::53\]
 
-In the above example, non-PvD-aware hosts will only use the first RA
+In the above example, non-PvD-aware hosts will only use the first listed RA
 sent by their default router and using the 2001:db8:cafe::/64 prefix.
 PvD-aware hosts will autonomously configure addresses from both PIOs,
 but will only use the source address in 2001:db8:f00d::/64 to
@@ -1024,7 +1024,7 @@ fetch the information for none of them.
 From a user privacy perspective, retrieving the PvD Additional Information
 is not different from establishing a first connection to a remote
 server, or even performing a single DNS lookup. For example, most
-operating systems already perform early queries to well known web sites,
+operating systems already perform early queries to static web sites,
 such as http://captive.example.com/hotspot-detect.html, in order to
 detect the presence of a captive portal.
 
@@ -1085,8 +1085,8 @@ purpose of the mechanism described in this document.
 
 New assignments for Additional Information PvD Keys Registry will
 be administered by IANA through Expert Review {{!RFC8126}}.
-Experts are requested to ensure that defined keys do not overlap,
-and represent non-vendor-specific use cases. Vendor-specific keys
+Experts are requested to ensure that defined keys do not overlap in names
+or semantics, and represent non-vendor-specific use cases. Vendor-specific keys
 SHOULD use sub-dictionaries, as described in {{aiformat}}.
 
 IANA is asked to place this registry in a new page, entitled

@@ -1106,14 +1106,14 @@ Internet-Draft            Provisioning Domains              January 2020
       *  Recursive DNS Server Option: length = 3, addresses =
          [2001:db8:f00d::53]
 
-   In the above example, non-PvD-aware hosts will only use the first RA
-   sent by their default router and using the 2001:db8:cafe::/64 prefix.
-   PvD-aware hosts will autonomously configure addresses from both PIOs,
-   but will only use the source address in 2001:db8:f00d::/64 to
-   communicate past the first hop router since only the router sending
-   the second RA will be used as default router; similarly, they will
-   use the DNS server 2001:db8:f00d::53 when communicating from this
-   address.
+   In the above example, non-PvD-aware hosts will only use the first
+   listed RA sent by their default router and using the
+   2001:db8:cafe::/64 prefix.  PvD-aware hosts will autonomously
+   configure addresses from both PIOs, but will only use the source
+   address in 2001:db8:f00d::/64 to communicate past the first hop
+   router since only the router sending the second RA will be used as
+   default router; similarly, they will use the DNS server
+   2001:db8:f00d::53 when communicating from this address.
 
 
 
@@ -1357,8 +1357,8 @@ Internet-Draft            Provisioning Domains              January 2020
    From a user privacy perspective, retrieving the PvD Additional
    Information is not different from establishing a first connection to
    a remote server, or even performing a single DNS lookup.  For
-   example, most operating systems already perform early queries to well
-   known web sites, such as http://captive.example.com/hotspot-
+   example, most operating systems already perform early queries to
+   static web sites, such as http://captive.example.com/hotspot-
    detect.html, in order to detect the presence of a captive portal.
 
    The DNS queries associated with the PvD Additional Information MUST
@@ -1432,9 +1432,10 @@ Internet-Draft            Provisioning Domains              January 2020
 
    New assignments for Additional Information PvD Keys Registry will be
    administered by IANA through Expert Review [RFC8126].  Experts are
-   requested to ensure that defined keys do not overlap, and represent
-   non-vendor-specific use cases.  Vendor-specific keys SHOULD use sub-
-   dictionaries, as described in Section 4.3.
+   requested to ensure that defined keys do not overlap in names or
+   semantics, and represent non-vendor-specific use cases.  Vendor-
+   specific keys SHOULD use sub-dictionaries, as described in
+   Section 4.3.
 
    IANA is asked to place this registry in a new page, entitled
    "Provisioning Domains (PvDs)".
@@ -1449,7 +1450,6 @@ Internet-Draft            Provisioning Domains              January 2020
 
    Since these flags apply to an IPv6 Router Advertisement Option, IANA
    is asked to place this registry under the existing "Internet Control
-
 
 
 
